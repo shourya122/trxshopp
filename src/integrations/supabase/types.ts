@@ -209,6 +209,8 @@ export type Database = {
       order_items: {
         Row: {
           created_at: string
+          edition_name: string | null
+          edition_price_cents: number | null
           id: string
           order_id: string
           price_cents: number
@@ -218,6 +220,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          edition_name?: string | null
+          edition_price_cents?: number | null
           id?: string
           order_id: string
           price_cents?: number
@@ -227,6 +231,8 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          edition_name?: string | null
+          edition_price_cents?: number | null
           id?: string
           order_id?: string
           price_cents?: number
@@ -338,6 +344,7 @@ export type Database = {
           created_at: string
           description: string | null
           developer: string
+          editions: Json
           featured: boolean
           genre: string
           id: string
@@ -364,6 +371,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           developer?: string
+          editions?: Json
           featured?: boolean
           genre?: string
           id?: string
@@ -390,6 +398,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           developer?: string
+          editions?: Json
           featured?: boolean
           genre?: string
           id?: string
