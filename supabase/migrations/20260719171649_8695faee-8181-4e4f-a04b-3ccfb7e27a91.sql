@@ -1,0 +1,1 @@
+CREATE POLICY "Users view orders by email" ON public.orders FOR SELECT USING (customer_email IS NOT NULL AND lower(customer_email) = lower(coalesce((auth.jwt() ->> 'email'), '')));

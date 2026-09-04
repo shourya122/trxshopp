@@ -1,73 +1,37 @@
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
-  Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import { CartProvider } from "@/lib/cart";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { NotFound404 } from "@/components/NotFound404";
+import { Toaster } from "@/components/ui/sonner";
+import CookieConsent from "@/components/CookieConsent";
+import { LegalModalProvider } from "@/components/legal/LegalModalProvider";
+import { useCartSync } from "@/hooks/useCartSync";
+import { SecurityGuard } from "@/components/SecurityGuard";
+
 
 function NotFoundComponent() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+  return <NotFound404 />;
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
-            onClick={() => {
-              router.invalidate();
-              reset();
-            }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Try again
-          </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
-            Go home
-          </a>
-        </div>
-      </div>
+    <div onClick={() => { router.invalidate(); reset(); }}>
+      <NotFound404 title="OOPS!" subtitle="SOMETHING WENT WRONG" />
     </div>
   );
 }
@@ -77,21 +41,53 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      {
+        httpEquiv: "Content-Security-Policy",
+        content: [
+          "default-src 'self'",
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.gpteng.co https://*.gstatic.com https://www.googletagmanager.com https://cdn.jsdelivr.net https://sdk.cashfree.com",
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.fontshare.com",
+          "font-src 'self' data: https://fonts.gstatic.com https://cdn.gpteng.co https://cdn.fontshare.com",
+          "img-src 'self' data: blob: https:",
+          "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://assets.unicorn.studio https://cdn.jsdelivr.net https://www.google-analytics.com https://api.cashfree.com https://payments.cashfree.com https://sandbox.cashfree.com https://payments-test.cashfree.com",
+          "frame-src 'self' https://sdk.cashfree.com https://api.cashfree.com https://payments.cashfree.com https://sandbox.cashfree.com https://payments-test.cashfree.com",
+          "base-uri 'self'",
+          "form-action 'self' https://api.cashfree.com https://payments.cashfree.com https://sandbox.cashfree.com https://payments-test.cashfree.com",
+          "object-src 'none'",
+          "upgrade-insecure-requests",
+        ].join("; "),
+      },
+      { httpEquiv: "Referrer-Policy", content: "strict-origin-when-cross-origin" },
+      { httpEquiv: "X-Content-Type-Options", content: "nosniff" },
+      { name: "referrer", content: "strict-origin-when-cross-origin" },
+      { title: "TRXSHOP — Game Store & Digital Marketplace" },
+      { name: "description", content: "Buy Original PC, PlayStation, and Xbox games at best prices — The software and subscriptions you actually use. 100% genuine Digital Download" },
+      { property: "og:title", content: "TRXSHOP — Game Store & Digital Marketplace" },
+      { property: "og:description", content: "Buy Original PC, PlayStation, and Xbox games at best prices — The software and subscriptions you actually use. 100% genuine Digital Download" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "TRXSHOP — Game Store & Digital Marketplace" },
+      { name: "twitter:description", content: "Buy Original PC, PlayStation, and Xbox games at best prices — The software and subscriptions you actually use. 100% genuine Digital Download" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/1e2bb937-a6dd-4eea-8c80-d8b43877e643" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/1e2bb937-a6dd-4eea-8c80-d8b43877e643" },
+      { name: "google-site-verification", content: "3byZATFsV59pj8TnMzqhhkrHxH-8MDcbX5YKo69zVRc" },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: "https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.cdnfonts.com/css/sf-pro-display",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://api.fontshare.com/v2/css?f[]=satoshi@900&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -100,11 +96,30 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
-function RootShell({ children }: { children: ReactNode }) {
+function AnimatedOutlet() {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -12 }}
+        transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+      >
+        <Outlet />
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
         <HeadContent />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-VKF66MNSCB"></script>
+        <script dangerouslySetInnerHTML={{ __html: "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-VKF66MNSCB');" }} />
       </head>
       <body>
         {children}
@@ -114,13 +129,44 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function CartSyncBridge() {
+  useCartSync();
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { pathname } = useLocation();
 
+  const isProductRoute = pathname.startsWith("/products/") || pathname.startsWith("/games");
+  const isHomePage = pathname === "/";
+  const isAdminRoute = pathname.startsWith("/admin");
+  const isCheckoutRoute = pathname.startsWith("/checkout");
+  const isVerifyCodeRoute = pathname.startsWith("/verify-code");
+  const isSignInRoute = pathname.startsWith("/signin");
+  const isAccountRoute = pathname.startsWith("/account");
+  const isOrderRoute = pathname.startsWith("/order/");
+  const hideChrome = isVerifyCodeRoute || isSignInRoute || isAccountRoute || isOrderRoute;
+  const hideFooter = isAdminRoute || isCheckoutRoute || hideChrome;
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <CartProvider>
+        <LegalModalProvider>
+          {!isAdminRoute && <a href="#main-content" className="skip-link">Skip to content</a>}
+          <div className="relative z-10">
+            {!isAdminRoute && !hideChrome && <Header />}
+            <main id="main-content">
+              <AnimatedOutlet />
+            </main>
+            {!hideFooter && <Footer hideNewsletter={!isHomePage} minimal={isProductRoute} />}
+          </div>
+          <Toaster position={isAdminRoute ? "top-center" : "bottom-right"} />
+          {!isAdminRoute && <CookieConsent />}
+          <CartSyncBridge />
+          {!isAdminRoute && <SecurityGuard />}
+
+        </LegalModalProvider>
+      </CartProvider>
     </QueryClientProvider>
   );
 }
