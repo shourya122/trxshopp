@@ -268,6 +268,7 @@ export type Database = {
           customer_phone: string | null
           id: string
           items: Json
+          order_number: string
           order_status: string
           paid_at: string | null
           pay_link: string | null
@@ -291,6 +292,7 @@ export type Database = {
           customer_phone?: string | null
           id?: string
           items?: Json
+          order_number: string
           order_status?: string
           paid_at?: string | null
           pay_link?: string | null
@@ -314,6 +316,7 @@ export type Database = {
           customer_phone?: string | null
           id?: string
           items?: Json
+          order_number?: string
           order_status?: string
           paid_at?: string | null
           pay_link?: string | null
