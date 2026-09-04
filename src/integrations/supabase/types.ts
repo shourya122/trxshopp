@@ -257,6 +257,8 @@ export type Database = {
           created_at: string
           customer_email: string
           customer_id: string | null
+          customer_name: string | null
+          customer_phone: string | null
           id: string
           items: Json
           order_status: string
@@ -266,6 +268,7 @@ export type Database = {
           payment_ref: string | null
           payment_status: string
           raw_callback: Json | null
+          shipping_address: Json | null
           status: string
           total_amount: number
           updated_at: string
@@ -276,6 +279,8 @@ export type Database = {
           created_at?: string
           customer_email: string
           customer_id?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
           id?: string
           items?: Json
           order_status?: string
@@ -285,6 +290,7 @@ export type Database = {
           payment_ref?: string | null
           payment_status?: string
           raw_callback?: Json | null
+          shipping_address?: Json | null
           status?: string
           total_amount?: number
           updated_at?: string
@@ -295,6 +301,8 @@ export type Database = {
           created_at?: string
           customer_email?: string
           customer_id?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
           id?: string
           items?: Json
           order_status?: string
@@ -304,6 +312,7 @@ export type Database = {
           payment_ref?: string | null
           payment_status?: string
           raw_callback?: Json | null
+          shipping_address?: Json | null
           status?: string
           total_amount?: number
           updated_at?: string
