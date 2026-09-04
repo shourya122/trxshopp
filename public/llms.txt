@@ -1,0 +1,13 @@
+# TRXSHOP
+
+> TRXSHOP is a digital marketplace for genuine PC, PlayStation, and Xbox game keys, software, and subscriptions with instant delivery.
+
+TRXSHOP sells 100% genuine digital downloads at competitive prices, with instant delivery after payment. Products include Steam / PC keys, PlayStation and Xbox games, plus popular software and subscription services.
+
+## Pages
+
+- [Home](/): Featured games, newly added titles, and why gamers trust TRXSHOP.
+- [All Games](/games): Full catalog with filters for platform, genre, and price.
+- [Contact](/contactus): Support contact and registered merchant information.
+- [Terms and Conditions](/terms-and-conditions): Site terms of use.
+- [Refund and Cancellation](/refund-and-cancellation): Refund and cancellation policy.

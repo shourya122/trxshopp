@@ -1,0 +1,1 @@
+CREATE POLICY "Deny all client access" ON public.crypto_orders FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
