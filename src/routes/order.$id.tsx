@@ -263,7 +263,7 @@ function OrderPage() {
                     <div className="relative shrink-0 w-20 h-20 rounded-lg bg-white/[0.06] border border-white/10">
                       <div className="absolute inset-0 rounded-lg overflow-hidden">
                         {it.cover_image ? (
-                          <img src={it.cover_image} alt={name} className="w-full h-full object-contain p-1" />
+                          <img src={it.cover_image} alt={name} className="w-full h-full object-cover" />
                         ) : (
                           <div className="w-full h-full grid place-items-center text-white/40">
                             <ShoppingBag className="w-6 h-6" />

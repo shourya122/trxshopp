@@ -238,7 +238,7 @@ function SearchProductCard({
             src={img}
             alt={`${product.title} cover`}
             loading="lazy"
-            className="w-full h-full object-contain object-center p-1.5 transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-white/40 text-xs">
@@ -289,7 +289,7 @@ function RecentProductCard({
             src={product.image}
             alt={`${product.title} cover`}
             loading="lazy"
-            className="w-full h-full object-contain object-center p-1.5 transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-white/40 text-xs">

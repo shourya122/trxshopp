@@ -501,7 +501,7 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
         <div className="relative shrink-0 w-10 h-12">
           <div className="w-full h-full rounded-[3px] bg-white/[0.05] overflow-hidden">
             {items[0]?.image ? (
-              <img src={items[0].image} alt="" className="w-full h-full object-contain" loading="lazy" />
+              <img src={items[0].image} alt="" className="w-full h-full object-cover" loading="lazy" />
             ) : (
               <div className="w-full h-full grid place-items-center text-white/30">
                 <Package className="w-4 h-4" />
@@ -539,7 +539,7 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
                       <img
                         src={i.image}
                         alt={i.name}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                         loading="lazy"
                       />
                     ) : (
