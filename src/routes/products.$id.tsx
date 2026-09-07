@@ -304,7 +304,9 @@ function ProductPage() {
           {/* Edition selector (only if editions defined) */}
           {hasEditions && (
             <div className="mb-5">
-              <div className="text-[13px] font-medium text-neutral-300 mb-2">Edition</div>
+              <div className="text-[13px] font-medium text-neutral-300 mb-2">
+                {product.editionsLabel?.trim() || "Edition"}
+              </div>
               <div className="flex flex-wrap gap-2">
                 {editions.map((e) => {
                   const on = e.name === selectedEdition;

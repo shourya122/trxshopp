@@ -351,6 +351,7 @@ export type Database = {
           description: string | null
           developer: string
           editions: Json
+          editions_label: string
           featured: boolean
           genre: string
           id: string
@@ -379,6 +380,7 @@ export type Database = {
           description?: string | null
           developer?: string
           editions?: Json
+          editions_label?: string
           featured?: boolean
           genre?: string
           id?: string
@@ -407,6 +409,7 @@ export type Database = {
           description?: string | null
           developer?: string
           editions?: Json
+          editions_label?: string
           featured?: boolean
           genre?: string
           id?: string

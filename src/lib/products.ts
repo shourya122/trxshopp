@@ -23,6 +23,7 @@ type Row = {
   featured: boolean;
   rating: number | string;
   editions: unknown;
+  editions_label?: unknown;
   option_groups?: unknown;
 
   created_at: string;
@@ -98,6 +99,7 @@ function rowToProduct(r: Row): Product {
     featured: r.featured,
     badge: (r.badge as Product["badge"]) || "",
     editions: parseEditions(r.editions),
+    editionsLabel: typeof r.editions_label === "string" ? r.editions_label : "",
     optionGroups: parseOptionGroups(r.option_groups),
 
     rating: typeof r.rating === "string" ? parseFloat(r.rating) : r.rating,
