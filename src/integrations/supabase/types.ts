@@ -360,6 +360,7 @@ export type Database = {
           option_groups: Json
           platforms: string[]
           price_cents: number
+          product_details: string
           publisher: string
           rating: number
           release_date: string
@@ -367,6 +368,7 @@ export type Database = {
           slug: string
           status: string
           stock: number
+          terms_conditions: string
           title: string
           updated_at: string
         }
@@ -389,6 +391,7 @@ export type Database = {
           option_groups?: Json
           platforms?: string[]
           price_cents?: number
+          product_details?: string
           publisher?: string
           rating?: number
           release_date?: string
@@ -396,6 +399,7 @@ export type Database = {
           slug: string
           status?: string
           stock?: number
+          terms_conditions?: string
           title: string
           updated_at?: string
         }
@@ -418,6 +422,7 @@ export type Database = {
           option_groups?: Json
           platforms?: string[]
           price_cents?: number
+          product_details?: string
           publisher?: string
           rating?: number
           release_date?: string
@@ -425,6 +430,7 @@ export type Database = {
           slug?: string
           status?: string
           stock?: number
+          terms_conditions?: string
           title?: string
           updated_at?: string
         }
