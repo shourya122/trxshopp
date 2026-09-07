@@ -136,17 +136,7 @@ export function ProductEditDialog({ product, onClose }: Props) {
       editions: editions
         .map((e) => ({ name: e.name.trim(), price_cents: Math.max(0, Math.round(Number(e.price_cents) || 0)) }))
         .filter((e) => e.name.length > 0),
-      option_groups: optionGroups
-        .map((g) => ({
-          name: g.name.trim(),
-          values: (g.values ?? [])
-            .map((v) => {
-              const cents = Math.max(0, Math.round(Number(v.price_cents) || 0));
-              return { value: (v.value ?? "").trim(), price_cents: cents > 0 ? cents : null };
-            })
-            .filter((v) => v.value.length > 0),
-        }))
-        .filter((g) => g.name.length > 0 && g.values.length > 0),
+      editions_label: (form.editions_label ?? "").trim(),
     };
 
     try {
