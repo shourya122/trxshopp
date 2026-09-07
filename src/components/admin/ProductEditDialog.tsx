@@ -296,37 +296,6 @@ export function ProductEditDialog({ product, onClose }: Props) {
               </div>
             </Field>
 
-            <Field label="Editions (optional)">
-              <div className="space-y-2">
-                {editions.length === 0 && (
-                  <p className="text-[11px] text-[#71717A]">
-                    No editions defined. Product page will show the base price and no edition selector.
-                  </p>
-                )}
-                {editions.map((e, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <div className="flex-1">
-                      <Input value={e.name} onChange={(v) => updateEdition(i, { name: v })} placeholder="Edition name (e.g. Standard)" />
-                    </div>
-                    <div className="w-32">
-                      <Input
-                        type="number"
-                        value={((e.price_cents ?? 0) / 100).toString()}
-                        onChange={(v) => updateEdition(i, { price_cents: Math.round((Number(v) || 0) * 100) })}
-                        placeholder="Price (₹)"
-                      />
-                    </div>
-                    <button onClick={() => removeEdition(i)} className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-white/[0.06] text-[#f87171] hover:bg-[#EF4444]/[0.08]">
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                ))}
-                <button onClick={addEdition} className="flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-dashed border-white/[0.1] text-[11.5px] text-[#A1A1AA] hover:border-white/20 hover:text-white">
-                  <Plus className="h-3 w-3" /> Add edition
-                </button>
-              </div>
-            </Field>
-
             {/* Variants — Shopify-style option selector, opt-in per product */}
             <div className="rounded-xl border border-white/[0.08] bg-[#111113] p-4">
               <div className="text-[13px] font-semibold text-white">Variants</div>
@@ -334,6 +303,39 @@ export function ProductEditDialog({ product, onClose }: Props) {
                 Optional. Add editions or choices like size, colour, or content features. Give a value its own price to
                 override the base price when it’s selected — leave the price blank to keep the base price.
               </p>
+
+              <div className="mt-3 border-b border-white/[0.06] pb-3">
+              <Field label="Editions (optional)">
+                <div className="space-y-2">
+                  {editions.length === 0 && (
+                    <p className="text-[11px] text-[#71717A]">
+                      No editions defined. Product page will show the base price and no edition selector.
+                    </p>
+                  )}
+                  {editions.map((e, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <div className="flex-1">
+                        <Input value={e.name} onChange={(v) => updateEdition(i, { name: v })} placeholder="Edition name (e.g. Standard)" />
+                      </div>
+                      <div className="w-32">
+                        <Input
+                          type="number"
+                          value={((e.price_cents ?? 0) / 100).toString()}
+                          onChange={(v) => updateEdition(i, { price_cents: Math.round((Number(v) || 0) * 100) })}
+                          placeholder="Price (₹)"
+                        />
+                      </div>
+                      <button onClick={() => removeEdition(i)} className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-white/[0.06] text-[#f87171] hover:bg-[#EF4444]/[0.08]">
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                  <button onClick={addEdition} className="flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-dashed border-white/[0.1] text-[11.5px] text-[#A1A1AA] hover:border-white/20 hover:text-white">
+                    <Plus className="h-3 w-3" /> Add edition
+                  </button>
+                </div>
+              </Field>
+              </div>
 
               <div className="mt-3 space-y-3">
                 {optionGroups.map((g, gi) => (
