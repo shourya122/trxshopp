@@ -8,7 +8,7 @@
 export function ProductCardSkeleton() {
   return (
     <div className="block" aria-hidden="true">
-      <div className="skeleton-shimmer aspect-[3/4] w-full rounded-sm" />
+      <div className="skeleton-shimmer h-64 w-full rounded-sm sm:h-80" />
       <div className="pt-4 space-y-2">
         <div className="skeleton-shimmer h-[14px] w-[85%] rounded" />
         <div className="skeleton-shimmer h-[14px] w-[60%] rounded" />

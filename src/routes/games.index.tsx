@@ -320,12 +320,12 @@ export function ProductCard({ g }: { g: Product }) {
     >
     <Link to="/products/$id" params={{ id: g.slug || g.id }} className="group block">
 
-      <div className="relative overflow-hidden bg-neutral-900 aspect-[3/4] rounded-md [transform:translateZ(0)] transition-[transform,box-shadow] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 group-hover:shadow-[0_24px_50px_-15px_rgba(0,0,0,0.65)]">
+      <div className="relative overflow-hidden bg-neutral-900 rounded-md [transform:translateZ(0)] transition-[transform,box-shadow] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 group-hover:shadow-[0_24px_50px_-15px_rgba(0,0,0,0.65)]">
         <ImageWithSkeleton
           src={img}
           alt={`${g.title} game cover`}
           loading="lazy"
-          className="w-full h-full object-cover object-center transform-gpu [backface-visibility:hidden] [transform-origin:center] will-change-transform transition-transform duration-[1800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+          className="block w-full h-auto object-contain object-center"
         />
 
         {/* Gradient sheen on hover */}

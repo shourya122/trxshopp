@@ -189,7 +189,7 @@ function Products() {
                     <td className="cursor-pointer px-3 py-3" onClick={() => setEditing(p as EditableProduct)}>
                       <div className="flex items-center gap-3">
                         {p.cover_image ? (
-                          <img src={p.cover_image as string} alt="" className="h-9 w-9 shrink-0 rounded-md border border-white/[0.06] object-cover" />
+                          <img src={p.cover_image as string} alt="" className="h-9 w-9 shrink-0 rounded-md border border-white/[0.06] bg-white/[0.02] object-contain" />
                         ) : (
                           <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md border border-white/[0.06] bg-white/[0.04] text-[10px] font-bold text-[#71717A]">
                             {(p.title as string).slice(0, 2).toUpperCase()}
