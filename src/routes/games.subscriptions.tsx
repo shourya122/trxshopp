@@ -35,7 +35,7 @@ async function listSubscriptions(): Promise<Product[]> {
     featured: r.featured,
     badge: (r.badge as Product["badge"]) || "",
     editions: [],
-    optionGroups: [],
+    optionGroups: [], editionsLabel: "",
     rating: typeof r.rating === "string" ? parseFloat(r.rating) : r.rating,
     votes: "0",
     createdAt: new Date(r.created_at).getTime(),

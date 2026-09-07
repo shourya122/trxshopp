@@ -41,6 +41,7 @@ export interface Product {
   featured: boolean;
   badge: "" | "hot" | "disc" | "new";
   editions: Edition[];
+  editionsLabel: string;
   optionGroups: OptionGroup[];
 
   rating: number;
