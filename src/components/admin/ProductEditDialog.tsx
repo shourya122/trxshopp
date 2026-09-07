@@ -87,6 +87,21 @@ export function ProductEditDialog({ product, onClose }: Props) {
   };
   const addEdition = () => set("editions", [...editions, { name: "", price_cents: form.price_cents ?? 0 }]);
 
+  // Variant options (Shopify-style) — optional, per product.
+  const optionGroups = form.option_groups ?? [];
+  const setGroups = (next: { name: string; values: string[] }[]) => set("option_groups", next);
+  const updateGroup = (i: number, patch: Partial<{ name: string; values: string[] }>) =>
+    setGroups(optionGroups.map((g, idx) => (idx === i ? { ...g, ...patch } : g)));
+  const removeGroup = (i: number) => setGroups(optionGroups.filter((_, idx) => idx !== i));
+  const addGroup = () => setGroups([...optionGroups, { name: "", values: [""] }]);
+  const setValue = (gi: number, vi: number, v: string) =>
+    updateGroup(gi, { values: (optionGroups[gi]?.values ?? []).map((x, i) => (i === vi ? v : x)) });
+  const addValue = (gi: number) =>
+    updateGroup(gi, { values: [...(optionGroups[gi]?.values ?? []), ""] });
+  const removeValue = (gi: number, vi: number) =>
+    updateGroup(gi, { values: (optionGroups[gi]?.values ?? []).filter((_, i) => i !== vi) });
+
+
   const save = async () => {
     if (!form.title?.trim()) { toast.error("Title is required"); return; }
     setSaving(true);
