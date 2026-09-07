@@ -35,6 +35,8 @@ export interface Product {
   featured: boolean;
   badge: "" | "hot" | "disc" | "new";
   editions: Edition[];
+  optionGroups: OptionGroup[];
+
   rating: number;
   votes: string;
   createdAt: number;
