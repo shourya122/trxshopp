@@ -18,6 +18,7 @@ const placeInput = z.object({
     name: z.string().min(1).max(200),
     qty: z.number().int().positive().max(99),
     edition_name: z.string().max(60).optional(),
+  options: z.record(z.string().max(60), z.string().max(60)).optional(),
   })).min(1).max(50),
   coupon_code: z.string().trim().optional(),
   customer_name: z.string().trim().max(120).optional(),
@@ -87,9 +88,12 @@ export const placeOrder = createServerFn({ method: "POST" })
         unitCents = Number(match.price_cents) || unitCents;
         editionName = match.name as string;
       }
+      const optionSuffix = it.options && Object.keys(it.options).length
+        ? ` (${Object.entries(it.options).map(([k, v]) => `${k}: ${v}`).join(", ")})`
+        : "";
       lineItems.push({
         product_id: p.id as string,
-        title: p.title as string,
+        title: `${p.title as string}${optionSuffix}`,
         quantity: it.qty,
         price_cents: unitCents,
         edition_name: editionName,
