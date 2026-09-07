@@ -8,7 +8,7 @@ export function ProductDetailSkeleton() {
       <div className="max-w-[1200px] mx-auto px-4 sm:px-8 pt-24 pb-6 grid grid-cols-1 lg:grid-cols-[480px_minmax(0,1fr)] gap-12 lg:gap-20">
         {/* Image */}
         <div className="lg:sticky lg:top-6 self-start w-full">
-          <div className="skeleton-shimmer h-80 w-full rounded-lg sm:h-[480px]" />
+          <div className="skeleton-shimmer aspect-[3/4] w-full rounded-lg" />
         </div>
 
         {/* Info */}

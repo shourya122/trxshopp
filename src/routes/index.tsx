@@ -846,12 +846,12 @@ function HomeProductCard({
 
   return (
     <Link to="/products/$id" params={{ id: slug }} className="group block content-in">
-      <div className="relative overflow-hidden bg-neutral-900 rounded-sm card-tilt">
+      <div className="relative overflow-hidden bg-neutral-900 aspect-[3/4] rounded-sm card-tilt">
         <img
           src={img}
           alt={`${title} game cover`}
           loading="lazy"
-          className="block w-full h-auto object-contain"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <span
           className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full"

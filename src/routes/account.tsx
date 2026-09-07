@@ -286,7 +286,7 @@ function AccountPage() {
                           style={{ background: "#000", border: `1px solid ${BORDER_SOFT}` }}
                         >
                           {o.cover_image
-                            ? <img src={o.cover_image} alt="" className="w-full h-full object-contain" />
+                            ? <img src={o.cover_image} alt="" className="w-full h-full object-cover" />
                             : <div className="w-full h-full grid place-items-center" style={{ color: "rgba(255,255,255,0.15)" }}><ImageIcon className="w-6 h-6" /></div>}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -524,7 +524,7 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
                       <div className="flex items-start gap-3 flex-1 min-w-0">
                         <div className="relative w-14 h-14 rounded-md overflow-hidden shrink-0" style={{ background: "#000", border: "1px solid rgba(255,255,255,0.12)" }}>
                           {cover
-                            ? <img src={cover} alt="" className="w-full h-full object-contain" />
+                            ? <img src={cover} alt="" className="w-full h-full object-cover" />
                             : <div className="w-full h-full grid place-items-center" style={{ color: "rgba(255,255,255,0.2)" }}><ImageIcon className="w-4 h-4" /></div>}
                           <span
                             className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full grid place-items-center text-[10px] font-bold"

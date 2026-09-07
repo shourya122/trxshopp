@@ -232,13 +232,13 @@ function SearchProductCard({
       onClick={onClick}
       className="group block"
     >
-      <div className="relative overflow-hidden bg-white/5 rounded-lg">
+      <div className="relative overflow-hidden bg-white/5 aspect-[3/4] rounded-lg">
         {img ? (
           <img
             src={img}
             alt={`${product.title} cover`}
             loading="lazy"
-            className="block w-full h-auto object-contain"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-white/40 text-xs">
@@ -283,13 +283,13 @@ function RecentProductCard({
       onClick={onClose}
       className="group block"
     >
-      <div className="relative overflow-hidden bg-white/5 rounded-lg">
+      <div className="relative overflow-hidden bg-white/5 aspect-[3/4] rounded-lg">
         {product.image ? (
           <img
             src={product.image}
             alt={`${product.title} cover`}
             loading="lazy"
-            className="block w-full h-auto object-contain"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-white/40 text-xs">

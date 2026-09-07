@@ -224,11 +224,11 @@ function ProductPage() {
       <div className="max-w-[1200px] mx-auto px-4 sm:px-8 pt-24 pb-6 grid grid-cols-1 lg:grid-cols-[480px_minmax(0,1fr)] gap-12 lg:gap-20">
         {/* Image */}
         <div className="lg:sticky lg:top-6 self-start w-full">
-          <div className="rounded-lg overflow-hidden bg-neutral-900">
+          <div className="rounded-lg overflow-hidden bg-neutral-900 aspect-[3/4]">
             <ImageWithSkeleton
               src={coverSrc}
               alt={productTitle}
-              className="block w-full h-auto object-contain object-center"
+              className="w-full h-full object-cover object-center"
               style={{ imageRendering: "auto" }}
             />
           </div>
@@ -486,12 +486,12 @@ function RelatedCarousel({ related }: { related: Product[] }) {
                   data-card
                   className="group snap-start shrink-0 basis-[calc((100%-3rem)/2)] sm:basis-[calc((100%-4.5rem)/3)] lg:basis-[calc((100%-4.5rem)/4)]"
                 >
-                  <div className="relative overflow-hidden bg-neutral-900 rounded-lg transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 group-hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.6)]">
+                  <div className="relative overflow-hidden bg-neutral-900 rounded-lg aspect-[3/4] transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 group-hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.6)]">
                     <ImageWithSkeleton
                       src={g.coverImage || g.screenshots[0] || ""}
                       alt={`${g.title} game cover`}
                       loading="lazy"
-                      className="block w-full h-auto object-contain object-center"
+                      className="w-full h-full object-cover object-center will-change-transform transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
                       skeletonClassName="bg-neutral-800"
                     />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />

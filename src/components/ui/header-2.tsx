@@ -342,7 +342,7 @@ export function Header() {
                           <img
                             src={it.image}
                             alt={it.name}
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-cover"
                             onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                           />
                         )}

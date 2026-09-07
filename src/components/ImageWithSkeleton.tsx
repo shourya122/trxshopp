@@ -25,7 +25,7 @@ export function ImageWithSkeleton({
   const ready = loaded || errored;
 
   return (
-    <div className={cn("relative w-full", wrapperClassName)}>
+    <div className={cn("relative w-full h-full", wrapperClassName)}>
       {!ready && (
         <Skeleton
           className={cn(
