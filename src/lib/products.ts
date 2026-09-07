@@ -86,6 +86,8 @@ function rowToProduct(r: Row): Product {
     featured: r.featured,
     badge: (r.badge as Product["badge"]) || "",
     editions: parseEditions(r.editions),
+    optionGroups: parseOptionGroups(r.option_groups),
+
     rating: typeof r.rating === "string" ? parseFloat(r.rating) : r.rating,
     votes: "0",
     createdAt: created,
