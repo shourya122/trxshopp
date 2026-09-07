@@ -10,6 +10,7 @@ const itemSchema = z.object({
   variantId: z.string().optional(),
   product_id: z.string().optional(),
   edition_name: z.string().max(60).optional(),
+  options: z.record(z.string().max(60), z.string().max(60)).optional(),
 });
 
 const OXAPAY_ENDPOINT = "https://api.oxapay.com/v1/payment/invoice";

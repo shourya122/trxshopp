@@ -23,6 +23,8 @@ type Row = {
   featured: boolean;
   rating: number | string;
   editions: unknown;
+  option_groups?: unknown;
+
   created_at: string;
   updated_at: string;
 };
@@ -40,6 +42,23 @@ function parseEditions(raw: unknown): { name: string; priceCents: number }[] {
   }
   return out;
 }
+
+function parseOptionGroups(raw: unknown): { name: string; values: string[] }[] {
+  if (!Array.isArray(raw)) return [];
+  const out: { name: string; values: string[] }[] = [];
+  for (const g of raw) {
+    if (!g || typeof g !== "object") continue;
+    const rec = g as Record<string, unknown>;
+    const name = typeof rec.name === "string" ? rec.name.trim() : "";
+    const values = Array.isArray(rec.values)
+      ? rec.values.filter((v): v is string => typeof v === "string" && v.trim().length > 0).map((v) => v.trim())
+      : [];
+    if (!name || values.length === 0) continue;
+    out.push({ name, values });
+  }
+  return out;
+}
+
 
 
 function rowToProduct(r: Row): Product {
@@ -67,6 +86,8 @@ function rowToProduct(r: Row): Product {
     featured: r.featured,
     badge: (r.badge as Product["badge"]) || "",
     editions: parseEditions(r.editions),
+    optionGroups: parseOptionGroups(r.option_groups),
+
     rating: typeof r.rating === "string" ? parseFloat(r.rating) : r.rating,
     votes: "0",
     createdAt: created,

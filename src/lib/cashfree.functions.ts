@@ -10,6 +10,7 @@ const itemSchema = z.object({
   variantId: z.string().optional(),
   product_id: z.string().optional(),
   edition_name: z.string().max(60).optional(),
+  options: z.record(z.string().max(60), z.string().max(60)).optional(),
   edition_price_cents: z.number().int().nonnegative().optional(),
 });
 

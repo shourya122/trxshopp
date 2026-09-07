@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { ShieldCheck, Layers, Clock, Lock, Check, Star, ArrowRight, Eye, FileText, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import cartIconAsset from "@/assets/cart-icon-v2.svg.asset.json";
@@ -129,6 +130,21 @@ function ProductPage() {
     if (!hasEditions && selectedEdition) setSelectedEdition("");
   }, [hasEditions, editions, selectedEdition]);
 
+  const optionGroups = useMemo(() => product?.optionGroups ?? [], [product]);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+  useEffect(() => {
+    setSelectedOptions((cur) => {
+      const next: Record<string, string> = {};
+      for (const g of optionGroups) {
+        next[g.name] = g.values.includes(cur[g.name]) ? cur[g.name] : g.values[0];
+      }
+      const same =
+        Object.keys(next).length === Object.keys(cur).length &&
+        Object.keys(next).every((k) => next[k] === cur[k]);
+      return same ? cur : next;
+    });
+  }, [optionGroups]);
+
   const { data: allProducts } = useQuery({
     queryKey: ["products", "active"],
     queryFn: () => listProducts({ activeOnly: true, max: 12 }),
@@ -170,6 +186,7 @@ function ProductPage() {
         steamId: numericId,
         image: product.coverImage || product.screenshots[0] || "",
         edition: activeEdition ? { name: activeEdition.name, priceCents: activeEdition.priceCents } : undefined,
+        options: optionGroups.length ? selectedOptions : undefined,
       }, qty);
       setCartState("added");
       setTimeout(() => setCartState("idle"), 1200);
@@ -199,6 +216,7 @@ function ProductPage() {
         edition: activeEdition
           ? { name: activeEdition.name, priceCents: activeEdition.priceCents }
           : undefined,
+        options: optionGroups.length ? selectedOptions : undefined,
       };
       try {
         sessionStorage.setItem(
@@ -304,6 +322,39 @@ function ProductPage() {
                   );
                 })}
               </div>
+            </div>
+          )}
+
+          {/* Variant options (admin-defined, per product) */}
+          {optionGroups.length > 0 && (
+            <div className="mb-5 space-y-4">
+              {optionGroups.map((g) => (
+                <div key={g.name}>
+                  <div className="text-[13px] font-medium text-neutral-300 mb-2">{g.name}</div>
+                  <div className="flex flex-wrap gap-2">
+                    {g.values.map((v) => {
+                      const on = selectedOptions[g.name] === v;
+                      return (
+                        <button
+                          key={v}
+                          type="button"
+                          onClick={() => setSelectedOptions((cur) => ({ ...cur, [g.name]: v }))}
+                          className="relative isolate min-w-[150px] rounded-full border border-neutral-700 px-5 py-3 text-[13.5px] font-semibold transition-colors duration-300"
+                        >
+                          {on && (
+                            <motion.span
+                              layoutId={`trx-opt-${g.name}`}
+                              transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                              className="absolute inset-0 -z-10 rounded-full bg-white"
+                            />
+                          )}
+                          <span className={on ? "text-black" : "text-neutral-300"}>{v}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 

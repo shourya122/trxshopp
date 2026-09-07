@@ -25,6 +25,7 @@ export interface CartItem {
   image?: string;
   qty: number;
   edition?: { name: string; priceCents: number };
+  options?: Record<string, string>;
 }
 
 export interface AddCartInput {
@@ -38,6 +39,7 @@ export interface AddCartInput {
   steamId?: number;
   id?: number;
   edition?: { name: string; priceCents: number };
+  options?: Record<string, string>;
 }
 
 
@@ -58,8 +60,16 @@ interface CartContextValue {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-function hashNumericId(variantId: string, editionName?: string): number {
-  const key = editionName ? `${variantId}::${editionName}` : variantId;
+function optionsKey(options?: Record<string, string>): string {
+  if (!options) return "";
+  return Object.keys(options)
+    .sort()
+    .map((k) => `${k}=${options[k]}`)
+    .join("|");
+}
+
+function hashNumericId(variantId: string, editionName?: string, options?: Record<string, string>): number {
+  const key = [variantId, editionName ?? "", optionsKey(options)].join("::");
   let h = 0;
   for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) | 0;
   return Math.abs(h);
@@ -109,9 +119,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       // Line identity must always be edition-aware and derived from the full
       // variantId — never a caller-supplied id, which can collide across
       // products/editions and cause shared remove/qty mutations.
-      const numericId = hashNumericId(input.variantId, editionName);
+      const numericId = hashNumericId(input.variantId, editionName, input.options);
       const matches = (i: CartItem) =>
-        i.variantId === input.variantId && (i.edition?.name ?? null) === (editionName ?? null);
+        i.variantId === input.variantId &&
+        (i.edition?.name ?? null) === (editionName ?? null) &&
+        optionsKey(i.options) === optionsKey(input.options);
       setItems((cur) => {
         const existing = cur.find(matches);
         if (existing) {
@@ -132,6 +144,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             image: input.image,
             qty,
             edition: input.edition,
+            options: input.options,
           },
         ];
       });

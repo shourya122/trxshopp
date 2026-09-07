@@ -33,6 +33,8 @@ export type EditableProduct = {
   featured?: boolean | null;
   badge?: string | null;
   editions?: { name: string; price_cents: number }[] | null;
+  option_groups?: { name: string; values: string[] }[] | null;
+
 };
 
 type Props = {
@@ -85,6 +87,21 @@ export function ProductEditDialog({ product, onClose }: Props) {
   };
   const addEdition = () => set("editions", [...editions, { name: "", price_cents: form.price_cents ?? 0 }]);
 
+  // Variant options (Shopify-style) — optional, per product.
+  const optionGroups = form.option_groups ?? [];
+  const setGroups = (next: { name: string; values: string[] }[]) => set("option_groups", next);
+  const updateGroup = (i: number, patch: Partial<{ name: string; values: string[] }>) =>
+    setGroups(optionGroups.map((g, idx) => (idx === i ? { ...g, ...patch } : g)));
+  const removeGroup = (i: number) => setGroups(optionGroups.filter((_, idx) => idx !== i));
+  const addGroup = () => setGroups([...optionGroups, { name: "", values: [""] }]);
+  const setValue = (gi: number, vi: number, v: string) =>
+    updateGroup(gi, { values: (optionGroups[gi]?.values ?? []).map((x, i) => (i === vi ? v : x)) });
+  const addValue = (gi: number) =>
+    updateGroup(gi, { values: [...(optionGroups[gi]?.values ?? []), ""] });
+  const removeValue = (gi: number, vi: number) =>
+    updateGroup(gi, { values: (optionGroups[gi]?.values ?? []).filter((_, i) => i !== vi) });
+
+
   const save = async () => {
     if (!form.title?.trim()) { toast.error("Title is required"); return; }
     setSaving(true);
@@ -110,7 +127,14 @@ export function ProductEditDialog({ product, onClose }: Props) {
       editions: editions
         .map((e) => ({ name: e.name.trim(), price_cents: Math.max(0, Math.round(Number(e.price_cents) || 0)) }))
         .filter((e) => e.name.length > 0),
+      option_groups: optionGroups
+        .map((g) => ({
+          name: g.name.trim(),
+          values: (g.values ?? []).map((v) => v.trim()).filter((v) => v.length > 0),
+        }))
+        .filter((g) => g.name.length > 0 && g.values.length > 0),
     };
+
     try {
       const p = updateFn({ data: { id: form.id, patch } });
       toast.promise(p, {
@@ -288,6 +312,72 @@ export function ProductEditDialog({ product, onClose }: Props) {
                 </button>
               </div>
             </Field>
+
+            {/* Variants — Shopify-style option selector, opt-in per product */}
+            <div className="rounded-xl border border-white/[0.08] bg-[#111113] p-4">
+              <div className="text-[13px] font-semibold text-white">Variants</div>
+              <p className="mt-1 text-[11.5px] text-[#71717A]">
+                Optional. Add choices like size, colour, or content features. Customers pick them above “Add to cart”.
+              </p>
+
+              <div className="mt-3 space-y-3">
+                {optionGroups.map((g, gi) => (
+                  <div key={gi} className="rounded-lg border border-white/[0.06] bg-[#0B0B0E] p-3">
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1">
+                        <Input
+                          value={g.name}
+                          onChange={(v) => updateGroup(gi, { name: v })}
+                          placeholder="Option name (e.g. Video game content features)"
+                        />
+                      </div>
+                      <button
+                        onClick={() => removeGroup(gi)}
+                        className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-white/[0.06] text-[#f87171] hover:bg-[#EF4444]/[0.08]"
+                        title="Remove option"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                    <div className="mt-2 space-y-2">
+                      {(g.values ?? []).map((v, vi) => (
+                        <div key={vi} className="flex items-center gap-2">
+                          <div className="flex-1">
+                            <Input
+                              value={v}
+                              onChange={(nv) => setValue(gi, vi, nv)}
+                              placeholder={vi === 0 ? "Value (e.g. Downloadable content (DLC))" : "Value (e.g. Early access)"}
+                            />
+                          </div>
+                          <button
+                            onClick={() => removeValue(gi, vi)}
+                            className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-white/[0.06] text-[#a1a1aa] hover:bg-white/[0.05] hover:text-white"
+                            title="Remove value"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        onClick={() => addValue(gi)}
+                        className="flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-dashed border-white/[0.1] text-[11.5px] text-[#A1A1AA] hover:border-white/20 hover:text-white"
+                      >
+                        <Plus className="h-3 w-3" /> Add value
+                      </button>
+                    </div>
+                  </div>
+                ))}
+
+                <button
+                  onClick={addGroup}
+                  className="flex items-center gap-2 text-[12.5px] text-[#D4D4D8] transition hover:text-white"
+                >
+                  <span className="grid h-5 w-5 place-items-center rounded-full border border-white/25 text-[12px] leading-none">+</span>
+                  Add options like size or color
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
 

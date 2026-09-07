@@ -425,6 +425,7 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
             name: i.name,
             qty: i.qty,
             edition_name: i.edition?.name,
+            options: i.options,
           })),
           coupon_code: coupon?.code,
           customer_name: name.trim() || undefined,
@@ -556,6 +557,11 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
                   <p className="text-white/90 leading-snug" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif', fontSize: '14px' }}>{i.name}</p>
                   {i.edition?.name && (
                     <p className="text-emerald-300/80 mt-0.5" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif', fontSize: '14px' }}>{i.edition.name}</p>
+                  )}
+                  {i.options && Object.keys(i.options).length > 0 && (
+                    <p className="text-white/50 mt-0.5" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif', fontSize: '13px' }}>
+                      {Object.entries(i.options).map(([k, v]) => `${k}: ${v}`).join(" · ")}
+                    </p>
                   )}
                 </div>
                 <span className="text-white/90 whitespace-nowrap" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif', fontSize: '14px' }}>
@@ -890,6 +896,7 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
                         variantId: i.variantId, product_id: i.variantId || String(i.id),
                         edition_name: i.edition?.name,
                         edition_price_cents: i.edition?.priceCents,
+                        options: i.options,
                       }))}
                       amount={grand}
                       name={name}
@@ -926,6 +933,7 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
                         variantId: i.variantId,
                         product_id: i.variantId || String(i.id),
                         edition_name: i.edition?.name,
+                        options: i.options,
                       }))}
                       amount={grand}
                       name={name}

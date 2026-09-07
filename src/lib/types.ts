@@ -5,6 +5,13 @@ export interface Edition {
   priceCents: number;
 }
 
+/** Optional per-product choice selector (Shopify-style variant options). */
+export interface OptionGroup {
+  name: string;
+  values: string[];
+}
+
+
 
 export interface Product {
   id: string;                  // Supabase product UUID
@@ -28,6 +35,8 @@ export interface Product {
   featured: boolean;
   badge: "" | "hot" | "disc" | "new";
   editions: Edition[];
+  optionGroups: OptionGroup[];
+
   rating: number;
   votes: string;
   createdAt: number;
