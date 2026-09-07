@@ -23,6 +23,8 @@ type Row = {
   featured: boolean;
   rating: number | string;
   editions: unknown;
+  option_groups?: unknown;
+
   created_at: string;
   updated_at: string;
 };
