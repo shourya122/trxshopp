@@ -324,7 +324,7 @@ function ProductPage() {
                       )}
                       <span className={on ? "text-black" : "text-neutral-300"}>
                         {e.name}
-                        <span className={`ml-1.5 font-normal ${on ? "text-black/60" : "text-neutral-500"}`}>
+                        <span className={`ml-1.5 font-normal ${on ? "text-black" : "text-neutral-500"}`}>
                           ₹{(e.priceCents / 100).toLocaleString("en-IN")}
                         </span>
                       </span>
@@ -363,7 +363,7 @@ function ProductPage() {
                           <span className={on ? "text-black" : "text-neutral-300"}>
                             {v}
                             {ov.priceCents ? (
-                              <span className={`ml-1.5 font-normal ${on ? "text-black/60" : "text-neutral-500"}`}>
+                              <span className={`ml-1.5 font-normal ${on ? "text-black" : "text-neutral-500"}`}>
                                 ₹{(ov.priceCents / 100).toLocaleString("en-IN")}
                               </span>
                             ) : null}
