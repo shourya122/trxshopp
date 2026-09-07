@@ -2,6 +2,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { resolveOptions } from "@/lib/option-pricing";
 
 const lineSchema = z.object({
   product_id: z.string().uuid().nullable().optional(),
@@ -58,7 +59,7 @@ export const placeOrder = createServerFn({ method: "POST" })
     const ids = data.items.map((i) => i.product_id || i.variantId).filter(Boolean) as string[];
     const { data: products } = await admin
       .from("products")
-      .select("id, title, price_cents, active, stock, editions")
+      .select("id, title, price_cents, active, stock, editions, option_groups")
       .in("id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]);
     const byId = new Map((products ?? []).map((p) => [p.id as string, p]));
 
@@ -88,9 +89,12 @@ export const placeOrder = createServerFn({ method: "POST" })
         unitCents = Number(match.price_cents) || unitCents;
         editionName = match.name as string;
       }
-      const optionSuffix = it.options && Object.keys(it.options).length
-        ? ` (${Object.entries(it.options).map(([k, v]) => `${k}: ${v}`).join(", ")})`
-        : "";
+      const optRes = resolveOptions((p as { option_groups?: unknown }).option_groups, it.options);
+      if (!optRes.ok) {
+        return { ok: false as const, error: optRes.error ?? "Invalid options." };
+      }
+      if (optRes.priceCents != null) unitCents = optRes.priceCents;
+      const optionSuffix = optRes.suffix;
       lineItems.push({
         product_id: p.id as string,
         title: `${p.title as string}${optionSuffix}`,
