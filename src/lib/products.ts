@@ -7,6 +7,8 @@ type Row = {
   slug: string;
   title: string;
   description: string | null;
+  product_details: string | null;
+  terms_conditions: string | null;
   price_cents: number;
   old_price_cents: number;
   cover_image: string | null;
