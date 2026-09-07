@@ -313,7 +313,7 @@ function ProductPage() {
                       key={e.name}
                       type="button"
                       onClick={() => setSelectedEdition(e.name)}
-                      className="relative isolate min-w-[150px] rounded-full border border-neutral-700 px-5 py-3 text-[13.5px] font-semibold transition-colors duration-300"
+                      className="relative isolate min-w-[170px] rounded-full border border-neutral-700 px-6 py-3.5 text-[15px] font-semibold transition-colors duration-300"
                     >
                       {on && (
                         <motion.span
