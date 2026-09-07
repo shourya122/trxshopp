@@ -8,6 +8,7 @@ export interface PricingItemInput {
   name?: string;
   qty: number;
   edition_name?: string;
+  options?: Record<string, string>;
 }
 
 export interface ResolvedLineItem {
@@ -98,9 +99,12 @@ export async function resolvePricing(
     if (unitCents <= 0) {
       return { ok: false, error: `Price unavailable: ${p.title}` };
     }
+    const optionSuffix = it.options && Object.keys(it.options).length
+      ? ` (${Object.entries(it.options).map(([k, v]) => `${k}: ${v}`).join(", ")})`
+      : "";
     lineItems.push({
       product_id: p.id as string,
-      title: p.title as string,
+      title: `${p.title as string}${optionSuffix}`,
       qty,
       price: unitCents / 100,
       price_cents: unitCents,
