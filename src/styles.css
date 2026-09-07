@@ -987,3 +987,13 @@ html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.12) transparen
   80% { transform: translateX(5px); }
 }
 .otp-shake { animation: otp-shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+
+/* Rich-text description (admin editor + product page) */
+.trx-rte h1, .trx-rte-view h1 { font-size: 1.35em; font-weight: 700; margin: 0.5em 0 0.3em; }
+.trx-rte h2, .trx-rte-view h2 { font-size: 1.2em; font-weight: 700; margin: 0.5em 0 0.3em; }
+.trx-rte h3, .trx-rte-view h3 { font-size: 1.08em; font-weight: 600; margin: 0.5em 0 0.3em; }
+.trx-rte p, .trx-rte-view p { margin: 0 0 0.6em; }
+.trx-rte ul, .trx-rte-view ul { list-style: disc; padding-left: 1.4em; margin: 0 0 0.6em; }
+.trx-rte ol, .trx-rte-view ol { list-style: decimal; padding-left: 1.4em; margin: 0 0 0.6em; }
+.trx-rte a, .trx-rte-view a { text-decoration: underline; }
+.trx-rte-view strong { font-weight: 700; color: #fff; }
