@@ -33,7 +33,8 @@ export type EditableProduct = {
   featured?: boolean | null;
   badge?: string | null;
   editions?: { name: string; price_cents: number }[] | null;
-  option_groups?: { name: string; values: { value: string; price_cents?: number | null }[] }[] | null;
+  editions_label?: string | null;
+
 
 };
 
