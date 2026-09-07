@@ -995,5 +995,6 @@ html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.12) transparen
 .trx-rte p, .trx-rte-view p { margin: 0 0 0.6em; }
 .trx-rte ul, .trx-rte-view ul { list-style: disc; padding-left: 1.4em; margin: 0 0 0.6em; }
 .trx-rte ol, .trx-rte-view ol { list-style: decimal; padding-left: 1.4em; margin: 0 0 0.6em; }
+.trx-rte li::marker, .trx-rte-view li::marker { color: #fff; }
 .trx-rte a, .trx-rte-view a { text-decoration: underline; }
 .trx-rte-view strong { font-weight: 700; color: #fff; }

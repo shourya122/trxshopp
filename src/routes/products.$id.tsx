@@ -499,29 +499,43 @@ function ProductPage() {
                 )}
 
                 <h3 className="text-sm font-bold mb-3 text-white">Product Details:</h3>
-                <ol className="space-y-3 text-sm text-neutral-200 list-decimal pl-5 marker:font-bold marker:text-white">
-                  {[
-                    "You will receive access to a Steam account, available for offline mode only.",
-                    "The provided account is intended strictly for offline gameplay; online services are not accessible.",
-                    "This is a licensed and authentic version of the game.",
-                    "The account is valid globally, allowing access from any region.",
-                    "You can fully enjoy the single-player experience.",
-                    `Languages supported: ${product.languages}.`,
-                    "Updates and patches can be downloaded independently.",
-                    "Always includes the latest available version of the game.",
-                    "Login support provided in case of any issues.",
-                  ].map((line) => (
-                    <li key={line} className="font-semibold leading-snug">{line}</li>
-                  ))}
-                </ol>
+                {product.productDetails ? (
+                  <div
+                    className="trx-rte-view text-sm text-neutral-200 leading-relaxed mb-5"
+                    dangerouslySetInnerHTML={{ __html: product.productDetails }}
+                  />
+                ) : (
+                  <ol className="space-y-3 text-sm text-neutral-200 list-decimal pl-5 marker:font-bold marker:text-white">
+                    {[
+                      "You will receive access to a Steam account, available for offline mode only.",
+                      "The provided account is intended strictly for offline gameplay; online services are not accessible.",
+                      "This is a licensed and authentic version of the game.",
+                      "The account is valid globally, allowing access from any region.",
+                      "You can fully enjoy the single-player experience.",
+                      `Languages supported: ${product.languages}.`,
+                      "Updates and patches can be downloaded independently.",
+                      "Always includes the latest available version of the game.",
+                      "Login support provided in case of any issues.",
+                    ].map((line) => (
+                      <li key={line} className="font-semibold leading-snug">{line}</li>
+                    ))}
+                  </ol>
+                )}
                 <h3 className="text-sm font-bold mt-6 mb-3 text-white">Terms &amp; Conditions:</h3>
-                <ul className="space-y-2 text-sm text-neutral-200 list-disc pl-5">
-                  <li>This product does not include a digital activation key; access is granted through a Steam account containing the purchased game.</li>
-                  <li>Account activation is completed without using any third-party software.</li>
-                  <li>The account remains the property of the original owner. Changing security settings is strictly prohibited.</li>
-                  <li>Sharing or transferring the account to others is not allowed.</li>
-                  <li>No refunds after purchase. If the account is non-operational, a replacement will be issued.</li>
-                </ul>
+                {product.termsConditions ? (
+                  <div
+                    className="trx-rte-view text-sm text-neutral-200 leading-relaxed mb-5"
+                    dangerouslySetInnerHTML={{ __html: product.termsConditions }}
+                  />
+                ) : (
+                  <ul className="space-y-2 text-sm text-neutral-200 list-disc pl-5">
+                    <li>This product does not include a digital activation key; access is granted through a Steam account containing the purchased game.</li>
+                    <li>Account activation is completed without using any third-party software.</li>
+                    <li>The account remains the property of the original owner. Changing security settings is strictly prohibited.</li>
+                    <li>Sharing or transferring the account to others is not allowed.</li>
+                    <li>No refunds after purchase. If the account is non-operational, a replacement will be issued.</li>
+                  </ul>
+                )}
               </AccordionContent>
             </AccordionItem>
           </Accordion>

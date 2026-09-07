@@ -7,6 +7,8 @@ type Row = {
   slug: string;
   title: string;
   description: string | null;
+  product_details: string | null;
+  terms_conditions: string | null;
   price_cents: number;
   old_price_cents: number;
   cover_image: string | null;
@@ -84,6 +86,8 @@ function rowToProduct(r: Row): Product {
     slug: r.slug,
     title: r.title,
     description: r.description ?? "",
+    productDetails: r.product_details ?? "",
+    termsConditions: r.terms_conditions ?? "",
     genre: r.genre ?? "",
     developer: r.developer ?? "",
     publisher: r.publisher ?? "",

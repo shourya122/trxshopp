@@ -19,6 +19,8 @@ export type EditableProduct = {
   title?: string | null;
   slug?: string | null;
   description?: string | null;
+  product_details?: string | null;
+  terms_conditions?: string | null;
   category?: string | null;
   genre?: string | null;
   developer?: string | null;
@@ -99,6 +101,8 @@ export function ProductEditDialog({ product, onClose }: Props) {
       title: form.title.trim(),
       slug: form.slug?.trim() || undefined,
       description: sanitizeHtml(form.description ?? ""),
+      product_details: sanitizeHtml(form.product_details ?? ""),
+      terms_conditions: sanitizeHtml(form.terms_conditions ?? ""),
       category: form.category ?? "",
       genre: form.genre ?? "",
       developer: form.developer ?? "",
@@ -196,6 +200,22 @@ export function ProductEditDialog({ product, onClose }: Props) {
                 value={form.description ?? ""}
                 onChange={(html) => set("description", html)}
                 placeholder="Rich, keyword-friendly copy shown on the product page."
+              />
+            </Field>
+
+            <Field label="Product Details">
+              <RichTextEditor
+                value={form.product_details ?? ""}
+                onChange={(html) => set("product_details", html)}
+                placeholder="Shown under 'Product Details' on the product page. Use numbered/bullet lists."
+              />
+            </Field>
+
+            <Field label="Terms & Conditions">
+              <RichTextEditor
+                value={form.terms_conditions ?? ""}
+                onChange={(html) => set("terms_conditions", html)}
+                placeholder="Shown under 'Terms & Conditions' on the product page."
               />
             </Field>
 

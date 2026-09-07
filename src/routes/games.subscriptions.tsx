@@ -20,6 +20,8 @@ async function listSubscriptions(): Promise<Product[]> {
     slug: r.slug,
     title: r.title,
     description: r.description ?? "",
+    productDetails: r.product_details ?? "",
+    termsConditions: r.terms_conditions ?? "",
     genre: r.genre ?? "",
     developer: r.developer ?? "",
     publisher: r.publisher ?? "",
