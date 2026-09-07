@@ -6,6 +6,8 @@ import { X, Plus, Trash2, Image as ImageIcon, Save } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { adminUpdateProduct } from "@/lib/admin.functions";
+import { RichTextEditor, sanitizeHtml } from "@/components/admin/RichTextEditor";
+
 
 /**
  * Full product editor — image, description, pricing, inventory, metadata.
