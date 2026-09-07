@@ -303,8 +303,8 @@ function ProductPage() {
 
           {/* Edition selector (only if editions defined) */}
           {hasEditions && (
-            <div className="mb-4">
-              <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-400 mb-2">Edition</div>
+            <div className="mb-5">
+              <div className="text-[13px] font-medium text-neutral-300 mb-2">Edition</div>
               <div className="flex flex-wrap gap-2">
                 {editions.map((e) => {
                   const on = e.name === selectedEdition;
@@ -313,24 +313,28 @@ function ProductPage() {
                       key={e.name}
                       type="button"
                       onClick={() => setSelectedEdition(e.name)}
-                      className={`px-4 py-2.5 rounded-lg border text-[13px] font-semibold transition ${
-                        on
-                          ? "border-emerald-500 bg-emerald-500/10 text-white"
-                          : "border-neutral-700 text-neutral-300 hover:border-neutral-500"
-                      }`}
+                      className="relative isolate min-w-[150px] rounded-full border border-neutral-700 px-5 py-3 text-[13.5px] font-semibold transition-colors duration-300"
                     >
-                      <div className="text-left">
-                        <div>{e.name}</div>
-                        <div className={`text-[11px] font-normal ${on ? "text-emerald-300" : "text-neutral-400"}`}>
+                      {on && (
+                        <motion.span
+                          layoutId="trx-edition-pill"
+                          transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                          className="absolute inset-0 -z-10 rounded-full bg-white"
+                        />
+                      )}
+                      <span className={on ? "text-black" : "text-neutral-300"}>
+                        {e.name}
+                        <span className={`ml-1.5 font-normal ${on ? "text-black/60" : "text-neutral-500"}`}>
                           ₹{(e.priceCents / 100).toLocaleString("en-IN")}
-                        </div>
-                      </div>
+                        </span>
+                      </span>
                     </button>
                   );
                 })}
               </div>
             </div>
           )}
+
 
           {/* Variant options (admin-defined, per product) */}
           {optionGroups.length > 0 && (
