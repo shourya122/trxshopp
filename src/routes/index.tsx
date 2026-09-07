@@ -851,7 +851,7 @@ function HomeProductCard({
           src={img}
           alt={`${title} game cover`}
           loading="lazy"
-          className="w-full h-full object-contain object-center p-1.5 transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
         />
         <span
           className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full"

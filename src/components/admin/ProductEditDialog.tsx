@@ -160,7 +160,7 @@ export function ProductEditDialog({ product, onClose }: Props) {
             <Label>Cover image</Label>
             <div className="grid aspect-[3/4] w-full place-items-center overflow-hidden rounded-md border border-white/[0.06] bg-white/[0.02]">
               {form.cover_image ? (
-                <img src={form.cover_image} alt="cover" className="h-full w-full object-contain p-2" />
+                <img src={form.cover_image} alt="cover" className="h-full w-full object-cover" />
               ) : (
                 <ImageIcon className="h-6 w-6 text-[#52525B]" />
               )}
