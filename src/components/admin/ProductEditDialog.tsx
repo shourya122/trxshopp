@@ -87,28 +87,6 @@ export function ProductEditDialog({ product, onClose }: Props) {
   };
   const addEdition = () => set("editions", [...editions, { name: "", price_cents: form.price_cents ?? 0 }]);
 
-  // Variant options (Shopify-style) — optional, per product. Each value may carry its own price.
-  type OptVal = { value: string; price_cents?: number | null };
-  type OptGroup = { name: string; values: OptVal[] };
-  const optionGroups: OptGroup[] = (form.option_groups ?? []).map((g) => ({
-    name: g.name,
-    values: (g.values ?? []).map((v) =>
-      typeof v === "string" ? { value: v as unknown as string, price_cents: null } : v,
-    ),
-  }));
-  const setGroups = (next: OptGroup[]) => set("option_groups", next);
-  const updateGroup = (i: number, patch: Partial<OptGroup>) =>
-    setGroups(optionGroups.map((g, idx) => (idx === i ? { ...g, ...patch } : g)));
-  const removeGroup = (i: number) => setGroups(optionGroups.filter((_, idx) => idx !== i));
-  const addGroup = () => setGroups([...optionGroups, { name: "", values: [{ value: "", price_cents: null }] }]);
-  const updateValue = (gi: number, vi: number, patch: Partial<OptVal>) =>
-    updateGroup(gi, {
-      values: (optionGroups[gi]?.values ?? []).map((x, i) => (i === vi ? { ...x, ...patch } : x)),
-    });
-  const addValue = (gi: number) =>
-    updateGroup(gi, { values: [...(optionGroups[gi]?.values ?? []), { value: "", price_cents: null }] });
-  const removeValue = (gi: number, vi: number) =>
-    updateGroup(gi, { values: (optionGroups[gi]?.values ?? []).filter((_, i) => i !== vi) });
 
 
   const save = async () => {
