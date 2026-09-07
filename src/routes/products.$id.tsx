@@ -44,7 +44,12 @@ export const Route = createFileRoute("/products/$id")({
     const price = Math.round(product.priceCents / 100);
     const platforms = (product.platforms || []).join(", ").toUpperCase() || "PC";
     const title = `Buy ${product.title} (${platforms}) — ₹${price} | TRXSHOP`;
-    const desc = (product.description || `Buy ${product.title} for ${platforms}. Genuine digital key, instant delivery on TRXSHOP.`).slice(0, 155);
+    const desc = (product.description || `Buy ${product.title} for ${platforms}. Genuine digital key, instant delivery on TRXSHOP.`)
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 155);
+
     const image = product.coverImage || "";
     return {
       meta: [
@@ -484,7 +489,15 @@ function ProductPage() {
                 <span className="flex items-center gap-2"><Eye size={18} /> Description</span>
               </AccordionTrigger>
               <AccordionContent>
-                <p className="text-sm text-neutral-200 leading-relaxed mb-5 whitespace-pre-line">{product.description || `Play ${product.title} — instant Steam account delivery.`}</p>
+                {/^\s*<(p|h1|h2|h3|ul|ol|div|strong|em|u|span|a|br)\b/i.test(product.description || "") ? (
+                  <div
+                    className="trx-rte-view text-sm text-neutral-200 leading-relaxed mb-5"
+                    dangerouslySetInnerHTML={{ __html: product.description }}
+                  />
+                ) : (
+                  <p className="text-sm text-neutral-200 leading-relaxed mb-5 whitespace-pre-line">{product.description || `Play ${product.title} — instant Steam account delivery.`}</p>
+                )}
+
                 <h3 className="text-sm font-bold mb-3 text-white">Product Details:</h3>
                 <ol className="space-y-3 text-sm text-neutral-200 list-decimal pl-5 marker:font-bold marker:text-white">
                   {[

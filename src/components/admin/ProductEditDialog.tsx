@@ -6,6 +6,8 @@ import { X, Plus, Trash2, Image as ImageIcon, Save } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { adminUpdateProduct } from "@/lib/admin.functions";
+import { RichTextEditor, sanitizeHtml } from "@/components/admin/RichTextEditor";
+
 
 /**
  * Full product editor — image, description, pricing, inventory, metadata.
@@ -96,7 +98,7 @@ export function ProductEditDialog({ product, onClose }: Props) {
     const patch: Record<string, unknown> = {
       title: form.title.trim(),
       slug: form.slug?.trim() || undefined,
-      description: form.description ?? "",
+      description: sanitizeHtml(form.description ?? ""),
       category: form.category ?? "",
       genre: form.genre ?? "",
       developer: form.developer ?? "",
@@ -190,14 +192,13 @@ export function ProductEditDialog({ product, onClose }: Props) {
             </div>
 
             <Field label="Description">
-              <textarea
+              <RichTextEditor
                 value={form.description ?? ""}
-                onChange={(e) => set("description", e.target.value)}
-                rows={5}
+                onChange={(html) => set("description", html)}
                 placeholder="Rich, keyword-friendly copy shown on the product page."
-                className="w-full resize-y rounded-md border border-white/[0.06] bg-[#111113] px-3 py-2 text-[12.5px] leading-[1.55] text-white outline-none placeholder:text-[#52525B] focus:border-white/15"
               />
             </Field>
+
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <Field label="Price (₹)"><Input type="number" value={((form.price_cents ?? 0) / 100).toString()} onChange={(v) => set("price_cents", Math.round((Number(v) || 0) * 100))} /></Field>
