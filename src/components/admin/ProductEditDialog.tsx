@@ -98,7 +98,7 @@ export function ProductEditDialog({ product, onClose }: Props) {
     const patch: Record<string, unknown> = {
       title: form.title.trim(),
       slug: form.slug?.trim() || undefined,
-      description: form.description ?? "",
+      description: sanitizeHtml(form.description ?? ""),
       category: form.category ?? "",
       genre: form.genre ?? "",
       developer: form.developer ?? "",
