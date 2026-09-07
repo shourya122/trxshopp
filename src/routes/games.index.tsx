@@ -325,7 +325,7 @@ export function ProductCard({ g }: { g: Product }) {
           src={img}
           alt={`${g.title} game cover`}
           loading="lazy"
-          className="w-full h-full object-cover object-center transform-gpu [backface-visibility:hidden] [transform-origin:center] will-change-transform transition-transform duration-[1800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+          className="w-full h-full object-contain object-center p-1.5 transform-gpu [backface-visibility:hidden] [transform-origin:center] will-change-transform transition-transform duration-[1800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
         />
 
         {/* Gradient sheen on hover */}
