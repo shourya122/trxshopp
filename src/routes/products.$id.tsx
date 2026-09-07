@@ -44,7 +44,12 @@ export const Route = createFileRoute("/products/$id")({
     const price = Math.round(product.priceCents / 100);
     const platforms = (product.platforms || []).join(", ").toUpperCase() || "PC";
     const title = `Buy ${product.title} (${platforms}) — ₹${price} | TRXSHOP`;
-    const desc = (product.description || `Buy ${product.title} for ${platforms}. Genuine digital key, instant delivery on TRXSHOP.`).slice(0, 155);
+    const desc = (product.description || `Buy ${product.title} for ${platforms}. Genuine digital key, instant delivery on TRXSHOP.`)
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 155);
+
     const image = product.coverImage || "";
     return {
       meta: [
