@@ -1,6 +1,7 @@
 // Server-side pricing resolution. NEVER trust client-supplied prices or amounts.
 // Fetches product prices from the DB, resolves editions, and applies coupons.
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { resolveOptions } from "./option-pricing";
 
 export interface PricingItemInput {
   product_id?: string;
@@ -68,7 +69,7 @@ export async function resolvePricing(
 
   const { data: products, error: pErr } = await admin
     .from("products")
-    .select("id, title, price_cents, active, editions")
+    .select("id, title, price_cents, active, editions, option_groups")
     .in("id", ids);
   if (pErr) return { ok: false, error: pErr.message };
   const byId = new Map((products ?? []).map((p) => [p.id as string, p]));
@@ -99,9 +100,10 @@ export async function resolvePricing(
     if (unitCents <= 0) {
       return { ok: false, error: `Price unavailable: ${p.title}` };
     }
-    const optionSuffix = it.options && Object.keys(it.options).length
-      ? ` (${Object.entries(it.options).map(([k, v]) => `${k}: ${v}`).join(", ")})`
-      : "";
+    const optRes = resolveOptions((p as { option_groups?: unknown }).option_groups, it.options);
+    if (!optRes.ok) return { ok: false, error: optRes.error ?? "Invalid options." };
+    if (optRes.priceCents != null) unitCents = optRes.priceCents;
+    const optionSuffix = optRes.suffix;
     lineItems.push({
       product_id: p.id as string,
       title: `${p.title as string}${optionSuffix}`,

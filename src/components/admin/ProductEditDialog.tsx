@@ -33,7 +33,7 @@ export type EditableProduct = {
   featured?: boolean | null;
   badge?: string | null;
   editions?: { name: string; price_cents: number }[] | null;
-  option_groups?: { name: string; values: string[] }[] | null;
+  option_groups?: { name: string; values: { value: string; price_cents?: number | null }[] }[] | null;
 
 };
 
@@ -87,17 +87,26 @@ export function ProductEditDialog({ product, onClose }: Props) {
   };
   const addEdition = () => set("editions", [...editions, { name: "", price_cents: form.price_cents ?? 0 }]);
 
-  // Variant options (Shopify-style) — optional, per product.
-  const optionGroups = form.option_groups ?? [];
-  const setGroups = (next: { name: string; values: string[] }[]) => set("option_groups", next);
-  const updateGroup = (i: number, patch: Partial<{ name: string; values: string[] }>) =>
+  // Variant options (Shopify-style) — optional, per product. Each value may carry its own price.
+  type OptVal = { value: string; price_cents?: number | null };
+  type OptGroup = { name: string; values: OptVal[] };
+  const optionGroups: OptGroup[] = (form.option_groups ?? []).map((g) => ({
+    name: g.name,
+    values: (g.values ?? []).map((v) =>
+      typeof v === "string" ? { value: v as unknown as string, price_cents: null } : v,
+    ),
+  }));
+  const setGroups = (next: OptGroup[]) => set("option_groups", next);
+  const updateGroup = (i: number, patch: Partial<OptGroup>) =>
     setGroups(optionGroups.map((g, idx) => (idx === i ? { ...g, ...patch } : g)));
   const removeGroup = (i: number) => setGroups(optionGroups.filter((_, idx) => idx !== i));
-  const addGroup = () => setGroups([...optionGroups, { name: "", values: [""] }]);
-  const setValue = (gi: number, vi: number, v: string) =>
-    updateGroup(gi, { values: (optionGroups[gi]?.values ?? []).map((x, i) => (i === vi ? v : x)) });
+  const addGroup = () => setGroups([...optionGroups, { name: "", values: [{ value: "", price_cents: null }] }]);
+  const updateValue = (gi: number, vi: number, patch: Partial<OptVal>) =>
+    updateGroup(gi, {
+      values: (optionGroups[gi]?.values ?? []).map((x, i) => (i === vi ? { ...x, ...patch } : x)),
+    });
   const addValue = (gi: number) =>
-    updateGroup(gi, { values: [...(optionGroups[gi]?.values ?? []), ""] });
+    updateGroup(gi, { values: [...(optionGroups[gi]?.values ?? []), { value: "", price_cents: null }] });
   const removeValue = (gi: number, vi: number) =>
     updateGroup(gi, { values: (optionGroups[gi]?.values ?? []).filter((_, i) => i !== vi) });
 
@@ -130,7 +139,12 @@ export function ProductEditDialog({ product, onClose }: Props) {
       option_groups: optionGroups
         .map((g) => ({
           name: g.name.trim(),
-          values: (g.values ?? []).map((v) => v.trim()).filter((v) => v.length > 0),
+          values: (g.values ?? [])
+            .map((v) => {
+              const cents = Math.max(0, Math.round(Number(v.price_cents) || 0));
+              return { value: (v.value ?? "").trim(), price_cents: cents > 0 ? cents : null };
+            })
+            .filter((v) => v.value.length > 0),
         }))
         .filter((g) => g.name.length > 0 && g.values.length > 0),
     };
@@ -282,43 +296,46 @@ export function ProductEditDialog({ product, onClose }: Props) {
               </div>
             </Field>
 
-            <Field label="Editions (optional)">
-              <div className="space-y-2">
-                {editions.length === 0 && (
-                  <p className="text-[11px] text-[#71717A]">
-                    No editions defined. Product page will show the base price and no edition selector.
-                  </p>
-                )}
-                {editions.map((e, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <div className="flex-1">
-                      <Input value={e.name} onChange={(v) => updateEdition(i, { name: v })} placeholder="Edition name (e.g. Standard)" />
-                    </div>
-                    <div className="w-32">
-                      <Input
-                        type="number"
-                        value={((e.price_cents ?? 0) / 100).toString()}
-                        onChange={(v) => updateEdition(i, { price_cents: Math.round((Number(v) || 0) * 100) })}
-                        placeholder="Price (₹)"
-                      />
-                    </div>
-                    <button onClick={() => removeEdition(i)} className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-white/[0.06] text-[#f87171] hover:bg-[#EF4444]/[0.08]">
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                ))}
-                <button onClick={addEdition} className="flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-dashed border-white/[0.1] text-[11.5px] text-[#A1A1AA] hover:border-white/20 hover:text-white">
-                  <Plus className="h-3 w-3" /> Add edition
-                </button>
-              </div>
-            </Field>
-
             {/* Variants — Shopify-style option selector, opt-in per product */}
             <div className="rounded-xl border border-white/[0.08] bg-[#111113] p-4">
               <div className="text-[13px] font-semibold text-white">Variants</div>
               <p className="mt-1 text-[11.5px] text-[#71717A]">
-                Optional. Add choices like size, colour, or content features. Customers pick them above “Add to cart”.
+                Optional. Add editions or choices like size, colour, or content features. Give a value its own price to
+                override the base price when it’s selected — leave the price blank to keep the base price.
               </p>
+
+              <div className="mt-3 border-b border-white/[0.06] pb-3">
+              <Field label="Editions (optional)">
+                <div className="space-y-2">
+                  {editions.length === 0 && (
+                    <p className="text-[11px] text-[#71717A]">
+                      No editions defined. Product page will show the base price and no edition selector.
+                    </p>
+                  )}
+                  {editions.map((e, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <div className="flex-1">
+                        <Input value={e.name} onChange={(v) => updateEdition(i, { name: v })} placeholder="Edition name (e.g. Standard)" />
+                      </div>
+                      <div className="w-32">
+                        <Input
+                          type="number"
+                          value={((e.price_cents ?? 0) / 100).toString()}
+                          onChange={(v) => updateEdition(i, { price_cents: Math.round((Number(v) || 0) * 100) })}
+                          placeholder="Price (₹)"
+                        />
+                      </div>
+                      <button onClick={() => removeEdition(i)} className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-white/[0.06] text-[#f87171] hover:bg-[#EF4444]/[0.08]">
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                  <button onClick={addEdition} className="flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-dashed border-white/[0.1] text-[11.5px] text-[#A1A1AA] hover:border-white/20 hover:text-white">
+                    <Plus className="h-3 w-3" /> Add edition
+                  </button>
+                </div>
+              </Field>
+              </div>
 
               <div className="mt-3 space-y-3">
                 {optionGroups.map((g, gi) => (
@@ -344,9 +361,20 @@ export function ProductEditDialog({ product, onClose }: Props) {
                         <div key={vi} className="flex items-center gap-2">
                           <div className="flex-1">
                             <Input
-                              value={v}
-                              onChange={(nv) => setValue(gi, vi, nv)}
+                              value={v.value}
+                              onChange={(nv) => updateValue(gi, vi, { value: nv })}
                               placeholder={vi === 0 ? "Value (e.g. Downloadable content (DLC))" : "Value (e.g. Early access)"}
+                            />
+                          </div>
+                          <div className="w-28 shrink-0">
+                            <Input
+                              type="number"
+                              value={v.price_cents ? (v.price_cents / 100).toString() : ""}
+                              onChange={(nv) => {
+                                const n = Number(nv);
+                                updateValue(gi, vi, { price_cents: nv.trim() === "" || !Number.isFinite(n) ? null : Math.max(0, Math.round(n * 100)) });
+                              }}
+                              placeholder="Price ₹"
                             />
                           </div>
                           <button

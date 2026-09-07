@@ -136,7 +136,8 @@ function ProductPage() {
     setSelectedOptions((cur) => {
       const next: Record<string, string> = {};
       for (const g of optionGroups) {
-        next[g.name] = g.values.includes(cur[g.name]) ? cur[g.name] : g.values[0];
+        const labels = g.values.map((v) => v.value);
+        next[g.name] = labels.includes(cur[g.name]) ? cur[g.name] : labels[0];
       }
       const same =
         Object.keys(next).length === Object.keys(cur).length &&
@@ -165,7 +166,13 @@ function ProductPage() {
   const activeEdition = hasEditions
     ? editions.find((e) => e.name === selectedEdition) ?? editions[0]
     : null;
-  const effectiveCents = activeEdition ? activeEdition.priceCents : product.priceCents;
+  // A selected variant value with its own price overrides base/edition price (last one wins).
+  let optionOverrideCents: number | null = null;
+  for (const g of optionGroups) {
+    const v = g.values.find((x) => x.value === selectedOptions[g.name]);
+    if (v?.priceCents) optionOverrideCents = v.priceCents;
+  }
+  const effectiveCents = optionOverrideCents ?? (activeEdition ? activeEdition.priceCents : product.priceCents);
   const sale = Math.round(effectiveCents / 100);
   const regular = product.oldPriceCents > 0 ? Math.round(product.oldPriceCents / 100) : sale;
   const related = (allProducts || []).filter((p) => p.id !== product.id).slice(0, 4);
@@ -332,7 +339,8 @@ function ProductPage() {
                 <div key={g.name}>
                   <div className="text-[13px] font-medium text-neutral-300 mb-2">{g.name}</div>
                   <div className="flex flex-wrap gap-2">
-                    {g.values.map((v) => {
+                    {g.values.map((ov) => {
+                      const v = ov.value;
                       const on = selectedOptions[g.name] === v;
                       return (
                         <button
@@ -348,7 +356,14 @@ function ProductPage() {
                               className="absolute inset-0 -z-10 rounded-full bg-white"
                             />
                           )}
-                          <span className={on ? "text-black" : "text-neutral-300"}>{v}</span>
+                          <span className={on ? "text-black" : "text-neutral-300"}>
+                            {v}
+                            {ov.priceCents ? (
+                              <span className={`ml-1.5 font-normal ${on ? "text-black/60" : "text-neutral-500"}`}>
+                                ₹{(ov.priceCents / 100).toLocaleString("en-IN")}
+                              </span>
+                            ) : null}
+                          </span>
                         </button>
                       );
                     })}

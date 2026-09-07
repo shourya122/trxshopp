@@ -263,7 +263,10 @@ const productPatch = z.object({
   })).max(20).optional(),
   option_groups: z.array(z.object({
     name: z.string().trim().min(1).max(60),
-    values: z.array(z.string().trim().min(1).max(60)).max(20),
+    values: z.array(z.object({
+      value: z.string().trim().min(1).max(60),
+      price_cents: z.number().int().min(0).nullable().optional(),
+    })).max(20),
   })).max(5).optional(),
 
 });

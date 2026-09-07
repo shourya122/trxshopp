@@ -43,16 +43,28 @@ function parseEditions(raw: unknown): { name: string; priceCents: number }[] {
   return out;
 }
 
-function parseOptionGroups(raw: unknown): { name: string; values: string[] }[] {
+function parseOptionGroups(raw: unknown): { name: string; values: { value: string; priceCents?: number | null }[] }[] {
   if (!Array.isArray(raw)) return [];
-  const out: { name: string; values: string[] }[] = [];
+  const out: { name: string; values: { value: string; priceCents?: number | null }[] }[] = [];
   for (const g of raw) {
     if (!g || typeof g !== "object") continue;
     const rec = g as Record<string, unknown>;
     const name = typeof rec.name === "string" ? rec.name.trim() : "";
-    const values = Array.isArray(rec.values)
-      ? rec.values.filter((v): v is string => typeof v === "string" && v.trim().length > 0).map((v) => v.trim())
-      : [];
+    const values: { value: string; priceCents?: number | null }[] = [];
+    if (Array.isArray(rec.values)) {
+      for (const v of rec.values) {
+        if (typeof v === "string") {
+          if (v.trim()) values.push({ value: v.trim(), priceCents: null });
+          continue;
+        }
+        if (!v || typeof v !== "object") continue;
+        const vr = v as Record<string, unknown>;
+        const label = typeof vr.value === "string" ? vr.value.trim() : typeof vr.name === "string" ? (vr.name as string).trim() : "";
+        if (!label) continue;
+        const cents = Number(vr.price_cents ?? vr.priceCents);
+        values.push({ value: label, priceCents: Number.isFinite(cents) && cents > 0 ? Math.round(cents) : null });
+      }
+    }
     if (!name || values.length === 0) continue;
     out.push({ name, values });
   }

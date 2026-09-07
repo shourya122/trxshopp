@@ -6,9 +6,15 @@ export interface Edition {
 }
 
 /** Optional per-product choice selector (Shopify-style variant options). */
+export interface OptionValue {
+  value: string;
+  /** Optional absolute unit price override (in cents) when this value is selected. */
+  priceCents?: number | null;
+}
+
 export interface OptionGroup {
   name: string;
-  values: string[];
+  values: OptionValue[];
 }
 
 
