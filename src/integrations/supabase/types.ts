@@ -356,6 +356,7 @@ export type Database = {
           id: string
           languages: string
           old_price_cents: number
+          option_groups: Json
           platforms: string[]
           price_cents: number
           publisher: string
@@ -383,6 +384,7 @@ export type Database = {
           id?: string
           languages?: string
           old_price_cents?: number
+          option_groups?: Json
           platforms?: string[]
           price_cents?: number
           publisher?: string
@@ -410,6 +412,7 @@ export type Database = {
           id?: string
           languages?: string
           old_price_cents?: number
+          option_groups?: Json
           platforms?: string[]
           price_cents?: number
           publisher?: string
