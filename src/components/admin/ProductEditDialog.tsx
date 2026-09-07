@@ -19,6 +19,8 @@ export type EditableProduct = {
   title?: string | null;
   slug?: string | null;
   description?: string | null;
+  product_details?: string | null;
+  terms_conditions?: string | null;
   category?: string | null;
   genre?: string | null;
   developer?: string | null;
