@@ -101,6 +101,8 @@ export function ProductEditDialog({ product, onClose }: Props) {
       title: form.title.trim(),
       slug: form.slug?.trim() || undefined,
       description: sanitizeHtml(form.description ?? ""),
+      product_details: sanitizeHtml(form.product_details ?? ""),
+      terms_conditions: sanitizeHtml(form.terms_conditions ?? ""),
       category: form.category ?? "",
       genre: form.genre ?? "",
       developer: form.developer ?? "",
