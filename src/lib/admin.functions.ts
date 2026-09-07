@@ -261,6 +261,7 @@ const productPatch = z.object({
     name: z.string().trim().min(1).max(60),
     price_cents: z.number().int().min(0),
   })).max(20).optional(),
+  editions_label: z.string().trim().max(60).optional(),
   option_groups: z.array(z.object({
     name: z.string().trim().min(1).max(60),
     values: z.array(z.object({
