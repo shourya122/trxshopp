@@ -26,6 +26,8 @@ export interface Product {
   slug: string;
   title: string;
   description: string;
+  productDetails: string;      // editable product-page details section
+  termsConditions: string;     // editable product-page terms section
   genre: string;
   developer: string;
   publisher: string;
