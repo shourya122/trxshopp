@@ -203,6 +203,22 @@ export function ProductEditDialog({ product, onClose }: Props) {
               />
             </Field>
 
+            <Field label="Product Details">
+              <RichTextEditor
+                value={form.product_details ?? ""}
+                onChange={(html) => set("product_details", html)}
+                placeholder="Shown under 'Product Details' on the product page. Use numbered/bullet lists."
+              />
+            </Field>
+
+            <Field label="Terms & Conditions">
+              <RichTextEditor
+                value={form.terms_conditions ?? ""}
+                onChange={(html) => set("terms_conditions", html)}
+                placeholder="Shown under 'Terms & Conditions' on the product page."
+              />
+            </Field>
+
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <Field label="Price (₹)"><Input type="number" value={((form.price_cents ?? 0) / 100).toString()} onChange={(v) => set("price_cents", Math.round((Number(v) || 0) * 100))} /></Field>
