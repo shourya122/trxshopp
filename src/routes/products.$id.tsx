@@ -708,8 +708,8 @@ function ReviewsCarousel() {
             <span className="flex items-center gap-0.5 text-emerald-500">
               {[...Array(5)].map((_, i) => <Star key={i} size={22} fill="currentColor" strokeWidth={0} />)}
             </span>
-            <span className="text-lg font-bold text-white ml-1">4.4/5</span>
-            <span className="text-base text-neutral-400">(100+ verified reviews)</span>
+            <span className="text-lg font-bold text-white ml-1">{avg.toFixed(1)}/5</span>
+            <span className="text-base text-neutral-400">({reviews.length} verified reviews)</span>
           </div>
         </div>
 
