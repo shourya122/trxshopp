@@ -451,3 +451,75 @@ export const adminListNotifications = createServerFn({ method: "GET" })
     rows.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
     return rows.slice(0, 25);
   });
+
+// ---- Reviews CRUD ----
+
+export type AdminReview = {
+  id: string;
+  author_name: string;
+  rating: number;
+  body: string;
+  product_id: string | null;
+  product_title: string;
+  verified: boolean;
+  time_label: string;
+  published: boolean;
+  sort_order: number;
+  created_at: string;
+};
+
+export const adminListReviews = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<AdminReview[]> => {
+    await assertAdmin(context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data, error } = await supabaseAdmin
+      .from("reviews")
+      .select("id, author_name, rating, body, product_id, product_title, verified, time_label, published, sort_order, created_at")
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: false })
+      .limit(500);
+    if (error) throw new Error(error.message);
+    return (data ?? []) as AdminReview[];
+  });
+
+const reviewInput = z.object({
+  author_name: z.string().trim().min(1).max(120),
+  rating: z.number().int().min(1).max(5),
+  body: z.string().trim().min(1).max(4000),
+  product_id: z.string().uuid().nullable().optional(),
+  product_title: z.string().trim().max(200).optional(),
+  verified: z.boolean().optional(),
+  time_label: z.string().trim().max(60).optional(),
+  published: z.boolean().optional(),
+  sort_order: z.number().int().min(0).max(9999).optional(),
+});
+
+export const adminSaveReview = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().uuid().nullable().optional(), values: reviewInput }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const values = data.values as Record<string, unknown>;
+    if (data.id) {
+      const { error } = await supabaseAdmin.from("reviews").update(values as never).eq("id", data.id);
+      if (error) throw new Error(error.message);
+      return { ok: true as const, id: data.id };
+    }
+    const { data: row, error } = await supabaseAdmin
+      .from("reviews").insert(values as never).select("id").single();
+    if (error) throw new Error(error.message);
+    return { ok: true as const, id: (row as { id: string }).id };
+  });
+
+export const adminDeleteReview = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("reviews").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true as const };
+  });

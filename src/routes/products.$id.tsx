@@ -18,6 +18,7 @@ import avatar2 from "@/assets/masteroog.png.asset.json";
 import avatar3 from "@/assets/woody.png.asset.json";
 import { toast } from "sonner";
 import { PayWithCryptoButton } from "@/components/PayWithCryptoButton";
+import { supabase } from "@/integrations/supabase/client";
 
 
 
@@ -635,9 +636,9 @@ function RelatedCarousel({ related }: { related: Product[] }) {
   );
 }
 
-type Review = { name: string; when: string; text: string };
+type Review = { name: string; when: string; text: string; rating?: number; verified?: boolean };
 
-const REVIEWS: Review[] = [
+const FALLBACK_REVIEWS: Review[] = [
   { name: "Hitesh Sai", when: "3 days ago", text: "Best reasonable games they're providing. And service support as well. They'll make sure that it's worth for buying from TRXSHOP. Hoping to buy more further!" },
   { name: "Ashraf Khan", when: "1 week ago", text: "Bought a game from them — had a small login issue but their support team was quick to help once they were online. Very happy with the experience." },
   { name: "Arnab Bhattacharya", when: "2 weeks ago", text: "Fantastic customer service. Any doubts you have, they reply almost instantly. Highly recommend buying games here." },
@@ -651,6 +652,34 @@ const REVIEWS: Review[] = [
 function ReviewsCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
+
+  const { data: dbReviews } = useQuery({
+    queryKey: ["site-reviews"],
+    queryFn: async (): Promise<Review[]> => {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("author_name, rating, body, time_label, verified, sort_order, created_at")
+        .eq("published", true)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (error) throw new Error(error.message);
+      return (data ?? []).map((r) => ({
+        name: r.author_name as string,
+        when: (r.time_label as string) || "",
+        text: r.body as string,
+        rating: (r.rating as number) ?? 5,
+        verified: (r.verified as boolean) ?? true,
+      }));
+    },
+    staleTime: 60_000,
+  });
+
+  const reviews = dbReviews && dbReviews.length > 0 ? dbReviews : FALLBACK_REVIEWS;
+  const avg =
+    reviews.length > 0
+      ? reviews.reduce((s, r) => s + (r.rating ?? 5), 0) / reviews.length
+      : 5;
 
   const scrollByCard = (dir: 1 | -1) => {
     const el = trackRef.current;
@@ -680,8 +709,8 @@ function ReviewsCarousel() {
             <span className="flex items-center gap-0.5 text-emerald-500">
               {[...Array(5)].map((_, i) => <Star key={i} size={22} fill="currentColor" strokeWidth={0} />)}
             </span>
-            <span className="text-lg font-bold text-white ml-1">4.4/5</span>
-            <span className="text-base text-neutral-400">(100+ verified reviews)</span>
+            <span className="text-lg font-bold text-white ml-1">{avg.toFixed(1)}/5</span>
+            <span className="text-base text-neutral-400">({reviews.length} verified reviews)</span>
           </div>
         </div>
 
@@ -711,9 +740,9 @@ function ReviewsCarousel() {
             ref={trackRef}
             className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-3 px-10 sm:px-12 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {REVIEWS.map((r) => (
+            {reviews.map((r, ri) => (
               <div
-                key={r.name}
+                key={`${r.name}-${ri}`}
                 data-rcard
                 className="snap-start shrink-0 basis-full sm:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/2)] border border-neutral-700 rounded-2xl p-8 bg-neutral-900/70"
               >
@@ -722,12 +751,22 @@ function ReviewsCarousel() {
                     <h3 className="text-xl font-extrabold text-white leading-tight">{r.name}</h3>
                     <p className="text-sm text-neutral-400 mt-1">{r.when}</p>
                   </div>
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/60 rounded-full px-3 py-1.5 whitespace-nowrap">
-                    <Check size={14} strokeWidth={3} /> Verified Buyer
-                  </span>
+                  {(r.verified ?? true) && (
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/60 rounded-full px-3 py-1.5 whitespace-nowrap">
+                      <Check size={14} strokeWidth={3} /> Verified Buyer
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center gap-0.5 text-emerald-500 mb-4">
-                  {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="currentColor" strokeWidth={0} />)}
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      size={18}
+                      fill="currentColor"
+                      strokeWidth={0}
+                      className={i < (r.rating ?? 5) ? "" : "text-neutral-700"}
+                    />
+                  ))}
                 </div>
                 <p className="text-base text-neutral-200 leading-relaxed">{r.text}</p>
               </div>
