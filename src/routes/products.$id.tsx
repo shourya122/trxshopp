@@ -750,12 +750,22 @@ function ReviewsCarousel() {
                     <h3 className="text-xl font-extrabold text-white leading-tight">{r.name}</h3>
                     <p className="text-sm text-neutral-400 mt-1">{r.when}</p>
                   </div>
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/60 rounded-full px-3 py-1.5 whitespace-nowrap">
-                    <Check size={14} strokeWidth={3} /> Verified Buyer
-                  </span>
+                  {(r.verified ?? true) && (
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/60 rounded-full px-3 py-1.5 whitespace-nowrap">
+                      <Check size={14} strokeWidth={3} /> Verified Buyer
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center gap-0.5 text-emerald-500 mb-4">
-                  {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="currentColor" strokeWidth={0} />)}
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      size={18}
+                      fill="currentColor"
+                      strokeWidth={0}
+                      className={i < (r.rating ?? 5) ? "" : "text-neutral-700"}
+                    />
+                  ))}
                 </div>
                 <p className="text-base text-neutral-200 leading-relaxed">{r.text}</p>
               </div>
