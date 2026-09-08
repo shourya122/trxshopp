@@ -739,9 +739,9 @@ function ReviewsCarousel() {
             ref={trackRef}
             className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-3 px-10 sm:px-12 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {REVIEWS.map((r) => (
+            {reviews.map((r, ri) => (
               <div
-                key={r.name}
+                key={`${r.name}-${ri}`}
                 data-rcard
                 className="snap-start shrink-0 basis-full sm:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/2)] border border-neutral-700 rounded-2xl p-8 bg-neutral-900/70"
               >
