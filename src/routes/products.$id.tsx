@@ -18,6 +18,7 @@ import avatar2 from "@/assets/masteroog.png.asset.json";
 import avatar3 from "@/assets/woody.png.asset.json";
 import { toast } from "sonner";
 import { PayWithCryptoButton } from "@/components/PayWithCryptoButton";
+import { supabase } from "@/integrations/supabase/client";
 
 
 
