@@ -652,6 +652,34 @@ function ReviewsCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
 
+  const { data: dbReviews } = useQuery({
+    queryKey: ["site-reviews"],
+    queryFn: async (): Promise<Review[]> => {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("author_name, rating, body, time_label, verified, sort_order, created_at")
+        .eq("published", true)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (error) throw new Error(error.message);
+      return (data ?? []).map((r) => ({
+        name: r.author_name as string,
+        when: (r.time_label as string) || "",
+        text: r.body as string,
+        rating: (r.rating as number) ?? 5,
+        verified: (r.verified as boolean) ?? true,
+      }));
+    },
+    staleTime: 60_000,
+  });
+
+  const reviews = dbReviews && dbReviews.length > 0 ? dbReviews : FALLBACK_REVIEWS;
+  const avg =
+    reviews.length > 0
+      ? reviews.reduce((s, r) => s + (r.rating ?? 5), 0) / reviews.length
+      : 5;
+
   const scrollByCard = (dir: 1 | -1) => {
     const el = trackRef.current;
     if (!el) return;
