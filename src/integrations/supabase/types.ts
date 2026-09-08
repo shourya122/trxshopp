@@ -436,6 +436,59 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          product_id: string | null
+          product_title: string
+          published: boolean
+          rating: number
+          sort_order: number
+          time_label: string
+          updated_at: string
+          verified: boolean
+        }
+        Insert: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          product_id?: string | null
+          product_title?: string
+          published?: boolean
+          rating?: number
+          sort_order?: number
+          time_label?: string
+          updated_at?: string
+          verified?: boolean
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          product_id?: string | null
+          product_title?: string
+          published?: boolean
+          rating?: number
+          sort_order?: number
+          time_label?: string
+          updated_at?: string
+          verified?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       suppressed_emails: {
         Row: {
           created_at: string
