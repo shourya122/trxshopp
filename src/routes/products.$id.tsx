@@ -635,9 +635,9 @@ function RelatedCarousel({ related }: { related: Product[] }) {
   );
 }
 
-type Review = { name: string; when: string; text: string };
+type Review = { name: string; when: string; text: string; rating?: number; verified?: boolean };
 
-const REVIEWS: Review[] = [
+const FALLBACK_REVIEWS: Review[] = [
   { name: "Hitesh Sai", when: "3 days ago", text: "Best reasonable games they're providing. And service support as well. They'll make sure that it's worth for buying from TRXSHOP. Hoping to buy more further!" },
   { name: "Ashraf Khan", when: "1 week ago", text: "Bought a game from them — had a small login issue but their support team was quick to help once they were online. Very happy with the experience." },
   { name: "Arnab Bhattacharya", when: "2 weeks ago", text: "Fantastic customer service. Any doubts you have, they reply almost instantly. Highly recommend buying games here." },
