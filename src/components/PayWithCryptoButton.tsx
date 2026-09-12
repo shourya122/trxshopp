@@ -65,7 +65,6 @@ export function PayWithCryptoButton({
       toast.error("Sign in required", {
         description: "Please sign in to complete your purchase.",
         duration: 3500,
-        className: "trx-toast-timer",
       });
       navigate({ to: "/signin" });
       return;
