@@ -60,10 +60,18 @@ export function PayWithCashfreeButton({
   onError,
 }: Props) {
   const createLink = useServerFn(createCashfreePaymentLink);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
     if (loading || disabled) return;
+    if (!(await isSignedIn())) {
+      toast.error("Sign in required", {
+        description: "Please sign in to complete your purchase.",
+      });
+      navigate({ to: "/signin" });
+      return;
+    }
     if (!items.length || amount <= 0) {
       toast.error("Cart Empty", { description: "Add an item before checking out." });
       return;
