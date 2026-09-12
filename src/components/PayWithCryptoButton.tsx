@@ -3,6 +3,8 @@ import { Loader2, Bitcoin } from "lucide-react";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { createCryptoInvoice } from "@/lib/oxapay.functions";
+import { isSignedIn } from "@/lib/require-signin";
+import { useNavigate } from "@tanstack/react-router";
 
 interface CryptoItem {
   name: string;
@@ -54,10 +56,18 @@ export function PayWithCryptoButton({
   onError,
 }: Props) {
   const createInvoice = useServerFn(createCryptoInvoice);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
     if (loading || disabled) return;
+    if (!(await isSignedIn())) {
+      toast.error("Sign in required", {
+        description: "Please sign in to complete your purchase.",
+      });
+      navigate({ to: "/signin" });
+      return;
+    }
     if (!items.length || amount <= 0) {
       toast.error("Cart Empty", {
         description: "Add an item before initiating a crypto checkout.",
