@@ -58,6 +58,30 @@ const TOAST_STYLES = `
     animation: trx-toast-progress 1.2s linear infinite;
     pointer-events: none;
   }
+
+  /* Green left-to-right progress bar for timed auth toasts (e.g. pay-with-crypto sign-in gate). */
+  @keyframes trx-toast-timer {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+  [data-sonner-toaster] [data-sonner-toast].trx-toast-timer::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #22C55E, #4ADE80);
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.55);
+    transform-origin: left;
+    transform: scaleX(0);
+    animation: trx-toast-timer 3500ms linear forwards;
+    pointer-events: none;
+    z-index: 1;
+  }
+  [data-sonner-toaster] [data-sonner-toast].trx-toast-timer:hover::after {
+    animation-play-state: paused;
+  }
 `;
 
 const Toaster = ({ ...props }: ToasterProps) => {
