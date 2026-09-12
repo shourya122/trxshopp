@@ -59,12 +59,12 @@ const TOAST_STYLES = `
     pointer-events: none;
   }
 
-  /* Green left-to-right progress bar for timed auth toasts (e.g. pay-with-crypto sign-in gate). */
+  /* Green left-to-right progress bar for every timed toast (keeps moving on hover). */
   @keyframes trx-toast-timer {
     from { transform: scaleX(0); }
     to   { transform: scaleX(1); }
   }
-  [data-sonner-toaster] [data-sonner-toast].trx-toast-timer::after {
+  [data-sonner-toaster] [data-sonner-toast][data-mounted="true"]:not([data-type="loading"])::after {
     content: "";
     position: absolute;
     left: 0;
@@ -79,9 +79,7 @@ const TOAST_STYLES = `
     pointer-events: none;
     z-index: 1;
   }
-  [data-sonner-toaster] [data-sonner-toast].trx-toast-timer:hover::after {
-    animation-play-state: paused;
-  }
+
 `;
 
 const Toaster = ({ ...props }: ToasterProps) => {
@@ -92,7 +90,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
         position="bottom-right"
         gap={12}
         offset={24}
-        duration={4000}
+        duration={3500}
         icons={{
           success: <Check className="h-3.5 w-3.5" strokeWidth={2.5} />,
           error: <X className="h-3.5 w-3.5" strokeWidth={2.5} />,
