@@ -4,6 +4,8 @@ import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { createCashfreePaymentLink } from "@/lib/cashfree.functions";
 import { redirectToCashfreeCheckout } from "@/lib/cashfreeCheckout";
+import { isSignedIn } from "@/lib/require-signin";
+import { useNavigate } from "@tanstack/react-router";
 
 interface CashfreeItem {
   name: string;
