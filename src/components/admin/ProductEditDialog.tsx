@@ -61,10 +61,13 @@ export function ProductEditDialog({ product, onClose }: Props) {
   const [shotsHover, setShotsHover] = useState(false);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [overIndex, setOverIndex] = useState<number | null>(null);
+  const coverInput = useRef<HTMLInputElement>(null);
+  const shotsInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => { setForm(product); }, [product]);
 
   if (!form) return null;
+
 
   const set = <K extends keyof EditableProduct>(k: K, v: EditableProduct[K]) =>
     setForm((f) => (f ? { ...f, [k]: v } : f));
@@ -88,8 +91,7 @@ export function ProductEditDialog({ product, onClose }: Props) {
   const addScreenshot = () => set("screenshots", [...(form.screenshots ?? []), ""]);
 
   // ---- Drag & drop image upload / reorder ----
-  const coverInput = useRef<HTMLInputElement>(null);
-  const shotsInput = useRef<HTMLInputElement>(null);
+
 
   const pickFiles = (list: FileList | null) =>
     Array.from(list ?? []).filter(isImageFile);
