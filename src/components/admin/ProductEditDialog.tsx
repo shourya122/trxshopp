@@ -8,6 +8,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { adminUpdateProduct } from "@/lib/admin.functions";
 import { RichTextEditor, sanitizeHtml } from "@/components/admin/RichTextEditor";
 import { uploadProductImages, isImageFile } from "@/lib/product-images";
+import { AiWriteBar } from "@/components/admin/AiWriteBar";
 
 
 /**
