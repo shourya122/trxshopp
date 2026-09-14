@@ -124,7 +124,7 @@ function PrivacyPage() {
       <h2>Contact</h2>
       <p>
         Questions or requests about this Privacy Policy can be sent to
-        {" "}<a href="mailto:trxshop@atomicmail.io">trxshop@atomicmail.io</a>.
+        {" "}<a href="mailto:support@trxshop.in">support@trxshop.in</a>.
       </p>
     </LegalPage>
   );

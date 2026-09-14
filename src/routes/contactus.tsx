@@ -33,7 +33,7 @@ function ContactPage() {
       <p><a href="tel:+917000286871">7000286871</a></p>
 
       <h2>Email</h2>
-      <p><a href="mailto:corptufqn@gmail.com">corptufqn@gmail.com</a></p>
+      <p><a href="mailto:support@trxshop.in">support@trxshop.in</a></p>
     </LegalPage>
   );
 }

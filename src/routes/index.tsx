@@ -124,7 +124,7 @@ export const Route = createFileRoute("/")({
           contactPoint: {
             "@type": "ContactPoint",
             telephone: "+91-7000286871",
-            email: "corptufqn@gmail.com",
+            email: "support@trxshop.in",
             contactType: "customer support",
             areaServed: "IN",
           },
