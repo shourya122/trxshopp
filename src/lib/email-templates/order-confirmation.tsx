@@ -11,6 +11,7 @@ import {
   Hr,
 } from '@react-email/components'
 import type { TemplateEntry } from './registry'
+import { EmailBrand } from './email-brand'
 
 interface OrderItem {
   name: string
@@ -50,6 +51,7 @@ const OrderConfirmationEmail = ({
       <Preview>Your {siteName} order {label} is confirmed</Preview>
       <Body style={main}>
         <Container style={container}>
+          <EmailBrand siteName={siteName} />
           <Heading style={h1}>Payment received 🎉</Heading>
           <Text style={text}>
             {customerName ? `Hi ${customerName}, ` : 'Hi there, '}

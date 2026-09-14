@@ -1,7 +1,8 @@
 # TRXSHOP Roadmap
 
 ## Open
-- Add logo to email templates (auth/order emails) — user asked how-to; awaiting go-ahead or specific templates.
+- None.
 
 ## Done
+- Added the uploaded TRXSHOP logo to every auth and order email, and matched the favicon.
 - Fix email sender name typo: `trxxshop` → `Trx Shop` across all email routes/helpers.

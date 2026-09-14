@@ -11,6 +11,7 @@ import {
   Preview,
   Text,
 } from '@react-email/components'
+import { EmailBrand } from './email-brand'
 
 interface InviteEmailProps {
   siteName: string
@@ -28,6 +29,7 @@ export const InviteEmail = ({
     <Preview>You've been invited to join {siteName}</Preview>
     <Body style={main}>
       <Container style={container}>
+        <EmailBrand siteName={siteName} />
         <Heading style={h1}>You've been invited</Heading>
         <Text style={text}>
           You've been invited to join{' '}

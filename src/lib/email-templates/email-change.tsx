@@ -11,6 +11,7 @@ import {
   Preview,
   Text,
 } from '@react-email/components'
+import { EmailBrand } from './email-brand'
 
 interface EmailChangeEmailProps {
   siteName: string
@@ -31,6 +32,7 @@ export const EmailChangeEmail = ({
     <Preview>Confirm your email change for {siteName}</Preview>
     <Body style={main}>
       <Container style={container}>
+        <EmailBrand siteName={siteName} />
         <Heading style={h1}>Confirm your email change</Heading>
         <Text style={text}>
           You requested to change your email address for {siteName} from{' '}
