@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { X, Plus, Trash2, Image as ImageIcon, Save } from "lucide-react";
+import { X, Plus, Trash2, Image as ImageIcon, Save, UploadCloud, GripVertical, Loader2 } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { adminUpdateProduct } from "@/lib/admin.functions";
 import { RichTextEditor, sanitizeHtml } from "@/components/admin/RichTextEditor";
+import { uploadProductImages, isImageFile } from "@/lib/product-images";
 
 
 /**
