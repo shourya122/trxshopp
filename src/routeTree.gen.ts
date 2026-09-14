@@ -49,6 +49,7 @@ import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/l
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as ApiPublicProductImageSplatRouteImport } from './routes/api/public/product-image.$'
 
 const VerifyCodeRoute = VerifyCodeRouteImport.update({
   id: '/verify-code',
@@ -254,6 +255,12 @@ const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   path: '/lovable/email/auth/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicProductImageSplatRoute =
+  ApiPublicProductImageSplatRouteImport.update({
+    id: '/api/public/product-image/$',
+    path: '/api/public/product-image/$',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -291,6 +298,7 @@ export interface FileRoutesByFullPath {
   '/api/public/cf-sdk': typeof ApiPublicCfSdkRoute
   '/api/public/oxapay-webhook': typeof ApiPublicOxapayWebhookRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/product-image/$': typeof ApiPublicProductImageSplatRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -332,6 +340,7 @@ export interface FileRoutesByTo {
   '/api/public/cf-sdk': typeof ApiPublicCfSdkRoute
   '/api/public/oxapay-webhook': typeof ApiPublicOxapayWebhookRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/product-image/$': typeof ApiPublicProductImageSplatRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -375,6 +384,7 @@ export interface FileRoutesById {
   '/api/public/cf-sdk': typeof ApiPublicCfSdkRoute
   '/api/public/oxapay-webhook': typeof ApiPublicOxapayWebhookRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/product-image/$': typeof ApiPublicProductImageSplatRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -419,6 +429,7 @@ export interface FileRouteTypes {
     | '/api/public/cf-sdk'
     | '/api/public/oxapay-webhook'
     | '/lovable/email/suppression'
+    | '/api/public/product-image/$'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -460,6 +471,7 @@ export interface FileRouteTypes {
     | '/api/public/cf-sdk'
     | '/api/public/oxapay-webhook'
     | '/lovable/email/suppression'
+    | '/api/public/product-image/$'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -502,6 +514,7 @@ export interface FileRouteTypes {
     | '/api/public/cf-sdk'
     | '/api/public/oxapay-webhook'
     | '/lovable/email/suppression'
+    | '/api/public/product-image/$'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -535,6 +548,7 @@ export interface RootRouteChildren {
   ApiPublicCfSdkRoute: typeof ApiPublicCfSdkRoute
   ApiPublicOxapayWebhookRoute: typeof ApiPublicOxapayWebhookRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
+  ApiPublicProductImageSplatRoute: typeof ApiPublicProductImageSplatRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -824,6 +838,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/product-image/$': {
+      id: '/api/public/product-image/$'
+      path: '/api/public/product-image/$'
+      fullPath: '/api/public/product-image/$'
+      preLoaderRoute: typeof ApiPublicProductImageSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -881,6 +902,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicCfSdkRoute: ApiPublicCfSdkRoute,
   ApiPublicOxapayWebhookRoute: ApiPublicOxapayWebhookRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
+  ApiPublicProductImageSplatRoute: ApiPublicProductImageSplatRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
