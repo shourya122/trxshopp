@@ -16,7 +16,7 @@ import {
 import logoAsset from "@/assets/trxshop-logo.png.asset.json";
 import type { TemplateEntry } from "./registry";
 
-const LOGO_URL = `https://trxshop.xyz${logoAsset.url}`;
+const LOGO_URL = `https://trxshop.in${logoAsset.url}`;
 
 
 interface OrderItem {
@@ -66,7 +66,7 @@ const OrderDeliveredEmail = ({
   const delivery =
     deliveryMessage ||
     "Your digital product has been prepared and is ready to access anytime from your account.";
-  const accessHref = downloadLink || "https://trxshop.xyz/account";
+  const accessHref = downloadLink || "https://trxshop.in/account";
 
   return (
     <Html lang="en" dir="ltr">
@@ -166,7 +166,7 @@ export const template = {
     currency: "₹",
     price: 799,
     deliveryMessage: "Log in on Steam, do not change the password, and enjoy your game.",
-    downloadLink: "https://trxshop.xyz/account",
+    downloadLink: "https://trxshop.in/account",
   },
 } satisfies TemplateEntry;
 

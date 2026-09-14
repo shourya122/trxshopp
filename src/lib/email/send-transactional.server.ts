@@ -8,8 +8,8 @@ import { createClient } from '@supabase/supabase-js'
 import { TEMPLATES } from '@/lib/email-templates/registry'
 
 const SITE_NAME = 'trxxshop'
-const SENDER_DOMAIN = 'notify.trxshop.xyz'
-const FROM_DOMAIN = 'trxshop.xyz'
+const SENDER_DOMAIN = 'notify.trxshop.in'
+const FROM_DOMAIN = 'trxshop.in'
 
 function redact(email: string | null | undefined): string {
   if (!email) return '***'
