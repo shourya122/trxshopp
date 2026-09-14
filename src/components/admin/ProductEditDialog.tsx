@@ -55,6 +55,12 @@ export function ProductEditDialog({ product, onClose }: Props) {
   const qc = useQueryClient();
   const [form, setForm] = useState<EditableProduct | null>(product);
   const [saving, setSaving] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const [uploadingShots, setUploadingShots] = useState(false);
+  const [coverHover, setCoverHover] = useState(false);
+  const [shotsHover, setShotsHover] = useState(false);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [overIndex, setOverIndex] = useState<number | null>(null);
 
   useEffect(() => { setForm(product); }, [product]);
 
