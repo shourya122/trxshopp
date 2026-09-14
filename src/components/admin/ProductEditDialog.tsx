@@ -216,13 +216,35 @@ export function ProductEditDialog({ product, onClose }: Props) {
           {/* Cover */}
           <div className="space-y-3">
             <Label>Cover image</Label>
-            <div className="grid aspect-[3/4] w-full place-items-center overflow-hidden rounded-md border border-white/[0.06] bg-white/[0.02]">
+            <div
+              onDragOver={(e) => { e.preventDefault(); setCoverHover(true); }}
+              onDragLeave={() => setCoverHover(false)}
+              onDrop={(e) => { e.preventDefault(); setCoverHover(false); uploadCover(pickFiles(e.dataTransfer.files)); }}
+              onClick={() => coverInput.current?.click()}
+              className={`relative grid aspect-[3/4] w-full cursor-pointer place-items-center overflow-hidden rounded-md border transition ${
+                coverHover ? "border-[#2563EB] bg-[#2563EB]/[0.08]" : "border-white/[0.06] bg-white/[0.02] hover:border-white/20"
+              }`}
+            >
               {form.cover_image ? (
                 <img src={form.cover_image} alt="cover" className="h-full w-full object-cover" />
               ) : (
                 <ImageIcon className="h-6 w-6 text-[#52525B]" />
               )}
+              {(coverHover || uploadingCover) && (
+                <div className="absolute inset-0 grid place-items-center gap-1 bg-black/70 text-[11.5px] text-white">
+                  {uploadingCover ? <Loader2 className="h-5 w-5 animate-spin" /> : <UploadCloud className="h-5 w-5" />}
+                  <span>{uploadingCover ? "Uploading…" : "Drop image"}</span>
+                </div>
+              )}
             </div>
+            <input
+              ref={coverInput}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => { uploadCover(pickFiles(e.target.files)); e.currentTarget.value = ""; }}
+            />
+            <p className="text-[11px] text-[#71717A]">Drag an image here, or click to browse.</p>
             <Input value={form.cover_image ?? ""} onChange={(v) => set("cover_image", v)} placeholder="https://…" />
 
             <div className="flex items-center gap-2 pt-2">
