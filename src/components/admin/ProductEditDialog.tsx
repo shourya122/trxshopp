@@ -8,6 +8,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { adminUpdateProduct } from "@/lib/admin.functions";
 import { RichTextEditor, sanitizeHtml } from "@/components/admin/RichTextEditor";
 import { uploadProductImages, isImageFile } from "@/lib/product-images";
+import { AiWriteBar } from "@/components/admin/AiWriteBar";
 
 
 /**
@@ -272,6 +273,15 @@ export function ProductEditDialog({ product, onClose }: Props) {
             </div>
 
             <Field label="Description">
+              <AiWriteBar
+                target="description"
+                title={form.title}
+                category={form.category}
+                hasContent={!!(form.description ?? "").trim()}
+                onResult={(html, mode) =>
+                  set("description", mode === "append" ? `${form.description ?? ""}${html}` : html)
+                }
+              />
               <RichTextEditor
                 value={form.description ?? ""}
                 onChange={(html) => set("description", html)}
@@ -280,6 +290,16 @@ export function ProductEditDialog({ product, onClose }: Props) {
             </Field>
 
             <Field label="Product Details">
+              <AiWriteBar
+                target="product_details"
+                title={form.title}
+                category={form.category}
+                hasContent={!!(form.product_details ?? "").trim()}
+                placeholder="e.g. what's included, delivery time, platform, validity"
+                onResult={(html, mode) =>
+                  set("product_details", mode === "append" ? `${form.product_details ?? ""}${html}` : html)
+                }
+              />
               <RichTextEditor
                 value={form.product_details ?? ""}
                 onChange={(html) => set("product_details", html)}
@@ -288,6 +308,16 @@ export function ProductEditDialog({ product, onClose }: Props) {
             </Field>
 
             <Field label="Terms & Conditions">
+              <AiWriteBar
+                target="terms_conditions"
+                title={form.title}
+                category={form.category}
+                hasContent={!!(form.terms_conditions ?? "").trim()}
+                placeholder="e.g. no refunds after delivery, single-account use, 24h support"
+                onResult={(html, mode) =>
+                  set("terms_conditions", mode === "append" ? `${form.terms_conditions ?? ""}${html}` : html)
+                }
+              />
               <RichTextEditor
                 value={form.terms_conditions ?? ""}
                 onChange={(html) => set("terms_conditions", html)}
