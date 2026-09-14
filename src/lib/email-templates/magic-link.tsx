@@ -9,7 +9,6 @@ import {
   Preview,
   Text,
 } from '@react-email/components'
-import { EmailBrand } from './email-brand'
 
 interface MagicLinkEmailProps {
   siteName: string
@@ -25,7 +24,6 @@ export const MagicLinkEmail = ({
     <Preview>Your {siteName} verification code</Preview>
     <Body style={main}>
       <Container style={container}>
-        <EmailBrand siteName={siteName} />
         <Heading style={h1}>Your verification code</Heading>
         <Text style={text}>
           Enter this 6-digit code on {siteName} to sign in. This code will
