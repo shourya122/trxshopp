@@ -81,6 +81,51 @@ export function ProductEditDialog({ product, onClose }: Props) {
   };
   const addScreenshot = () => set("screenshots", [...(form.screenshots ?? []), ""]);
 
+  // ---- Drag & drop image upload / reorder ----
+  const coverInput = useRef<HTMLInputElement>(null);
+  const shotsInput = useRef<HTMLInputElement>(null);
+
+  const pickFiles = (list: FileList | null) =>
+    Array.from(list ?? []).filter(isImageFile);
+
+  const uploadCover = async (files: File[]) => {
+    if (!files.length) return;
+    setUploadingCover(true);
+    try {
+      const [url] = await uploadProductImages(files.slice(0, 1), "covers");
+      if (url) set("cover_image", url);
+      toast.success("Cover image uploaded");
+    } catch (e) {
+      toast.error((e as Error).message || "Upload failed");
+    } finally {
+      setUploadingCover(false);
+    }
+  };
+
+  const uploadShots = async (files: File[]) => {
+    if (!files.length) return;
+    setUploadingShots(true);
+    try {
+      const urls = await uploadProductImages(files, "screenshots");
+      setForm((f) =>
+        f ? { ...f, screenshots: [...(f.screenshots ?? []).filter((s) => s.trim()), ...urls] } : f,
+      );
+      toast.success(`${urls.length} image${urls.length > 1 ? "s" : ""} uploaded`);
+    } catch (e) {
+      toast.error((e as Error).message || "Upload failed");
+    } finally {
+      setUploadingShots(false);
+    }
+  };
+
+  const moveScreenshot = (from: number, to: number) => {
+    const next = [...(form.screenshots ?? [])];
+    if (from === to || from < 0 || to < 0 || from >= next.length || to >= next.length) return;
+    const [item] = next.splice(from, 1);
+    next.splice(to, 0, item);
+    set("screenshots", next);
+  };
+
   const editions = form.editions ?? [];
   const updateEdition = (i: number, patch: Partial<{ name: string; price_cents: number }>) => {
     const next = editions.map((e, idx) => (idx === i ? { ...e, ...patch } : e));
