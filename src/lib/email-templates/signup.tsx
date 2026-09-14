@@ -9,6 +9,7 @@ import {
   Preview,
   Text,
 } from '@react-email/components'
+import { EmailBrand } from './email-brand'
 
 interface SignupEmailProps {
   siteName: string
@@ -24,6 +25,7 @@ export const SignupEmail = ({
     <Preview>Your {siteName} verification code</Preview>
     <Body style={main}>
       <Container style={container}>
+        <EmailBrand siteName={siteName} />
         <Heading style={h1}>Your verification code</Heading>
         <Text style={text}>
           Enter this 6-digit code on {siteName} to confirm your email and

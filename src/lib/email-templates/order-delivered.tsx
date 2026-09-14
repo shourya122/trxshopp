@@ -7,16 +7,13 @@ import {
   Head,
   Heading,
   Html,
-  Img,
   Preview,
   Row,
   Section,
   Text,
 } from "@react-email/components";
-import logoAsset from "@/assets/trxshop-logo.png.asset.json";
 import type { TemplateEntry } from "./registry";
-
-const LOGO_URL = `https://trxshop.in${logoAsset.url}`;
+import { EmailBrand } from "./email-brand";
 
 
 interface OrderItem {
@@ -77,7 +74,7 @@ const OrderDeliveredEmail = ({
           <Container style={card}>
             {/* HEADER */}
             <Section style={header}>
-              <Img src={LOGO_URL} alt={siteName} width={160} style={logoImg} />
+              <EmailBrand siteName={siteName} />
             </Section>
 
 
@@ -189,7 +186,7 @@ const card = {
   padding: 0,
 };
 const header = {
-  padding: "50px 40px",
+  padding: "36px 40px 8px",
   textAlign: "center" as const,
   borderBottom: "1px solid #1A1A1A",
   backgroundColor: "#000000",
@@ -202,8 +199,6 @@ const brand = {
   letterSpacing: "-1px",
 };
 const tagline = { marginTop: "12px", color: "#7A7A7A", fontSize: "15px" };
-const logoImg = { display: "block", margin: "0 auto", height: "auto" };
-
 const content = { padding: "45px" };
 const h2 = { margin: 0, color: "#FFFFFF", fontSize: "30px", fontWeight: 700 as const };
 const h3 = { marginTop: 0, color: "#FFFFFF", fontSize: "20px", fontWeight: 700 as const };
