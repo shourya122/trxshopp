@@ -31,8 +31,8 @@ export default function LegalPage({
             Questions? Reach us on{" "}
             <a href="https://discord.gg/4yJQJxgYh4" style={{ color: "#5865F2" }}>Discord</a>{" "}
             or email{" "}
-            <a href="mailto:trxshop@atomicmail.io" style={{ color: "var(--text)", textDecoration: "underline" }}>
-              trxshop@atomicmail.io
+            <a href="mailto:support@trxshop.in" style={{ color: "var(--text)", textDecoration: "underline" }}>
+              support@trxshop.in
             </a>.
           </p>
         </article>

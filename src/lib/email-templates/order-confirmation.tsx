@@ -95,7 +95,7 @@ const OrderConfirmationEmail = ({
 
           <Text style={footer}>
             We'll follow up with delivery details shortly. If you have any questions,
-            simply email to trxshop@atomicmail.io and we will reach assist you.
+            simply email support@trxshop.in and we will reach out to assist you.
           </Text>
         </Container>
       </Body>

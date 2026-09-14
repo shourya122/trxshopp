@@ -53,7 +53,7 @@ export const LEGAL_PAGES: Record<LegalKey, { title: string; updated: string; bod
         <p>TRXSHOP may update these Terms at any time. Continued use of the Services constitutes acceptance of any revised Terms.</p>
         <h2>Contact</h2>
         <p>Questions regarding these Terms may be directed to:</p>
-        <p>Email: <a href="mailto:trxshop@atomicmail.io">trxshop@atomicmail.io</a></p>
+        <p>Email: <a href="mailto:support@trxshop.in">support@trxshop.in</a></p>
       </>
     ),
   },
@@ -150,7 +150,7 @@ export const LEGAL_PAGES: Record<LegalKey, { title: string; updated: string; bod
         <p>We may update this Privacy Policy from time to time. Changes will become effective when posted on this page.</p>
         <h2>Contact</h2>
         <p>If you have questions regarding this Privacy Policy, please contact:</p>
-        <p>Email: <a href="mailto:trxshop@atomicmail.io">trxshop@atomicmail.io</a></p>
+        <p>Email: <a href="mailto:support@trxshop.in">support@trxshop.in</a></p>
       </>
     ),
   },
@@ -207,7 +207,7 @@ export const LEGAL_PAGES: Record<LegalKey, { title: string; updated: string; bod
         <p>TRXSHOP reserves the right to modify this Refund Policy at any time without prior notice.</p>
         <h2>Contact</h2>
         <p>For refund requests or questions:</p>
-        <p>Email: <a href="mailto:trxshop@atomicmail.io">trxshop@atomicmail.io</a></p>
+        <p>Email: <a href="mailto:support@trxshop.in">support@trxshop.in</a></p>
       </>
     ),
   },
@@ -235,7 +235,7 @@ export const LEGAL_PAGES: Record<LegalKey, { title: string; updated: string; bod
         <h2>4. Where we deliver</h2>
         <p>We deliver worldwide, anywhere a digital key can be redeemed. Region locks for individual games are listed on each product page — please confirm region compatibility before purchasing.</p>
         <h2>5. Failed deliveries</h2>
-        <p>If 24 hours have passed without delivery, email <a href="mailto:trxshop@atomicmail.io">trxshop@atomicmail.io</a> with your order ID. We will either deliver the key or issue a full refund.</p>
+        <p>If 24 hours have passed without delivery, email <a href="mailto:support@trxshop.in">support@trxshop.in</a> with your order ID. We will either deliver the key or issue a full refund.</p>
       </>
     ),
   },

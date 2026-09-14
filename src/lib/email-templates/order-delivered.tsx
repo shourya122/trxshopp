@@ -135,7 +135,7 @@ const OrderDeliveredEmail = ({
             {/* FOOTER */}
             <Section style={footer}>
               <Text style={footerText}>
-                Need help? Simply Email to trxshop@atomicmail.io and we will reach assist you.
+                Need help? Simply email support@trxshop.in and we will reach out to assist you.
                 <br />
                 <br />
                 © {new Date().getFullYear()} {siteName}. All rights reserved.
