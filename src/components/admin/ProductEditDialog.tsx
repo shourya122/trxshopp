@@ -91,8 +91,7 @@ export function ProductEditDialog({ product, onClose }: Props) {
   const addScreenshot = () => set("screenshots", [...(form.screenshots ?? []), ""]);
 
   // ---- Drag & drop image upload / reorder ----
-  const coverInput = useRef<HTMLInputElement>(null);
-  const shotsInput = useRef<HTMLInputElement>(null);
+
 
   const pickFiles = (list: FileList | null) =>
     Array.from(list ?? []).filter(isImageFile);
