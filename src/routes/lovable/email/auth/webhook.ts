@@ -9,7 +9,7 @@ import { RecoveryEmail } from '@/lib/email-templates/recovery'
 import { EmailChangeEmail } from '@/lib/email-templates/email-change'
 import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 
-const SITE_NAME = 'trxxshop'
+const SITE_NAME = 'Trx Shop'
 const SENDER_DOMAIN = 'notify.trxshop.in'
 const ROOT_DOMAIN = 'trxshop.in'
 const FROM_DOMAIN = 'trxshop.in'

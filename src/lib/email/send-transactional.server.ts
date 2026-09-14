@@ -7,7 +7,7 @@ import { render } from '@react-email/render'
 import { createClient } from '@supabase/supabase-js'
 import { TEMPLATES } from '@/lib/email-templates/registry'
 
-const SITE_NAME = 'trxxshop'
+const SITE_NAME = 'Trx Shop'
 const SENDER_DOMAIN = 'notify.trxshop.in'
 const FROM_DOMAIN = 'trxshop.in'
 
