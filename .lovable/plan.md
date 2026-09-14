@@ -1,43 +1,36 @@
-## Audit findings
+# What's missing before TRXSHOP is production-ready
 
-Two real bugs plus a small polish item — everything else in the checkout → order → Discord flow is wired correctly.
+Your store is in good shape: products, cart, checkout, variants, reviews, admin panel, email templates, legal pages, sitemap, and sign-in all work. Below is what I'd fix or add next, grouped by priority. Tell me which items you want and I'll build them.
 
-### 1. Crypto (OxaPay) orders never flip to "paid" — CRITICAL
+## Critical — do these before real customers
 
-`createCryptoInvoice` sends OxaPay a `callback_url` of `/api/public/oxapay-webhook`, but that route file does not exist. So after a customer pays in crypto, OxaPay POSTs the "paid" event into a 404 and the order sits at `status: pending` forever. Cashfree has a proper webhook; OxaPay does not.
+1. **Broken product images** — Many product covers still point to expiring Discord CDN links that return 404. Fix: bulk-migrate all product images into your own storage so they never break again.
+2. **Card/UPI payments (Cashfree) credentials** — Crypto (OxaPay) is set up, but confirm Cashfree keys are configured and test one real card/UPI order end to end, including the webhook updating the order status.
+3. **Test a full order** — Place a test order: pay → confirmation email → order appears in admin → mark delivered → delivery email with code. Verify each step.
 
-### 2. Discord ID input goes nowhere — BUG
+## Important — trust and conversion
 
-Checkout collects a "Discord ID (optional)" value into a `discord` state variable, but it is never included in either `createCashfreePaymentLink` or `createCryptoInvoice`. It is never saved to the `orders` row and never shown in the Discord order notification. From the customer's side the field looks functional; from your side it's dead.
+4. **Delivery automation** — How do customers receive their game/account/code after payment? Right now it's manual via admin. Options: attach codes/credentials to products in admin and auto-send them in the delivery email.
+5. **Refund/policy check** — Your refund & cancellation page should match how you actually handle digital-goods refunds, since digital items are usually non-refundable once delivered.
+6. **OG share images** — Product pages have no share image, so links pasted in WhatsApp/X show no preview. Add per-product share images.
+7. **Support channel** — support@trxshop.in is on the contact page; make sure that mailbox actually receives mail (email infra for trxshop.in was set up — verify inbound works).
 
-### 3. Post-fix polish
+## Nice to have — growth
 
-Once crypto orders can flip to paid, post a "paid" update to `DISCORD_ORDERS_WEBHOOK_URL` from both webhooks so you see the full lifecycle (new order → paid) in Discord, matching what Cashfree can now do too.
+8. **Google Search Console + indexing** — Submit the sitemap, verify the domain, and check indexing so products show up on Google.
+9. **Analytics on the live site** — Track visitors, top products, and conversion.
+10. **Discount/coupon promotion** — Coupons exist in admin; add a banner or first-order discount code on the homepage to drive first sales.
+11. **Order status notifications** — Let customers see live order status on their account page (they can already view orders; add clearer status timeline).
+12. **Backup of product data** — Export your product/catalog data regularly so you never lose it again.
 
-## What to build
+## My recommended order
 
-1. **Migration**: add `customer_discord text` to `public.orders`.
-2. **New route** `src/routes/api/public/oxapay-webhook.ts`:
-   - Verify OxaPay HMAC (`hmac` header, SHA-512 of raw body with `OXAPAY_MERCHANT_API_KEY`).
-   - Parse `{ type, track_id, status, order_id }`; on `Paid` / `Confirming` completion set `status: paid`, `payment_status: paid`, `paid_at: now()`, `order_status: processing`, `payment_ref: track_id`, `raw_callback: payload`. On `Expired` / `Failed` set failed. Always 200-ack once processed.
-   - After a successful "paid" update, fire the Discord "paid" embed.
-3. **Wire Discord ID** through the client:
-   - `PayWithCashfreeButton` + `PayWithCryptoButton`: add optional `discord?: string` prop, forward to their server fn.
-   - Both server fns: extend Zod input, persist to `customer_discord`, include in the Discord embed payload.
-   - `checkout.tsx`: pass `discord={discord}` to both buttons.
-4. **Discord embed**: `postNewOrderToDiscord` gains an optional `customerDiscord` field rendered as its own row. Add a second helper `postOrderPaidToDiscord({ orderId, provider, amountInr })` used by both webhooks on payment success.
-5. **Sanity**: `cashfree.functions.ts` already saves name/phone/address; only `customer_discord` gets added there. `oxapay.functions.ts` already saves those (from last turn); only `customer_discord` added.
+```text
+1. Fix broken images (bulk migrate to own storage)
+2. Verify Cashfree + place a full test order
+3. Set up delivery automation for codes
+4. OG share images for products
+5. Search Console submission
+```
 
-## Technical notes
-
-- OxaPay v1 webhook signature: `HMAC_SHA512(rawBody, merchant_api_key)` sent in the `hmac` header, hex-encoded. Use `timingSafeEqual` on equal-length buffers.
-- OxaPay statuses to treat as paid: `Paid`. Treat `Expired`, `Failed` as failed. Ignore `Waiting` / `Confirming` (leave pending).
-- Idempotency: guard with `if (existing.status === 'paid') return 200` so retries don't double-fire the Discord "paid" post.
-- Public webhook: `/api/public/*` is unauth by design; signature check is the only gate — do the check before any DB write.
-- Migration only adds a nullable column; no policy/grant change needed since existing policies already cover the row.
-
-## Not changing
-
-- Cashfree webhook logic (already correct).
-- Checkout UI/layout.
-- OxaPay pricing/currency/lifetime parameters.
+Tell me which items to start with — I suggest beginning with #1 (images) and #2 (payments test) since they directly lose you sales.
