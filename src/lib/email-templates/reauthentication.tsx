@@ -54,15 +54,15 @@ const text = {
   margin: '0 0 25px',
 }
 const codeStyle = {
-  fontFamily: 'Courier, monospace',
-  fontSize: '28px',
+  fontFamily: "'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace",
+  fontSize: '36px',
   fontWeight: 'bold' as const,
-  letterSpacing: '6px',
+  letterSpacing: '14px',
   color: '#00e676',
-  backgroundColor: '#0a1f14',
-  border: '1px solid #00e676',
-  borderRadius: '10px',
-  padding: '16px 20px',
+  backgroundColor: '#07120d',
+  border: '2px solid #00e676',
+  borderRadius: '14px',
+  padding: '22px 28px',
   textAlign: 'center' as const,
   margin: '0 0 30px',
 }
