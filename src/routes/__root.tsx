@@ -152,6 +152,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
+        <CurrencyProvider>
         <LegalModalProvider>
           {!isAdminRoute && <a href="#main-content" className="skip-link">Skip to content</a>}
           <div className="relative z-10">
