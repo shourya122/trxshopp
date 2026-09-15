@@ -12,6 +12,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import appCss from "../styles.css?url";
 import { CartProvider } from "@/lib/cart";
+import { CurrencyProvider } from "@/lib/currency";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { NotFound404 } from "@/components/NotFound404";
