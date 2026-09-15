@@ -1,6 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { Loader2 } from "lucide-react";
 import { Card, PageHeader } from "@/components/admin/ui";
+import { adminUpdateUsdRate, getPublicSettings } from "@/lib/settings.functions";
 
 export const Route = createFileRoute("/admin/settings")({ component: Settings });
 
