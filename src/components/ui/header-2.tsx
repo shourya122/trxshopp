@@ -5,6 +5,7 @@ import cartIconAsset from "@/assets/header-cart-icon-v2.svg.asset.json";
 import { Link, useLocation } from "@tanstack/react-router";
 
 import { useCart } from "@/lib/cart";
+import { useCurrency } from "@/lib/currency";
 
 import trxshopLogo from "@/assets/trxshop-logo.png";
 import {
