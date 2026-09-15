@@ -221,6 +221,7 @@ function SearchProductCard({
   product: Product;
   onClick: () => void;
 }) {
+  const fmt = useFmt();
   const sale = Math.round(product.priceCents / 100);
   const regular =
     product.oldPriceCents > 0 ? Math.round(product.oldPriceCents / 100) : sale;
