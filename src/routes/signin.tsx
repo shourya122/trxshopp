@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
 import trxshopLogo from "@/assets/trxshop-logo.png";
+import { markAuthSoundPending } from "@/lib/success-sound";
 
 export const Route = createFileRoute("/signin")({
   head: () => ({
@@ -36,6 +37,7 @@ function SignInPage() {
 
   const handleGoogle = async () => {
     setLoading(true);
+    markAuthSoundPending();
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: typeof window !== "undefined" ? window.location.origin : "",
     });

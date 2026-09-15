@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
 import { X, ArrowRight, Package, LogOut, UserCircle } from "lucide-react";
+import { markAuthSoundPending } from "@/lib/success-sound";
 
 function GoogleLogo({ className }: { className?: string }) {
   return (
@@ -63,6 +64,7 @@ export function AccountDialog({
 
   const handleGoogle = async () => {
     setLoading(true);
+    markAuthSoundPending();
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: typeof window !== "undefined" ? window.location.origin : "",
     });

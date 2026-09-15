@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import trxshopLogo from "@/assets/trxshop-logo.png";
+import { playSuccessSound } from "@/lib/success-sound";
 
 type Search = { email?: string; newsletter?: string };
 
@@ -108,6 +109,7 @@ function VerifyCodePage() {
     }
     setErrorMsg("");
     try { sessionStorage.removeItem("otp-pending-email"); } catch {}
+    playSuccessSound();
     navigate({ to: "/" });
 
   };
