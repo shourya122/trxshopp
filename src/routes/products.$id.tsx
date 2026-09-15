@@ -9,6 +9,7 @@ import { getProduct, getProductBySlug, listProducts } from "@/lib/products";
 import type { Product } from "@/lib/types";
 
 import { useCart } from "@/lib/cart";
+import { useCurrency } from "@/lib/currency";
 import { ImageWithSkeleton } from "@/components/ImageWithSkeleton";
 import gpayLogo from "@/assets/gpay_new.png";
 import paytmLogo from "@/assets/paytm.svg";
@@ -334,7 +335,7 @@ function ProductPage() {
                       <span className={on ? "text-black" : "text-neutral-300"}>
                         {e.name}
                         <span className={`ml-1.5 font-normal ${on ? "text-black" : "text-neutral-500"}`}>
-                          ₹{(e.priceCents / 100).toLocaleString("en-IN")}
+                          {format(e.priceCents)}
                         </span>
                       </span>
                     </button>
@@ -373,7 +374,7 @@ function ProductPage() {
                             {v}
                             {ov.priceCents ? (
                               <span className={`ml-1.5 font-normal ${on ? "text-black" : "text-neutral-500"}`}>
-                                ₹{(ov.priceCents / 100).toLocaleString("en-IN")}
+                                {format(ov.priceCents)}
                               </span>
                             ) : null}
                           </span>
@@ -555,6 +556,7 @@ function ProductPage() {
 }
 
 function RelatedCarousel({ related }: { related: Product[] }) {
+  const { format } = useCurrency();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const scrollByCard = (dir: 1 | -1) => {
     const el = scrollerRef.current;
@@ -578,7 +580,7 @@ function RelatedCarousel({ related }: { related: Product[] }) {
             {related.map((g) => {
               const sale = Math.round(g.priceCents / 100);
               const regular = g.oldPriceCents > 0 ? Math.round(g.oldPriceCents / 100) : sale;
-              const fmt = (n: number) => `Rs. ${n.toLocaleString("en-IN")}.00`;
+              const fmt = (n: number) => format(n * 100, { rs: true });
               return (
                 <Link
                   key={g.id}
