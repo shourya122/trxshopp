@@ -880,11 +880,11 @@ function HomeProductCard({
       </h3>
       <div className="mt-1.5 flex items-baseline gap-2">
         <span className="text-white" style={{ fontSize: "16px", fontWeight: 700, lineHeight: "24px" }}>
-          Rs. {sale.toLocaleString("en-IN")}.00
+          {format(sale * 100, { rs: true })}
         </span>
         {regular > sale && (
           <span className="text-neutral-500 line-through" style={{ fontSize: "14px", fontWeight: 400, lineHeight: "20px" }}>
-            Rs. {regular.toLocaleString("en-IN")}.00
+            {format(regular * 100, { rs: true })}
           </span>
         )}
       </div>
