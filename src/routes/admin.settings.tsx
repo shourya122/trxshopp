@@ -9,6 +9,60 @@ import { adminUpdateUsdRate, getPublicSettings } from "@/lib/settings.functions"
 
 export const Route = createFileRoute("/admin/settings")({ component: Settings });
 
+function CurrencyCard() {
+  const settingsFn = useServerFn(getPublicSettings);
+  const saveFn = useServerFn(adminUpdateUsdRate);
+  const { data, isLoading, refetch } = useQuery({ queryKey: ["public-settings"], queryFn: () => settingsFn() });
+  const [rate, setRate] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (data?.usdInrRate != null) setRate(String(data.usdInrRate));
+  }, [data?.usdInrRate]);
+
+  const save = async () => {
+    const n = Number(rate);
+    if (!Number.isFinite(n) || n <= 0) { toast.error("Enter a valid rate greater than 0"); return; }
+    setSaving(true);
+    try {
+      await saveFn({ data: { rate: n } });
+      await refetch();
+      toast.success(`Dollar rate saved — $1 = ₹${n}`);
+    } catch (e) {
+      toast.error((e as Error)?.message || "Couldn't save the rate");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Card className="mb-3 p-5">
+      <h3 className="text-[14px] font-semibold text-white">Currency</h3>
+      <p className="mt-1 text-[12px] text-[#A1A1AA]">
+        Dollar prices shown to shoppers are converted from rupees with this rate. Customers are always charged in rupees.
+      </p>
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <span className="text-[12.5px] text-[#D4D4D8]">$1 =</span>
+        <span className="text-[12.5px] text-[#D4D4D8]">₹</span>
+        <input
+          value={rate}
+          onChange={(e) => setRate(e.target.value)}
+          inputMode="decimal"
+          placeholder={isLoading ? "…" : "88"}
+          className="h-9 w-28 rounded-md border border-white/[0.1] bg-black px-3 text-[13px] text-white outline-none focus:border-white/30"
+        />
+        <button
+          onClick={save}
+          disabled={saving || isLoading}
+          className="inline-flex h-9 items-center gap-2 rounded-md bg-white px-4 text-[12.5px] font-semibold text-black disabled:opacity-50"
+        >
+          {saving && <Loader2 className="h-3.5 w-3.5 animate-spin" />} Save
+        </button>
+      </div>
+    </Card>
+  );
+}
+
 const groups = [
   { title: "Workspace", desc: "Name, branding and timezone", items: ["Store name", "Logo & favicon", "Timezone", "Currency"] },
   { title: "Payments", desc: "Providers and payout schedule", items: ["Stripe", "PayPal", "Apple Pay", "Payout schedule"] },
@@ -30,6 +84,7 @@ function Settings() {
   return (
     <div>
       <PageHeader title="Settings" description="Configure your workspace and integrations." />
+      <CurrencyCard />
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {groups.map((g) => (
           <Card key={g.title} className="p-5">
