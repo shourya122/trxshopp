@@ -168,6 +168,7 @@ function RootComponent() {
           {!isAdminRoute && <SecurityGuard />}
 
         </LegalModalProvider>
+        </CurrencyProvider>
       </CartProvider>
     </QueryClientProvider>
   );
