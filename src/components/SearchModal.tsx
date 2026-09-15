@@ -5,6 +5,7 @@ import { Search, X, Clock } from "lucide-react";
 import { listProducts } from "@/lib/products";
 import type { Product } from "@/lib/types";
 import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
+import { useCurrency } from "@/lib/currency";
 
 interface SearchModalProps {
   open: boolean;
