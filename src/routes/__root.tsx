@@ -21,6 +21,7 @@ import CookieConsent from "@/components/CookieConsent";
 import { LegalModalProvider } from "@/components/legal/LegalModalProvider";
 import { useCartSync } from "@/hooks/useCartSync";
 import { SecurityGuard } from "@/components/SecurityGuard";
+import { playPendingAuthSound } from "@/lib/success-sound";
 
 
 function NotFoundComponent() {
@@ -135,6 +136,13 @@ function CartSyncBridge() {
   return null;
 }
 
+function AuthSoundBridge() {
+  useEffect(() => {
+    playPendingAuthSound();
+  }, []);
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const { pathname } = useLocation();
@@ -165,6 +173,7 @@ function RootComponent() {
           <Toaster position={isAdminRoute ? "top-center" : "bottom-right"} />
           {!isAdminRoute && <CookieConsent />}
           <CartSyncBridge />
+          <AuthSoundBridge />
           {!isAdminRoute && <SecurityGuard />}
 
         </LegalModalProvider>
