@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useCurrency } from "@/lib/currency";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -151,6 +152,7 @@ function OrderDetailSkeleton() {
 }
 
 function AccountPage() {
+  const { format } = useCurrency();
   const navigate = useNavigate();
   const fetchMe = useServerFn(getMe);
   const fetchOrders = useServerFn(listMyOrders);
@@ -265,7 +267,7 @@ function AccountPage() {
               ) : (
                 orders.map((o) => {
                   const s = statusLabel(o);
-                  const total = ((o.total_amount || o.amount_cents) / 100).toFixed(2);
+                  const totalCents = o.total_amount || o.amount_cents;
                   const ref = o.order_number ? `#${o.order_number}` : `#${o.id.slice(0, 6)}`;
                   const title = headline(o);
                   return (
@@ -294,7 +296,7 @@ function AccountPage() {
                           <div className="mt-1.5 flex flex-wrap items-center gap-2 text-sm" style={{ color: "rgba(230,246,250,0.55)" }}>
                             <span>{ref}</span>
                             <span>·</span>
-                            <span>₹{total} INR</span>
+                            <span>{format(totalCents, { decimals: 2 })}</span>
                             <span
                               className="inline-flex items-center gap-1 pl-1.5 pr-2 py-0.5 rounded-full text-xs"
                               style={
@@ -379,6 +381,7 @@ function AccountPage() {
 type OrderDetail = Awaited<ReturnType<typeof getOrderWithItems>>;
 
 function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => void }) {
+  const { format } = useCurrency();
   const fetchOne = useServerFn(getOrderWithItems);
   const [data, setData] = useState<OrderDetail | null>(null);
   const [loading, setLoading] = useState(false);
@@ -416,7 +419,7 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
     status: order.status as string,
   }) : "Order";
 
-  const total = order ? ((order.total_amount || order.amount_cents) / 100).toFixed(2) : "0.00";
+  const totalCents = order ? (order.total_amount || order.amount_cents) : 0;
   const subtotal = items.reduce((sum, i) => sum + (i.price_cents * i.quantity), 0) / 100;
   const ref = order?.order_number ? `#${order.order_number}` : id ? `#${id.slice(0, 6)}` : "";
   const addr = (order?.shipping_address ?? null) as null | Record<string, string>;
@@ -480,7 +483,7 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
               {/* Amount + status message */}
               <div className="p-4" style={cardStyle}>
                 <p className="text-lg font-semibold">
-                  ₹{total} <span className="text-xs font-normal" style={{ color: "rgba(255,255,255,0.5)" }}>INR</span>
+                  {format(totalCents, { decimals: 2 })}
                 </p>
                 {s && (
                   <p className="text-xs mt-1.5" style={{ color: "rgba(255,255,255,0.6)" }}>
@@ -538,13 +541,13 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
                           {it.edition_name && <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>{it.edition_name}</p>}
                         </div>
                       </div>
-                      <p className="text-sm font-mono shrink-0">₹{((it.price_cents * it.quantity) / 100).toFixed(2)}</p>
+                      <p className="text-sm font-mono shrink-0">{format(it.price_cents * it.quantity, { decimals: 2 })}</p>
                     </div>
                   );
                 })}
                 <div className="p-4 space-y-1.5 text-sm">
                   <div className="flex justify-between" style={{ color: "rgba(255,255,255,0.6)" }}>
-                    <span>Subtotal</span><span className="font-mono">₹{subtotal.toFixed(2)}</span>
+                    <span>Subtotal</span><span className="font-mono">{format(subtotal * 100, { decimals: 2 })}</span>
                   </div>
                   <div className="flex justify-between" style={{ color: "rgba(255,255,255,0.6)" }}>
                     <span>Shipping</span><span>Free</span>
@@ -553,7 +556,7 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
                     <span>Total</span>
                     <span>
                       <span className="text-xs mr-1" style={{ color: "rgba(255,255,255,0.5)" }}>INR</span>
-                      <span className="font-mono" style={{ color: "#FFFFFF" }}>₹{total}</span>
+                      <span className="font-mono" style={{ color: "#FFFFFF" }}>{format(totalCents, { decimals: 2 })}</span>
                     </span>
                   </div>
                 </div>
@@ -587,7 +590,7 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
                   <span>
                     <span className="font-medium">{providerLabel}</span>
                     <span className="block text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>
-                      ₹{total} INR · {createdShort}
+                      {format(totalCents, { decimals: 2 })} · {createdShort}
                     </span>
                   </span>
                 </div>

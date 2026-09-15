@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useCart, type CartItem } from "@/lib/cart";
+import { useCurrency } from "@/lib/currency";
 import { placeOrder } from "@/lib/orders.functions";
 import { validateCoupon } from "@/lib/coupons.functions";
 import { PayWithCashfreeButton } from "@/components/PayWithCashfreeButton";
@@ -293,6 +294,7 @@ function CheckoutPage() {
 }
 
 function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; isBuyNow: boolean }) {
+  const { currency, format, formatINR } = useCurrency();
   const [buyNowItems, setBuyNowItems] = useState<CartItem[] | null>(
     () => (isBuyNow ? readBuyNow() : null),
   );
@@ -517,8 +519,7 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
           <div className="text-[11px] text-white/50">{totalUnits} item{totalUnits > 1 ? "s" : ""}</div>
         </div>
         <div className="text-right">
-          <span className="text-[10px] text-white/40 mr-1.5 align-middle">INR</span>
-          <span className="font-['Rajdhani',sans-serif] text-lg text-white font-bold align-middle">₹{grand.toFixed(2)}</span>
+          <span className="font-['Rajdhani',sans-serif] text-lg text-white font-bold align-middle">{format(grand * 100, { decimals: 2 })}</span>
         </div>
       </button>
 
@@ -565,7 +566,7 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
                   )}
                 </div>
                 <span className="text-white/90 whitespace-nowrap" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif', fontSize: '14px' }}>
-                  ₹{(i.price * i.qty).toFixed(2)}
+                  {format(i.price * i.qty * 100, { decimals: 2 })}
                 </span>
               </li>
             ))}
@@ -618,16 +619,21 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 {coupon.code}
               </span>
-              <span className="font-mono">−₹{discount.toFixed(2)}</span>
+              <span className="font-mono">−{format(discount * 100, { decimals: 2 })}</span>
             </div>
           )}
         </div>
         <div className="flex justify-between items-baseline pt-4">
           <span className="uppercase tracking-wider text-white font-bold" style={{ fontWeight: 700 }}>Total</span>
           <span className="font-['Rajdhani',sans-serif] text-2xl text-white font-bold" style={{ fontWeight: 700 }}>
-            <span className="text-white/50 text-sm font-normal mr-1.5">INR</span>₹{grand.toFixed(2)}
+            {format(grand * 100, { decimals: 2 })}
           </span>
         </div>
+        {currency === "USD" && (
+          <p className="pt-1 text-right text-[12px] text-white/50">
+            You will be charged {formatINR(grand * 100, { decimals: 2 })} INR
+          </p>
+        )}
       </div>
     </section>
   );

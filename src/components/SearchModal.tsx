@@ -5,6 +5,7 @@ import { Search, X, Clock } from "lucide-react";
 import { listProducts } from "@/lib/products";
 import type { Product } from "@/lib/types";
 import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
+import { useCurrency } from "@/lib/currency";
 
 interface SearchModalProps {
   open: boolean;
@@ -23,8 +24,9 @@ interface RecentProduct {
   oldPriceCents: number;
 }
 
-function fmt(n: number) {
-  return `Rs. ${n.toLocaleString("en-IN")}.00`;
+function useFmt() {
+  const { format } = useCurrency();
+  return (n: number) => format(n * 100, { rs: true });
 }
 
 function loadRecent(): RecentProduct[] {
@@ -220,6 +222,7 @@ function SearchProductCard({
   product: Product;
   onClick: () => void;
 }) {
+  const fmt = useFmt();
   const sale = Math.round(product.priceCents / 100);
   const regular =
     product.oldPriceCents > 0 ? Math.round(product.oldPriceCents / 100) : sale;
@@ -272,6 +275,7 @@ function RecentProductCard({
   product: RecentProduct;
   onClose: () => void;
 }) {
+  const fmt = useFmt();
   const sale = Math.round(product.priceCents / 100);
   const regular =
     product.oldPriceCents > 0 ? Math.round(product.oldPriceCents / 100) : sale;

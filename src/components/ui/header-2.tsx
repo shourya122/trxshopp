@@ -5,6 +5,7 @@ import cartIconAsset from "@/assets/header-cart-icon-v2.svg.asset.json";
 import { Link, useLocation } from "@tanstack/react-router";
 
 import { useCart } from "@/lib/cart";
+import { useCurrency } from "@/lib/currency";
 
 import trxshopLogo from "@/assets/trxshop-logo.png";
 import {
@@ -32,6 +33,7 @@ export function Header() {
   const announcementRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const { currency, setCurrency, format } = useCurrency();
 
   useEffect(() => {
     let raf = 0;
@@ -224,6 +226,26 @@ export function Header() {
 
         {/* Right: icons */}
         <div className="flex items-center gap-0.5 sm:gap-1 justify-self-end self-center">
+          <div
+            role="group"
+            aria-label="Currency"
+            className="mr-1 hidden sm:inline-flex items-center rounded-full border border-white/15 bg-white/[0.04] p-0.5"
+          >
+            {(["INR", "USD"] as const).map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => setCurrency(c)}
+                aria-pressed={currency === c}
+                aria-label={c === "INR" ? "Show prices in Indian rupees" : "Show prices in US dollars"}
+                className={`h-6 w-7 rounded-full text-[12px] font-semibold leading-none transition-colors ${
+                  currency === c ? "bg-white text-black" : "text-white/55 hover:text-white"
+                }`}
+              >
+                {c === "INR" ? "₹" : "$"}
+              </button>
+            ))}
+          </div>
           <button
             aria-label="Search"
             onClick={() => setSearchOpen(true)}
@@ -351,13 +373,13 @@ export function Header() {
                         <div className="flex items-start justify-between gap-3">
                           <p className="text-base font-semibold leading-snug text-white">{it.name}</p>
                           <span className="text-base font-semibold whitespace-nowrap text-white">
-                            ₹{(it.price * it.qty).toLocaleString()}
+                            {format(it.price * it.qty * 100)}
                           </span>
                         </div>
                         <div className="mt-1.5 flex items-baseline gap-2">
-                          <span className="text-base font-semibold text-white">₹{it.price.toLocaleString()}</span>
+                          <span className="text-base font-semibold text-white">{format(it.price * 100)}</span>
                           {it.old && it.old > it.price && (
-                            <span className="text-sm text-white/40 line-through">₹{it.old.toLocaleString()}</span>
+                            <span className="text-sm text-white/40 line-through">{format(it.old * 100)}</span>
                           )}
                         </div>
                         <div className="mt-4 flex items-center gap-3">
@@ -395,7 +417,7 @@ export function Header() {
               <div className="border-t border-white/10 px-5 py-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-white">Estimated total</span>
-                  <span className="text-lg font-bold text-white">₹{total.toLocaleString()}</span>
+                  <span className="text-lg font-bold text-white">{format(total * 100)}</span>
                 </div>
                 <p className="text-xs text-white/60">Taxes and shipping calculated at checkout.</p>
                 <button

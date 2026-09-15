@@ -8,6 +8,7 @@ import type { Product, Platform } from "@/lib/types";
 import { ImageWithSkeleton } from "@/components/ImageWithSkeleton";
 import { ProductCardSkeletonGrid } from "@/components/ProductCardSkeleton";
 import { useCart } from "@/lib/cart";
+import { useCurrency } from "@/lib/currency";
 import { useReveal } from "@/hooks/useReveal";
 import cartIconAsset from "@/assets/cart-icon-v2.svg.asset.json";
 
@@ -277,7 +278,8 @@ function FilterMenu({
 export function ProductCard({ g }: { g: Product }) {
   const sale = Math.round(g.priceCents / 100);
   const regular = g.oldPriceCents > 0 ? Math.round(g.oldPriceCents / 100) : sale;
-  const fmt = (n: number) => `Rs. ${n.toLocaleString("en-IN")}.00`;
+  const { format } = useCurrency();
+  const fmt = (n: number) => format(n * 100, { rs: true });
   const img = g.coverImage || g.screenshots[0] || "";
   const { add } = useCart();
   const numericId = Array.from(g.id).reduce((a, c) => a + c.charCodeAt(0), 0);
