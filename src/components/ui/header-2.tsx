@@ -33,6 +33,7 @@ export function Header() {
   const announcementRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const { currency, setCurrency, format } = useCurrency();
 
   useEffect(() => {
     let raf = 0;
