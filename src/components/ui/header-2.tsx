@@ -415,7 +415,7 @@ export function Header() {
               <div className="border-t border-white/10 px-5 py-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-white">Estimated total</span>
-                  <span className="text-lg font-bold text-white">₹{total.toLocaleString()}</span>
+                  <span className="text-lg font-bold text-white">{format(total * 100)}</span>
                 </div>
                 <p className="text-xs text-white/60">Taxes and shipping calculated at checkout.</p>
                 <button
