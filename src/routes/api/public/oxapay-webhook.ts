@@ -80,6 +80,41 @@ export const Route = createFileRoute("/api/public/oxapay-webhook")({
           return new Response("ok");
         }
 
+        // SECURITY: never mark an order paid for less than it costs.
+        // OxaPay invoices are minted in INR; allow only the configured
+        // under-paid coverage (2.5%) plus a 1-rupee rounding allowance.
+        if (payment_status === "paid") {
+          const expectedCents = Number(existing.amount_cents ?? 0);
+          const paidInr = Number(payload?.amount);
+          if (!Number.isFinite(paidInr) || paidInr <= 0) {
+            console.error("[oxapay-webhook] paid callback without usable amount", {
+              orderId,
+              amount: payload?.amount,
+            });
+            payment_status = "pending";
+          } else {
+            const paidCents = Math.round(paidInr * 100);
+            const minCents = Math.floor(expectedCents * 0.975) - 100;
+            if (paidCents < minCents) {
+              console.error("[oxapay-webhook] underpaid order, refusing to mark paid", {
+                orderId,
+                paidCents,
+                expectedCents,
+              });
+              await supabase
+                .from("orders")
+                .update({
+                  payment_status: "pending",
+                  status: "pending",
+                  raw_callback: { ...payload, underpaid: true, expected_cents: expectedCents },
+                })
+                .eq("id", orderId);
+              return new Response("Amount mismatch", { status: 409 });
+            }
+          }
+        }
+
+
         const patch: Record<string, unknown> = {
           payment_status,
           status:
