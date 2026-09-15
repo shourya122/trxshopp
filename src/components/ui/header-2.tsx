@@ -371,7 +371,7 @@ export function Header() {
                         <div className="flex items-start justify-between gap-3">
                           <p className="text-base font-semibold leading-snug text-white">{it.name}</p>
                           <span className="text-base font-semibold whitespace-nowrap text-white">
-                            ₹{(it.price * it.qty).toLocaleString()}
+                            {format(it.price * it.qty * 100)}
                           </span>
                         </div>
                         <div className="mt-1.5 flex items-baseline gap-2">
