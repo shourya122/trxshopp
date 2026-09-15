@@ -6,6 +6,7 @@ import { CheckCircle2, Clock, XCircle, ExternalLink, Copy, DollarSign, ShoppingB
 import { PageLoader } from "@/components/Loader";
 import { toast } from "sonner";
 import trxshopLogo from "@/assets/trxshop-logo.png";
+import { useCurrency } from "@/lib/currency";
 
 export const Route = createFileRoute("/order/$id")({
   head: () => ({
@@ -51,13 +52,15 @@ type OrderItem = {
   cover_image?: string | null;
 };
 
-function fmtINR(n: number) {
-  return `₹${Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+function useFmt() {
+  const { format } = useCurrency();
+  return (n: number) => format(Number(n || 0) * 100, { decimals: 2 });
 }
 
 function OrderPage() {
   const { id } = Route.useParams();
   const fetchOrder = useServerFn(getCryptoOrder);
+  const fmtINR = useFmt();
 
   const { data, isLoading } = useQuery({
     queryKey: ["order", id],
@@ -199,7 +202,7 @@ function OrderPage() {
                   <span className="grid place-items-center w-7 h-6 rounded bg-white/[0.08] border border-white/10">
                     <DollarSign className="w-3.5 h-3.5 text-white/80" />
                   </span>
-                  <span>{paymentLabel} · {fmtINR(subtotalPreTax)} INR</span>
+                  <span>{paymentLabel} · {fmtINR(subtotalPreTax)}</span>
                 </div>
 
                 {addr && (
