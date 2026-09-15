@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useCurrency } from "@/lib/currency";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -151,6 +152,7 @@ function OrderDetailSkeleton() {
 }
 
 function AccountPage() {
+  const { format } = useCurrency();
   const navigate = useNavigate();
   const fetchMe = useServerFn(getMe);
   const fetchOrders = useServerFn(listMyOrders);
@@ -379,6 +381,7 @@ function AccountPage() {
 type OrderDetail = Awaited<ReturnType<typeof getOrderWithItems>>;
 
 function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => void }) {
+  const { format } = useCurrency();
   const fetchOne = useServerFn(getOrderWithItems);
   const [data, setData] = useState<OrderDetail | null>(null);
   const [loading, setLoading] = useState(false);

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useCart, type CartItem } from "@/lib/cart";
+import { useCurrency } from "@/lib/currency";
 import { placeOrder } from "@/lib/orders.functions";
 import { validateCoupon } from "@/lib/coupons.functions";
 import { PayWithCashfreeButton } from "@/components/PayWithCashfreeButton";
@@ -293,6 +294,7 @@ function CheckoutPage() {
 }
 
 function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; isBuyNow: boolean }) {
+  const { currency, format, formatINR } = useCurrency();
   const [buyNowItems, setBuyNowItems] = useState<CartItem[] | null>(
     () => (isBuyNow ? readBuyNow() : null),
   );
