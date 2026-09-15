@@ -173,9 +173,9 @@ export function Header() {
         )}
 
         <header
-          className={`text-white font-['Inter'] font-medium mx-0 rounded-none border-b border-white/10 overflow-visible transition-all duration-300 ease-[cubic-bezier(0.7,0,0.3,1)] sm:overflow-hidden sm:rounded-2xl sm:border ${
+          className={`text-white font-['Inter'] font-medium mx-0 rounded-none border-b border-white/10 overflow-visible transition-all duration-300 ease-[cubic-bezier(0.7,0,0.3,1)] sm:rounded-2xl sm:border ${
             scrolled
-              ? "sm:mx-auto sm:max-w-[min(85%,64rem)] sm:bg-black/90 sm:backdrop-blur-md sm:border-white/10 sm:shadow-[0_8px_32px_rgba(0,0,0,0.5)] bg-black/90 backdrop-blur-sm"
+              ? "sm:mx-auto sm:max-w-[min(92%,64rem)] sm:bg-black/90 sm:backdrop-blur-md sm:border-white/10 sm:shadow-[0_8px_32px_rgba(0,0,0,0.5)] bg-black/90 backdrop-blur-sm"
               : "sm:mx-auto sm:max-w-6xl sm:bg-transparent sm:backdrop-blur-0 sm:border-transparent sm:shadow-none bg-transparent"
           }`}
         >
@@ -183,19 +183,19 @@ export function Header() {
 
 
       {/* Main bar */}
-      <div className="w-full px-4 sm:px-8 h-12 sm:h-16 grid grid-cols-3 items-center">
+      <div className="w-full px-3 sm:px-8 h-12 sm:h-16 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-4">
 
         {/* Left: nav (desktop) / menu btn (mobile) */}
-        <nav className="hidden sm:flex items-center gap-6 lg:gap-8 self-center h-full">
+        <nav className="hidden sm:flex min-w-0 items-center gap-4 lg:gap-8 self-center h-full">
           {links.map((l) => (
             <Link
               key={l.label}
               to={l.href}
-              className={`group relative text-sm leading-none flex items-center font-medium overflow-hidden ${
+              className={`group relative text-sm leading-none flex items-center font-medium whitespace-nowrap ${
                 isActive(l.href) ? "text-white" : "text-white/60 hover:text-white"
               }`}
             >
-              <span className="relative inline-block overflow-hidden h-[1em] leading-[1em]">
+              <span className="relative inline-block overflow-hidden h-[1.1em] leading-[1.1em]">
                 <span className="block transition-transform duration-300 ease-[cubic-bezier(0.7,0,0.3,1)] group-hover:-translate-y-full">
                   {l.label}
                 </span>
@@ -208,7 +208,7 @@ export function Header() {
         </nav>
 
         <button
-          className="sm:hidden justify-self-start text-white p-2 -ml-2"
+          className="sm:hidden shrink-0 justify-self-start text-white p-2 -ml-2"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
@@ -219,17 +219,17 @@ export function Header() {
         <Link
           to="/"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="flex items-center justify-self-center"
+          className="flex min-w-0 items-center justify-self-center"
         >
-          <img src={trxshopLogo} alt="TRXSHOP logo" className="h-12 sm:h-20 w-auto" />
+          <img src={trxshopLogo} alt="TRXSHOP logo" className="h-10 sm:h-20 w-auto max-w-full" />
         </Link>
 
         {/* Right: icons */}
-        <div className="flex items-center gap-0.5 sm:gap-1 justify-self-end self-center">
+        <div className="flex min-w-0 items-center gap-0.5 sm:gap-1 justify-self-end self-center">
           <div
             role="group"
             aria-label="Currency"
-            className="mr-1 hidden sm:inline-flex items-center rounded-full border border-white/15 bg-white/[0.04] p-0.5"
+            className="mr-1 hidden sm:inline-flex shrink-0 items-center rounded-full border border-white/15 bg-white/[0.04] p-0.5"
           >
             {(["INR", "USD"] as const).map((c) => (
               <button
@@ -238,7 +238,7 @@ export function Header() {
                 onClick={() => setCurrency(c)}
                 aria-pressed={currency === c}
                 aria-label={c === "INR" ? "Show prices in Indian rupees" : "Show prices in US dollars"}
-                className={`h-6 w-7 rounded-full text-[12px] font-semibold leading-none transition-colors ${
+                className={`shrink-0 h-6 w-7 rounded-full text-[12px] font-semibold leading-none transition-colors ${
                   currency === c ? "bg-white text-black" : "text-white/55 hover:text-white"
                 }`}
               >
@@ -249,7 +249,7 @@ export function Header() {
           <button
             aria-label="Search"
             onClick={() => setSearchOpen(true)}
-            className="p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
+            className="shrink-0 p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
           >
             <Search className="w-5 h-5" />
           </button>
@@ -258,7 +258,7 @@ export function Header() {
               type="button"
               onClick={() => setAccountOpen((v) => !v)}
               aria-label="Account"
-              className="p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
+              className="shrink-0 p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
             >
               <User className="w-5 h-5" />
             </button>
@@ -270,7 +270,7 @@ export function Header() {
             onClick={() => setCartOpen(true)}
             aria-label="Cart"
             data-cart-target
-            className="relative p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
+            className="shrink-0 relative p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
           >
             <img src={cartIconAsset.url} alt="" className="w-6 h-6 block" />
             {count > 0 && (
