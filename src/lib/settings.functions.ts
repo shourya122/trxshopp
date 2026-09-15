@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
 
-export const DEFAULT_USD_INR_RATE = 88;
+export const DEFAULT_USD_INR_RATE = 104;
 
 /** Public, unauthenticated read of storefront settings (currently the USD rate). */
 export const getPublicSettings = createServerFn({ method: "GET" }).handler(async () => {
