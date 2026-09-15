@@ -186,16 +186,16 @@ export function Header() {
       <div className="w-full px-3 sm:px-8 h-12 sm:h-16 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-4">
 
         {/* Left: nav (desktop) / menu btn (mobile) */}
-        <nav className="hidden sm:flex items-center gap-6 lg:gap-8 self-center h-full">
+        <nav className="hidden sm:flex min-w-0 items-center gap-4 lg:gap-8 self-center h-full">
           {links.map((l) => (
             <Link
               key={l.label}
               to={l.href}
-              className={`group relative text-sm leading-none flex items-center font-medium overflow-hidden ${
+              className={`group relative text-sm leading-none flex items-center font-medium whitespace-nowrap ${
                 isActive(l.href) ? "text-white" : "text-white/60 hover:text-white"
               }`}
             >
-              <span className="relative inline-block overflow-hidden h-[1em] leading-[1em]">
+              <span className="relative inline-block overflow-hidden h-[1.1em] leading-[1.1em]">
                 <span className="block transition-transform duration-300 ease-[cubic-bezier(0.7,0,0.3,1)] group-hover:-translate-y-full">
                   {l.label}
                 </span>
@@ -208,7 +208,7 @@ export function Header() {
         </nav>
 
         <button
-          className="sm:hidden justify-self-start text-white p-2 -ml-2"
+          className="sm:hidden shrink-0 justify-self-start text-white p-2 -ml-2"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
