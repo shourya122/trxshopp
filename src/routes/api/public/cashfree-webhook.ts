@@ -79,6 +79,40 @@ export const Route = createFileRoute("/api/public/cashfree-webhook")({
           { auth: { persistSession: false, autoRefreshToken: false } },
         );
 
+        // SECURITY: never mark an order paid for less than it costs.
+        if (payment_status === "paid") {
+          const { data: amountRow } = await supabase
+            .from("orders")
+            .select("amount_cents")
+            .eq("id", orderId)
+            .maybeSingle();
+          const expectedCents = Number(amountRow?.amount_cents ?? 0);
+          const paidInr = Number(payload?.data?.order?.order_amount);
+          if (expectedCents > 0) {
+            if (!Number.isFinite(paidInr) || paidInr <= 0) {
+              console.error("[cashfree-webhook] paid callback without usable amount", { orderId });
+              return new Response("Amount missing", { status: 409 });
+            }
+            // 1-rupee rounding allowance only.
+            if (Math.round(paidInr * 100) < expectedCents - 100) {
+              console.error("[cashfree-webhook] underpaid order, refusing to mark paid", {
+                orderId,
+                paidCents: Math.round(paidInr * 100),
+                expectedCents,
+              });
+              await supabase
+                .from("orders")
+                .update({
+                  payment_status: "pending",
+                  status: "pending",
+                  raw_callback: { ...payload, underpaid: true, expected_cents: expectedCents },
+                })
+                .eq("id", orderId);
+              return new Response("Amount mismatch", { status: 409 });
+            }
+          }
+        }
+
         const patch: Record<string, unknown> = {
           payment_status,
           status: payment_status === "paid" ? "paid" : payment_status === "failed" ? "failed" : "pending",
@@ -89,6 +123,7 @@ export const Route = createFileRoute("/api/public/cashfree-webhook")({
           patch.order_status = "processing";
         }
         if (cfPaymentId) patch.payment_ref = String(cfPaymentId);
+
 
         // Idempotency: skip Discord "paid" post if the row was already paid.
         let alreadyPaid = false;
