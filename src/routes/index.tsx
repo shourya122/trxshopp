@@ -818,6 +818,7 @@ function HomeProductCard({
   platform: any;
 }) {
   const { add } = useCart();
+  const { format } = useCurrency();
   const [adding, setAdding] = useState(false);
   const lockRef = useRef(false);
   const btnRef = useRef<HTMLButtonElement>(null);
