@@ -7,6 +7,8 @@ import { PageLoader } from "@/components/Loader";
 import { toast } from "sonner";
 import trxshopLogo from "@/assets/trxshop-logo.png";
 import { useCurrency } from "@/lib/currency";
+import { useEffect, useRef } from "react";
+import { playSuccessSound } from "@/lib/success-sound";
 
 export const Route = createFileRoute("/order/$id")({
   head: () => ({
@@ -73,6 +75,16 @@ function OrderPage() {
       return 5000;
     },
   });
+
+  const paidStatus = data?.ok ? data.order.status : null;
+  const playedRef = useRef(false);
+  useEffect(() => {
+    if (playedRef.current) return;
+    if (paidStatus === "paid" || paidStatus === "confirmed") {
+      playedRef.current = true;
+      playSuccessSound();
+    }
+  }, [paidStatus]);
 
   if (isLoading) return <PageLoader label="Loading order" />;
 
