@@ -1,36 +1,29 @@
-# What's missing before TRXSHOP is production-ready
+# Show prices in US dollars alongside rupees
 
-Your store is in good shape: products, cart, checkout, variants, reviews, admin panel, email templates, legal pages, sitemap, and sign-in all work. Below is what I'd fix or add next, grouped by priority. Tell me which items you want and I'll build them.
+Customers outside India will be able to read prices in dollars. Rupees stay the real charging currency — the dollar figure is a reference only.
 
-## Critical — do these before real customers
+## What you get
 
-1. **Broken product images** — Many product covers still point to expiring Discord CDN links that return 404. Fix: bulk-migrate all product images into your own storage so they never break again.
-2. **Card/UPI payments (Cashfree) credentials** — Crypto (OxaPay) is set up, but confirm Cashfree keys are configured and test one real card/UPI order end to end, including the webhook updating the order status.
-3. **Test a full order** — Place a test order: pay → confirmation email → order appears in admin → mark delivered → delivery email with code. Verify each step.
+1. **A rate you control** — a new "Currency" box in the admin Settings page where you type today's rate (for example, 1 USD = 88 INR). Saved instantly, used everywhere on the site. Nothing fetches rates automatically, so the number only changes when you change it.
+2. **A ₹ / $ switch in the header** — next to search/cart. The choice is remembered on that visitor's device, so a customer from the US sets it once and keeps seeing dollars.
+3. **Dollar prices everywhere prices appear** — home page cards, all game/subscription listing pages, search results, product page (including edition and option prices), cart drawer, checkout summary, order confirmation and account order history.
+4. **An approximate line on product pages** — under the main price, the other currency is shown small, e.g. `≈ $12.99` when viewing in rupees, or `≈ ₹1,149` when viewing in dollars.
+5. **Checkout still charges in rupees.** When a visitor is viewing dollars, the checkout total shows the dollar figure plus a clear note: "You will be charged ₹1,149.00 INR". Payment pages, invoices and emails stay rupee-only, so nothing about payments or refunds changes.
 
-## Important — trust and conversion
+Admin panel figures (revenue, order totals, analytics) stay in rupees — those are your books, not customer-facing.
 
-4. **Delivery automation** — How do customers receive their game/account/code after payment? Right now it's manual via admin. Options: attach codes/credentials to products in admin and auto-send them in the delivery email.
-5. **Refund/policy check** — Your refund & cancellation page should match how you actually handle digital-goods refunds, since digital items are usually non-refundable once delivered.
-6. **OG share images** — Product pages have no share image, so links pasted in WhatsApp/X show no preview. Add per-product share images.
-7. **Support channel** — support@trxshop.in is on the contact page; make sure that mailbox actually receives mail (email infra for trxshop.in was set up — verify inbound works).
+## Technical detail
 
-## Nice to have — growth
+**Data**
+- New migration: `public.site_settings` (`key` text primary key, `value` jsonb, timestamps) with GRANTs — `SELECT` to `anon` and `authenticated`, full access to `service_role`; RLS on with a public read policy and a write policy gated on `has_role(auth.uid(), 'admin')`. Seeded with `usd_inr_rate` = 88.
+- Rate read via a public unauthenticated `createServerFn` in `src/lib/settings.functions.ts` (`getPublicSettings`), fetched once through TanStack Query in `__root.tsx` with a long `staleTime`; admin write via `adminUpdateSetting` (`requireSupabaseAuth` + admin role check).
 
-8. **Google Search Console + indexing** — Submit the sitemap, verify the domain, and check indexing so products show up on Google.
-9. **Analytics on the live site** — Track visitors, top products, and conversion.
-10. **Discount/coupon promotion** — Coupons exist in admin; add a banner or first-order discount code on the homepage to drive first sales.
-11. **Order status notifications** — Let customers see live order status on their account page (they can already view orders; add clearer status timeline).
-12. **Backup of product data** — Export your product/catalog data regularly so you never lose it again.
+**Display layer**
+- New `src/lib/currency.tsx`: `CurrencyProvider` (holds `currency: "INR" | "USD"`, `rate`, persists choice in `localStorage`, hydration-safe so SSR renders INR first) plus `useCurrency()` and a `usePrice()` helper exposing `format(cents)` and `formatBoth(cents)`. Rounding: USD to 2 decimals via `Intl.NumberFormat("en-US")`, INR via existing `en-IN` formatting.
+- Provider mounted in `src/routes/__root.tsx` above `<Outlet />`.
+- Replace inline `₹{...}` price markup with the formatter in: `src/routes/index.tsx`, `games.index.tsx`, `games.all.tsx`, `games.steam-games.tsx`, `games.playstation-games.tsx`, `games.subscriptions.tsx`, `products.$id.tsx`, `checkout.tsx`, `order.$id.tsx`, `account.tsx`, `src/components/SearchModal.tsx`, `src/components/ui/header-2.tsx` (cart drawer). Non-price copy such as the "₹299+" promo banners is left as-is.
+- `formatPrice` in `src/lib/types.ts` stays for server/email/admin use.
+- Header toggle: small segmented `₹ | $` control in `header-2.tsx` matching the existing dark header styling.
 
-## My recommended order
-
-```text
-1. Fix broken images (bulk migrate to own storage)
-2. Verify Cashfree + place a full test order
-3. Set up delivery automation for codes
-4. OG share images for products
-5. Search Console submission
-```
-
-Tell me which items to start with — I suggest beginning with #1 (images) and #2 (payments test) since they directly lose you sales.
+**Not touched**
+- Cart totals, coupon math, Cashfree/OxaPay payloads, order records and email templates keep working in integer paise. No conversion enters any write path.
