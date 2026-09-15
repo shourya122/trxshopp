@@ -375,9 +375,9 @@ export function Header() {
                           </span>
                         </div>
                         <div className="mt-1.5 flex items-baseline gap-2">
-                          <span className="text-base font-semibold text-white">₹{it.price.toLocaleString()}</span>
+                          <span className="text-base font-semibold text-white">{format(it.price * 100)}</span>
                           {it.old && it.old > it.price && (
-                            <span className="text-sm text-white/40 line-through">₹{it.old.toLocaleString()}</span>
+                            <span className="text-sm text-white/40 line-through">{format(it.old * 100)}</span>
                           )}
                         </div>
                         <div className="mt-4 flex items-center gap-3">
