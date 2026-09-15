@@ -8,6 +8,7 @@ import type { Product, Platform } from "@/lib/types";
 import { ImageWithSkeleton } from "@/components/ImageWithSkeleton";
 import { ProductCardSkeletonGrid } from "@/components/ProductCardSkeleton";
 import { useCart } from "@/lib/cart";
+import { useCurrency } from "@/lib/currency";
 import { useReveal } from "@/hooks/useReveal";
 import cartIconAsset from "@/assets/cart-icon-v2.svg.asset.json";
 
