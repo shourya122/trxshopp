@@ -23,8 +23,9 @@ interface RecentProduct {
   oldPriceCents: number;
 }
 
-function fmt(n: number) {
-  return `Rs. ${n.toLocaleString("en-IN")}.00`;
+function useFmt() {
+  const { format } = useCurrency();
+  return (n: number) => format(n * 100, { rs: true });
 }
 
 function loadRecent(): RecentProduct[] {
