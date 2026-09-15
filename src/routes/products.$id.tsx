@@ -245,7 +245,7 @@ function ProductPage() {
     }
   };
 
-  const fmt = (n: number) => `Rs. ${n.toLocaleString("en-IN")}.00`;
+  const fmt = (n: number) => format(n * 100, { rs: true });
   const productTitle = product.title;
   const coverSrc = product.coverImage || product.screenshots[0] || "";
 
