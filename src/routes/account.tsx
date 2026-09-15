@@ -294,7 +294,7 @@ function AccountPage() {
                           <div className="mt-1.5 flex flex-wrap items-center gap-2 text-sm" style={{ color: "rgba(230,246,250,0.55)" }}>
                             <span>{ref}</span>
                             <span>·</span>
-                            <span>₹{total} INR</span>
+                            <span>{format(total * 100, { decimals: 2 })}</span>
                             <span
                               className="inline-flex items-center gap-1 pl-1.5 pr-2 py-0.5 rounded-full text-xs"
                               style={
@@ -480,7 +480,7 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
               {/* Amount + status message */}
               <div className="p-4" style={cardStyle}>
                 <p className="text-lg font-semibold">
-                  ₹{total} <span className="text-xs font-normal" style={{ color: "rgba(255,255,255,0.5)" }}>INR</span>
+                  {format(total * 100, { decimals: 2 })}
                 </p>
                 {s && (
                   <p className="text-xs mt-1.5" style={{ color: "rgba(255,255,255,0.6)" }}>
@@ -538,13 +538,13 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
                           {it.edition_name && <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>{it.edition_name}</p>}
                         </div>
                       </div>
-                      <p className="text-sm font-mono shrink-0">₹{((it.price_cents * it.quantity) / 100).toFixed(2)}</p>
+                      <p className="text-sm font-mono shrink-0">{format(it.price_cents * it.quantity, { decimals: 2 })}</p>
                     </div>
                   );
                 })}
                 <div className="p-4 space-y-1.5 text-sm">
                   <div className="flex justify-between" style={{ color: "rgba(255,255,255,0.6)" }}>
-                    <span>Subtotal</span><span className="font-mono">₹{subtotal.toFixed(2)}</span>
+                    <span>Subtotal</span><span className="font-mono">{format(subtotal * 100, { decimals: 2 })}</span>
                   </div>
                   <div className="flex justify-between" style={{ color: "rgba(255,255,255,0.6)" }}>
                     <span>Shipping</span><span>Free</span>
@@ -553,7 +553,7 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
                     <span>Total</span>
                     <span>
                       <span className="text-xs mr-1" style={{ color: "rgba(255,255,255,0.5)" }}>INR</span>
-                      <span className="font-mono" style={{ color: "#FFFFFF" }}>₹{total}</span>
+                      <span className="font-mono" style={{ color: "#FFFFFF" }}>{format(total * 100, { decimals: 2 })}</span>
                     </span>
                   </div>
                 </div>
@@ -587,7 +587,7 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
                   <span>
                     <span className="font-medium">{providerLabel}</span>
                     <span className="block text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>
-                      ₹{total} INR · {createdShort}
+                      {format(total * 100, { decimals: 2 })} · {createdShort}
                     </span>
                   </span>
                 </div>
