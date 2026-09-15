@@ -229,7 +229,7 @@ export function Header() {
           <div
             role="group"
             aria-label="Currency"
-            className="mr-1 hidden sm:inline-flex items-center rounded-full border border-white/15 bg-white/[0.04] p-0.5"
+            className="mr-1 hidden sm:inline-flex shrink-0 items-center rounded-full border border-white/15 bg-white/[0.04] p-0.5"
           >
             {(["INR", "USD"] as const).map((c) => (
               <button
@@ -238,7 +238,7 @@ export function Header() {
                 onClick={() => setCurrency(c)}
                 aria-pressed={currency === c}
                 aria-label={c === "INR" ? "Show prices in Indian rupees" : "Show prices in US dollars"}
-                className={`h-6 w-7 rounded-full text-[12px] font-semibold leading-none transition-colors ${
+                className={`shrink-0 h-6 w-7 rounded-full text-[12px] font-semibold leading-none transition-colors ${
                   currency === c ? "bg-white text-black" : "text-white/55 hover:text-white"
                 }`}
               >
@@ -249,7 +249,7 @@ export function Header() {
           <button
             aria-label="Search"
             onClick={() => setSearchOpen(true)}
-            className="p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
+            className="shrink-0 p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
           >
             <Search className="w-5 h-5" />
           </button>
@@ -258,7 +258,7 @@ export function Header() {
               type="button"
               onClick={() => setAccountOpen((v) => !v)}
               aria-label="Account"
-              className="p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
+              className="shrink-0 p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
             >
               <User className="w-5 h-5" />
             </button>
@@ -270,7 +270,7 @@ export function Header() {
             onClick={() => setCartOpen(true)}
             aria-label="Cart"
             data-cart-target
-            className="relative p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
+            className="shrink-0 relative p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
           >
             <img src={cartIconAsset.url} alt="" className="w-6 h-6 block" />
             {count > 0 && (
