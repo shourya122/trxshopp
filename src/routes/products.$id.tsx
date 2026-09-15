@@ -120,6 +120,7 @@ function ProductPage() {
   const { id } = Route.useParams();
   
   const { add } = useCart();
+  const { format, formatAlt } = useCurrency();
   const [qty, setQty] = useState(1);
   const [cartState, setCartState] = useState<"idle" | "loading" | "added">("idle");
   const [buyingNow, setBuyingNow] = useState(false);
