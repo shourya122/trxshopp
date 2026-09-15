@@ -219,13 +219,13 @@ export function Header() {
         <Link
           to="/"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="flex items-center justify-self-center"
+          className="flex min-w-0 items-center justify-self-center"
         >
-          <img src={trxshopLogo} alt="TRXSHOP logo" className="h-12 sm:h-20 w-auto" />
+          <img src={trxshopLogo} alt="TRXSHOP logo" className="h-10 sm:h-20 w-auto max-w-full" />
         </Link>
 
         {/* Right: icons */}
-        <div className="flex items-center gap-0.5 sm:gap-1 justify-self-end self-center">
+        <div className="flex min-w-0 items-center gap-0.5 sm:gap-1 justify-self-end self-center">
           <div
             role="group"
             aria-label="Currency"
