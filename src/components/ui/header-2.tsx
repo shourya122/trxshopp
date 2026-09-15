@@ -224,6 +224,26 @@ export function Header() {
 
         {/* Right: icons */}
         <div className="flex items-center gap-0.5 sm:gap-1 justify-self-end self-center">
+          <div
+            role="group"
+            aria-label="Currency"
+            className="mr-1 hidden sm:inline-flex items-center rounded-full border border-white/15 bg-white/[0.04] p-0.5"
+          >
+            {(["INR", "USD"] as const).map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => setCurrency(c)}
+                aria-pressed={currency === c}
+                aria-label={c === "INR" ? "Show prices in Indian rupees" : "Show prices in US dollars"}
+                className={`h-6 w-7 rounded-full text-[12px] font-semibold leading-none transition-colors ${
+                  currency === c ? "bg-white text-black" : "text-white/55 hover:text-white"
+                }`}
+              >
+                {c === "INR" ? "₹" : "$"}
+              </button>
+            ))}
+          </div>
           <button
             aria-label="Search"
             onClick={() => setSearchOpen(true)}
