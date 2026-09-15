@@ -48,7 +48,7 @@ function CurrencyCard() {
           value={rate}
           onChange={(e) => setRate(e.target.value)}
           inputMode="decimal"
-          placeholder={isLoading ? "…" : "88"}
+          placeholder={isLoading ? "…" : "104"}
           className="h-9 w-28 rounded-md border border-white/[0.1] bg-black px-3 text-[13px] text-white outline-none focus:border-white/30"
         />
         <button
