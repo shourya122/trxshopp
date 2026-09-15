@@ -282,6 +282,9 @@ function ProductPage() {
             <span className="text-2xl font-bold text-white">{fmt(sale)}</span>
             <span className="text-2xl font-bold text-neutral-400 line-through">{fmt(regular)}</span>
           </div>
+          <p className="-mt-2 mb-4 text-[12.5px] text-neutral-400">
+            approx. {formatAlt(sale * 100)}
+          </p>
 
           {/* Reviews pill */}
           <div className="inline-flex items-center gap-2 border-2 border-dashed border-emerald-500/60 rounded-md px-3 py-1.5 mb-5">
