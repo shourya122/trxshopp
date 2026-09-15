@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { listProducts } from "@/lib/products";
 import { useCart } from "@/lib/cart";
+import { useCurrency } from "@/lib/currency";
 import { TextEffect } from "@/components/ui/text-effect";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { motion } from "framer-motion";
