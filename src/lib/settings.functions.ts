@@ -39,11 +39,11 @@ export const adminUpdateUsdRate = createServerFn({ method: "POST" })
     return { rate: Math.round(rate * 100) / 100 };
   })
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: roleRow, error: roleErr } = await supabaseAdmin
+      .from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+    if (roleErr) throw new Error(roleErr.message);
+    if (!roleRow) throw new Error("Forbidden");
 
     const { error } = await context.supabase
       .from("site_settings")

@@ -267,7 +267,7 @@ function AccountPage() {
               ) : (
                 orders.map((o) => {
                   const s = statusLabel(o);
-                  const total = ((o.total_amount || o.amount_cents) / 100).toFixed(2);
+                  const totalCents = o.total_amount || o.amount_cents;
                   const ref = o.order_number ? `#${o.order_number}` : `#${o.id.slice(0, 6)}`;
                   const title = headline(o);
                   return (
@@ -296,7 +296,7 @@ function AccountPage() {
                           <div className="mt-1.5 flex flex-wrap items-center gap-2 text-sm" style={{ color: "rgba(230,246,250,0.55)" }}>
                             <span>{ref}</span>
                             <span>·</span>
-                            <span>{format(total * 100, { decimals: 2 })}</span>
+                            <span>{format(totalCents, { decimals: 2 })}</span>
                             <span
                               className="inline-flex items-center gap-1 pl-1.5 pr-2 py-0.5 rounded-full text-xs"
                               style={
@@ -419,7 +419,7 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
     status: order.status as string,
   }) : "Order";
 
-  const total = order ? ((order.total_amount || order.amount_cents) / 100).toFixed(2) : "0.00";
+  const totalCents = order ? (order.total_amount || order.amount_cents) : 0;
   const subtotal = items.reduce((sum, i) => sum + (i.price_cents * i.quantity), 0) / 100;
   const ref = order?.order_number ? `#${order.order_number}` : id ? `#${id.slice(0, 6)}` : "";
   const addr = (order?.shipping_address ?? null) as null | Record<string, string>;
@@ -483,7 +483,7 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
               {/* Amount + status message */}
               <div className="p-4" style={cardStyle}>
                 <p className="text-lg font-semibold">
-                  {format(total * 100, { decimals: 2 })}
+                  {format(totalCents, { decimals: 2 })}
                 </p>
                 {s && (
                   <p className="text-xs mt-1.5" style={{ color: "rgba(255,255,255,0.6)" }}>
@@ -556,7 +556,7 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
                     <span>Total</span>
                     <span>
                       <span className="text-xs mr-1" style={{ color: "rgba(255,255,255,0.5)" }}>INR</span>
-                      <span className="font-mono" style={{ color: "#FFFFFF" }}>{format(total * 100, { decimals: 2 })}</span>
+                      <span className="font-mono" style={{ color: "#FFFFFF" }}>{format(totalCents, { decimals: 2 })}</span>
                     </span>
                   </div>
                 </div>
@@ -590,7 +590,7 @@ function OrderDetailDialog({ id, onClose }: { id: string | null; onClose: () => 
                   <span>
                     <span className="font-medium">{providerLabel}</span>
                     <span className="block text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>
-                      {format(total * 100, { decimals: 2 })} · {createdShort}
+                      {format(totalCents, { decimals: 2 })} · {createdShort}
                     </span>
                   </span>
                 </div>
