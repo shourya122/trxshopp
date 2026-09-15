@@ -173,9 +173,9 @@ export function Header() {
         )}
 
         <header
-          className={`text-white font-['Inter'] font-medium mx-0 rounded-none border-b border-white/10 overflow-visible transition-all duration-300 ease-[cubic-bezier(0.7,0,0.3,1)] sm:overflow-hidden sm:rounded-2xl sm:border ${
+          className={`text-white font-['Inter'] font-medium mx-0 rounded-none border-b border-white/10 overflow-visible transition-all duration-300 ease-[cubic-bezier(0.7,0,0.3,1)] sm:rounded-2xl sm:border ${
             scrolled
-              ? "sm:mx-auto sm:max-w-[min(85%,64rem)] sm:bg-black/90 sm:backdrop-blur-md sm:border-white/10 sm:shadow-[0_8px_32px_rgba(0,0,0,0.5)] bg-black/90 backdrop-blur-sm"
+              ? "sm:mx-auto sm:max-w-[min(92%,64rem)] sm:bg-black/90 sm:backdrop-blur-md sm:border-white/10 sm:shadow-[0_8px_32px_rgba(0,0,0,0.5)] bg-black/90 backdrop-blur-sm"
               : "sm:mx-auto sm:max-w-6xl sm:bg-transparent sm:backdrop-blur-0 sm:border-transparent sm:shadow-none bg-transparent"
           }`}
         >
