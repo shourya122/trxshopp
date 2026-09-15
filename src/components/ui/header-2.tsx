@@ -183,7 +183,7 @@ export function Header() {
 
 
       {/* Main bar */}
-      <div className="w-full px-4 sm:px-8 h-12 sm:h-16 grid grid-cols-3 items-center">
+      <div className="w-full px-3 sm:px-8 h-12 sm:h-16 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-4">
 
         {/* Left: nav (desktop) / menu btn (mobile) */}
         <nav className="hidden sm:flex items-center gap-6 lg:gap-8 self-center h-full">
