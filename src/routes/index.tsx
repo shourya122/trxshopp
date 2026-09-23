@@ -1,17 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { listProducts } from "@/lib/products";
 import { useCart } from "@/lib/cart";
 import { useCurrency } from "@/lib/currency";
-import { TextEffect } from "@/components/ui/text-effect";
-import { BlurFade } from "@/components/ui/blur-fade";
 import { motion } from "framer-motion";
-import { Zap, ShieldCheck, BadgeCheck, Gamepad2, Flame, Check, X, Loader2 } from "lucide-react";
+import { ArrowRight, BadgeCheck, Clock3, Gamepad2, Headphones, Loader2, ShieldCheck, Sparkles, Star, Zap } from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
-import { AmbientBackground } from "@/components/AmbientBackground";
 import { Loader } from "@/components/Loader";
+import marketHero from "@/assets/trxshop-market-hero.jpg";
 
 import xboxLogo from "@/assets/logos/Xbox.svg.asset.json";
 import spotifyLogo from "@/assets/logos/Spotify.svg.asset.json";
@@ -96,9 +94,12 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "TRXSHOP — Buy Cheap PC, PlayStation & Xbox Game Keys" },
       { property: "og:description", content: "Original game keys at unbeatable prices. Instant digital delivery for PC, PlayStation, and Xbox." },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://trxshop.xyz/" },
+      { property: "og:url", content: "https://trxshop.in/" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "TRXSHOP — Buy Cheap PC, PlayStation & Xbox Game Keys" },
+      { name: "twitter:description", content: "Original game keys at unbeatable prices. Instant digital delivery for PC, PlayStation, and Xbox." },
     ],
-    links: [{ rel: "canonical", href: "https://trxshop.xyz/" }],
+    links: [{ rel: "canonical", href: "https://trxshop.in/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -106,10 +107,10 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "TRXSHOP",
-          url: "https://trxshop.xyz/",
+          url: "https://trxshop.in/",
           potentialAction: {
             "@type": "SearchAction",
-            target: "https://trxshop.xyz/games?q={search_term_string}",
+            target: "https://trxshop.in/games?q={search_term_string}",
             "query-input": "required name=search_term_string",
           },
         }),
@@ -120,7 +121,7 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "Organization",
           name: "TRXSHOP",
-          url: "https://trxshop.xyz/",
+          url: "https://trxshop.in/",
           logo: "https://trxshop.xyz/favicon.ico",
           contactPoint: {
             "@type": "ContactPoint",
@@ -139,17 +140,17 @@ export const Route = createFileRoute("/")({
 type Filter = "all" | "pc" | "ps" | "xbox";
 
 function HomePage() {
-  const { add } = useCart();
   const { data: fsProducts, isPending: productsPending } = useQuery({
     queryKey: ["products", "active", "home"],
     queryFn: () => listProducts({ activeOnly: true, max: 80 }),
     staleTime: 30_000,
   });
 
-  // Full-page loader: wait until products + their images + window.load are ready
   const [pageReady, setPageReady] = useState(false);
   const [windowLoaded, setWindowLoaded] = useState(false);
   const [imagesReady, setImagesReady] = useState(false);
+  const [taglineIdx, setTaglineIdx] = useState(0);
+  const [taglineTrigger, setTaglineTrigger] = useState(true);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -163,111 +164,72 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    // Don't gate first paint on preloading 18 remote images. Mark ready once
-    // products query resolves; the loader overlay then needs only window.load.
     if (productsPending) return;
     setImagesReady(true);
-  }, [productsPending, fsProducts]);
-
+  }, [productsPending]);
 
   useEffect(() => {
-    if (!productsPending && windowLoaded && imagesReady) {
-      setPageReady(true);
-    }
+    if (!productsPending && windowLoaded && imagesReady) setPageReady(true);
   }, [productsPending, windowLoaded, imagesReady]);
 
-
-  // rotating hero tagline (TextEffect with exit)
-  const [taglineIdx, setTaglineIdx] = useState(0);
-  const [taglineTrigger, setTaglineTrigger] = useState(true);
   useEffect(() => {
     const id = setInterval(() => {
       setTaglineTrigger(false);
       setTimeout(() => {
         setTaglineIdx((i) => (i + 1) % HERO_TAGLINES.length);
         setTaglineTrigger(true);
-      }, 500);
+      }, 450);
     }, 2800);
     return () => clearInterval(id);
   }, []);
 
-  // Unicorn Studio animated background — enabled on all devices.
-  // Lag is prevented via: lazy-load on idle (never blocks first paint),
-  // pause when scrolled offscreen, pause when tab hidden, and respect
-  // prefers-reduced-motion for accessibility.
-  const heroBgRef = useRef<HTMLDivElement | null>(null);
-  const [enableHeroBg, setEnableHeroBg] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mql.matches) return; // a11y: honor reduced motion
-    // Skip the WebGL canvas on phones — it dominates GPU time on mid-range Android.
-    if (window.matchMedia("(max-width: 767px)").matches) return;
-    setEnableHeroBg(true);
-  }, []);
+  const products = fsProducts || [];
+  const pcProducts = products.filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "pc"));
+  const psProducts = products.filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "ps"));
+  const xboxProducts = products.filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "xbox"));
+  const subscriptionProducts = products.filter((p) => /spotify|discord|youtube|prime|canva|adobe|chatgpt|claude|gemini|grok|perplexity|subscription/i.test(`${p.title} ${p.genre}`));
+  const biggestDeals = products
+    .slice()
+    .sort((a, b) => (b.oldPriceCents - b.priceCents) - (a.oldPriceCents - a.priceCents))
+    .slice(0, 20);
 
-
-
-  useEffect(() => {
-    if (!enableHeroBg || typeof window === "undefined") return;
-    const el = heroBgRef.current;
-    if (!el) return;
-    let started = false;
-    let cleanup: (() => void) | undefined;
-    const start = () => {
-      if (started) return;
-      started = true;
-      const init = () => {
-        try { (window as any).UnicornStudio?.init?.(); } catch {}
-      };
-      if ((window as any).UnicornStudio) {
-        init();
-      } else {
-        const existing = document.querySelector<HTMLScriptElement>("script[data-unicorn]");
-        if (existing) {
-          existing.addEventListener("load", init, { once: true });
-        } else {
-          const script = document.createElement("script");
-          script.src = "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js";
-          script.async = true;
-          script.dataset.unicorn = "1";
-          script.onload = init;
-          document.head.appendChild(script);
-        }
-      }
-      // Pause the canvas when scrolled offscreen
-      const io = new IntersectionObserver((entries) => {
-        for (const e of entries) {
-          el.style.visibility = e.isIntersecting ? "visible" : "hidden";
-        }
-      }, { threshold: 0 });
-      io.observe(el);
-      const onVis = () => {
-        el.style.visibility = document.hidden ? "hidden" : "visible";
-      };
-      document.addEventListener("visibilitychange", onVis);
-      cleanup = () => {
-        io.disconnect();
-        document.removeEventListener("visibilitychange", onVis);
-      };
-    };
-    const idle = (window as any).requestIdleCallback as
-      | ((cb: () => void, opts?: { timeout: number }) => number)
-      | undefined;
-    const handle = idle ? idle(start, { timeout: 1500 }) : window.setTimeout(start, 600);
-    return () => {
-      if (idle && typeof handle === "number") {
-        (window as any).cancelIdleCallback?.(handle);
-      } else {
-        clearTimeout(handle as unknown as number);
-      }
-      cleanup?.();
-    };
-  }, [enableHeroBg]);
+  const categories = [
+    {
+      label: "PC Games",
+      count: pcProducts.length,
+      to: "/games/steam-games",
+      icon: Gamepad2,
+      tone: "market-card--green",
+      line: "Steam-ready titles and shared-account deals.",
+    },
+    {
+      label: "PlayStation",
+      count: psProducts.length,
+      to: "/games/playstation-games",
+      icon: ShieldCheck,
+      tone: "market-card--blue",
+      line: "Console picks with quick fulfilment.",
+    },
+    {
+      label: "Subscriptions",
+      count: subscriptionProducts.length,
+      to: "/games/subscriptions",
+      icon: Sparkles,
+      tone: "market-card--green",
+      line: "Premium apps, tools and entertainment.",
+    },
+    {
+      label: "All Products",
+      count: products.length,
+      to: "/games",
+      icon: BadgeCheck,
+      tone: "market-card--blue",
+      line: "Browse every live TRXSHOP listing.",
+    },
+  ] as const;
 
   return (
     <>
-      {/* Full-page loader until products + images + window.load are ready */}
       <div
         aria-hidden={pageReady}
         className={`fixed inset-0 z-[100] flex items-center justify-center bg-black transition-opacity duration-500 ${pageReady ? "opacity-0 pointer-events-none" : "opacity-100"}`}
@@ -277,74 +239,73 @@ function HomePage() {
           <Loader size={120} />
           <div className="text-white/80 text-sm tracking-widest uppercase">Loading TRX Shop</div>
         </div>
-
       </div>
 
-      <section className="hero">
-        <AmbientBackground />
-
-
-
-        
-        <div className="hero-left">
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }}
+      <section className="market-hero">
+        <img
+          src={marketHero}
+          alt="TRXSHOP digital marketplace"
+          width={1920}
+          height={1080}
+          className="market-hero__image"
+          fetchPriority="high"
+        />
+        <div className="market-hero__shade" />
+        <div className="market-hero__content">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 text-balance text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl lg:text-7xl"
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            className="market-hero__eyebrow"
           >
-            <span className="gradient-text">Every Platform.</span>
-            <br />
-            <span className="gradient-text">One Store.</span>
-            <br />
-            <span className="bg-[linear-gradient(110deg,#7ec8ff_10%,#fff_45%,#a78bfa_90%)] bg-clip-text text-transparent">
-              Fast delivery.
-            </span>
+            <span className="market-live-dot" />
+            Premium digital marketplace
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className="market-hero__title"
+          >
+            TRXSHOP
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-3 max-w-xl text-pretty text-sm text-white/65 sm:text-base sm:mt-4"
+            transition={{ duration: 0.7, delay: 0.18 }}
+            className="market-hero__subtitle"
           >
-            Buy Original PC, PlayStation, and Xbox games at unbeatable prices — The software and subscriptions you actually use. 100% genuine Digital Download
+            Game keys, premium subscriptions and digital products delivered fast with secure payments and real support.
           </motion.p>
-          <div className="hero-pf fu d3 mt-6">
-            <div className="pb pb-pc">PC / Steam</div>
-            <div className="pb pb-ps">PlayStation</div>
-            <div className="pb pb-xb">Xbox</div>
+          <div className="market-hero__tagline" aria-live="polite">
+            <span key={taglineIdx} className={taglineTrigger ? "market-tagline-in" : "market-tagline-out"}>
+              {HERO_TAGLINES[taglineIdx]}
+            </span>
           </div>
-          <div className="hero-actions fu d4">
-            <style>{`
-              @keyframes beam-spin { to { transform: rotate(360deg); } }
-              @keyframes dots-move { 0% { background-position: 0 0; } 100% { background-position: 24px 24px; } }
-              @media (max-width: 767px) {
-                /* Pause hero infinite animations on phones — GPU/CPU savings. */
-                .hero-cta-beam, .hero-cta-dots { animation: none !important; }
-                .hero-cta-beam { background: #1D9BF0 !important; }
-              }
-            `}</style>
-
-            <Link to="/games" className="group inline-flex overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] rounded-full pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative items-center justify-center">
-              {/* Spinning Border Beam (Visible on Hover) */}
-              <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#ffffff_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
-              {/* Default Static Border */}
-              <span className="absolute inset-0 rounded-full bg-zinc-800 transition-opacity duration-300 group-hover:opacity-0"></span>
-              {/* 3D Button Surface & Content */}
-              <span className="flex items-center justify-center gap-2.5 uppercase transition-colors duration-300 group-hover:text-white text-sm font-medium text-zinc-400 tracking-widest bg-gradient-to-b from-zinc-800 to-zinc-950 w-full h-full rounded-full pt-3.5 pr-8 pb-3.5 pl-8 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">
-                <span className="relative z-10">SHOP ALL PRODUCTS</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-              </span>
+          <div className="market-hero__actions">
+            <Link to="/games" className="market-btn market-btn--primary btn-press">
+              Browse store <ArrowRight className="h-4 w-4" />
             </Link>
+            <Link to="/games/subscriptions" className="market-btn market-btn--secondary btn-press">
+              Subscriptions <Sparkles className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="market-hero__stats">
+            {[
+              ["282+", "Live products"],
+              ["₹ / $", "Dual pricing"],
+              ["24/7", "Support desk"],
+            ].map(([value, label]) => (
+              <div key={label}>
+                <strong>{value}</strong>
+                <span>{label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* MARQUEE */}
-      <Marquee speed={20} direction="right" className="!mt-0">
+      <Marquee speed={22} direction="right" className="market-logo-marquee !mt-0">
         {[
           { src: xboxLogo.url, alt: "Xbox" },
           { src: spotifyLogo.url, alt: "Spotify" },
@@ -368,13 +329,9 @@ function HomePage() {
         ].map((logo, i) => {
           const small = ["Canva", "Adobe", "Kimi", "Grok"].includes(logo.alt);
           const large = ["YouTube", "Steam", "Prime Video", "Crunchyroll", "DeepSeek", "Perplexity", "Discord"].includes(logo.alt);
-          const sizeClass = small
-            ? "h-8 sm:h-10"
-            : large
-            ? "h-16 sm:h-20"
-            : "h-12 sm:h-14";
+          const sizeClass = small ? "h-8 sm:h-10" : large ? "h-16 sm:h-20" : "h-12 sm:h-14";
           return (
-            <div key={i} className="flex items-center px-8 shrink-0">
+            <div key={i} className="market-logo-tile">
               <img
                 src={logo.src}
                 alt={logo.alt}
@@ -388,287 +345,165 @@ function HomePage() {
         })}
       </Marquee>
 
-      {/* NEWLY ADDED — digitaldownload.in style */}
-      <section
+      <section className="market-section market-section--tight">
+        <div className="market-section-head market-section-head--center">
+          <span className="market-kicker">Choose your lane</span>
+          <h2>Shop by category</h2>
+          <p>Jump straight into the product type you need, then switch between rupees and dollars anytime.</p>
+        </div>
+        <div className="market-category-grid">
+          {categories.map((category) => {
+            const Icon = category.icon;
+            return (
+              <Link key={category.label} to={category.to} className={`market-category-card ${category.tone}`}>
+                <div className="market-category-card__top">
+                  <span className="market-category-card__icon"><Icon className="h-5 w-5" /></span>
+                  <span className="market-category-card__count">{productsPending ? "—" : `${category.count}+`}</span>
+                </div>
+                <h3>{category.label}</h3>
+                <p>{category.line}</p>
+                <span className="market-category-card__action">Browse <ArrowRight className="h-4 w-4" /></span>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <ProductRail
         id="games"
-        className="px-4 sm:px-8 lg:px-16 py-12 lg:py-16 bg-black text-white"
-        style={{ fontFamily: "Inter, Avenir, 'Helvetica Neue', Helvetica, sans-serif" }}
-      >
-        <div className="flex items-end justify-between mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white" style={{ fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
-            Newly Added
-          </h2>
-          <Link
-            to="/games"
-            className="text-sm font-medium text-neutral-300 underline underline-offset-4 hover:text-white"
-          >
-            View all newly added games
-          </Link>
-        </div>
-        <HorizontalScroller>
-          {productsPending && !fsProducts
-            ? Array.from({ length: 10 }).map((_, i) => (
-                <div key={`sk-${i}`} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
-                  <ProductCardSkeleton />
-                </div>
-              ))
-            : (fsProducts || []).slice(0, 20).map((p) => {
-                const sale = Math.round(p.priceCents / 100);
-                const regular = p.oldPriceCents > 0 ? Math.round(p.oldPriceCents / 100) : sale;
-                const img = p.coverImage || p.screenshots[0] || "";
-                return (
-                  <div key={p.id} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
-                    <HomeProductCard
-                      id={p.id}
-                      variantId={p.variantId}
-                      slug={p.slug || p.id}
-                      title={p.title}
-                      img={img}
-                      sale={sale}
-                      regular={regular}
-                      platform={(p.platforms[0] || "pc") as any}
-                    />
-                  </div>
-                );
-              })}
-        </HorizontalScroller>
-      </section>
+        kicker="Fresh stock"
+        title="Newly Added"
+        linkTo="/games"
+        linkLabel="View all"
+        products={products.slice(0, 20)}
+        pending={productsPending}
+      />
 
-      {/* PC GAMES */}
-      <section
+      <ProductRail
         id="pc-games"
-        className="px-4 sm:px-8 lg:px-16 py-12 lg:py-16 bg-black text-white"
-        style={{ fontFamily: "Inter, Avenir, 'Helvetica Neue', Helvetica, sans-serif" }}
-      >
-        <div className="flex items-end justify-between mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white" style={{ fontFamily: "'Geist', sans-serif" }}>
-            PC Games
-          </h2>
-          <Link
-            to="/games/steam-games"
-            className="text-sm font-medium text-neutral-300 underline underline-offset-4 hover:text-white"
-          >
-            View all PC games
-          </Link>
-        </div>
-        <HorizontalScroller>
-          {productsPending && !fsProducts
-            ? Array.from({ length: 10 }).map((_, i) => (
-                <div key={`sk-pc-${i}`} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
-                  <ProductCardSkeleton />
-                </div>
-              ))
-            : (fsProducts || [])
-                .filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "pc"))
-                .slice()
-                .sort((a, b) => (b.oldPriceCents - b.priceCents) - (a.oldPriceCents - a.priceCents))
-                .slice(0, 20)
+        kicker="Most savings"
+        title="Top PC Deals"
+        linkTo="/games/steam-games"
+        linkLabel="View PC games"
+        products={biggestDeals}
+        pending={productsPending}
+      />
 
-                .map((p) => {
-                  const sale = Math.round(p.priceCents / 100);
-                  const regular = p.oldPriceCents > 0 ? Math.round(p.oldPriceCents / 100) : sale;
-                  const img = p.coverImage || p.screenshots[0] || "";
-                  return (
-                    <div key={p.id} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
-                      <HomeProductCard
-                        id={p.id}
-                        variantId={p.variantId}
-                        slug={p.slug || p.id}
-                        title={p.title}
-                        img={img}
-                        sale={sale}
-                        regular={regular}
-                        platform="pc"
-                      />
-                    </div>
-                  );
-                })}
-        </HorizontalScroller>
-      </section>
-
-      {/* PS GAMES */}
-      <section
+      <ProductRail
         id="ps-games"
-        className="px-4 sm:px-8 lg:px-16 py-12 lg:py-16 bg-black text-white"
-        style={{ fontFamily: "Inter, Avenir, 'Helvetica Neue', Helvetica, sans-serif" }}
-      >
-        <div className="flex items-end justify-between mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white" style={{ fontFamily: "'Geist', sans-serif" }}>
-            PlayStation Games
+        kicker="Console picks"
+        title="PlayStation Games"
+        linkTo="/games/playstation-games"
+        linkLabel="View PlayStation"
+        products={psProducts.slice(0, 20)}
+        pending={productsPending}
+      />
 
-          </h2>
-          <Link
-            to="/games/playstation-games"
-            className="text-sm font-medium text-neutral-300 underline underline-offset-4 hover:text-white"
-          >
-            View all PS games
-          </Link>
-        </div>
-        <HorizontalScroller>
-          {productsPending && !fsProducts
-            ? Array.from({ length: 10 }).map((_, i) => (
-                <div key={`sk-ps-${i}`} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
-                  <ProductCardSkeleton />
+      <section id="about" className="market-section">
+        <div className="market-trust-grid">
+          <div className="market-trust-copy">
+            <span className="market-kicker">Built for safe checkout</span>
+            <h2>Why customers choose TRXSHOP</h2>
+            <p>Clear pricing, fast delivery after purchase, and support that stays reachable when you need help with your digital product.</p>
+            <Link to="/contactus" className="market-btn market-btn--secondary btn-press">
+              Contact support <Headphones className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="market-trust-cards">
+            {[
+              { icon: Zap, title: "Fast delivery", text: "Orders move quickly after payment confirmation." },
+              { icon: ShieldCheck, title: "Secure payments", text: "Card, UPI and crypto flows stay protected." },
+              { icon: BadgeCheck, title: "Verified catalog", text: "Products are managed from the admin panel." },
+              { icon: Clock3, title: "Order tracking", text: "Customers can check their order status any time." },
+            ].map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.title} className="market-trust-card">
+                  <Icon className="h-5 w-5" />
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
                 </div>
-              ))
-            : (fsProducts || [])
-                .filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "ps"))
-                .slice(0, 20)
-                .map((p) => {
-                  const sale = Math.round(p.priceCents / 100);
-                  const regular = p.oldPriceCents > 0 ? Math.round(p.oldPriceCents / 100) : sale;
-                  const img = p.coverImage || p.screenshots[0] || "";
-                  return (
-                    <div key={p.id} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
-                      <HomeProductCard
-                        id={p.id}
-                        variantId={p.variantId}
-                        slug={p.slug || p.id}
-                        title={p.title}
-                        img={img}
-                        sale={sale}
-                        regular={regular}
-                        platform="ps"
-                      />
-                    </div>
-                  );
-                })}
-        </HorizontalScroller>
-      </section>
-
-
-
-      {/* WHY GAMERS TRUST US — digitaldownload.in style */}
-      <section
-        id="about"
-        className="px-4 sm:px-8 lg:px-16 py-12 lg:py-20 bg-black text-white"
-        style={{ fontFamily: "Inter, Avenir, 'Helvetica Neue', Helvetica, sans-serif" }}
-      >
-        <h2 className="text-center font-bold tracking-tight text-white mb-8 sm:mb-12" style={{ fontSize: "clamp(28px, 4vw, 40px)", lineHeight: 1.2 }}>
-          Why Gamers Trust Us?
-        </h2>
-        <div className="max-w-3xl mx-auto overflow-hidden rounded-2xl border border-white/10">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-white/[0.04]">
-                <th className="text-left p-4 sm:p-5 font-semibold text-white" style={{ fontSize: "16px" }}>Features</th>
-                <th className="text-center p-4 sm:p-5 font-semibold text-white" style={{ fontSize: "16px" }}>TRX Shop</th>
-                <th className="text-center p-4 sm:p-5 font-semibold text-neutral-400" style={{ fontSize: "16px" }}>Other Stores</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                "Fast Delivery After Purchase",
-                "Genuine & Verified Products",
-                "Fair Pricing",
-                "Customer Support",
-              ].map((feature) => (
-                <tr key={feature} className="border-t border-white/10">
-                  <td className="p-4 sm:p-5 text-white" style={{ fontSize: "15px", fontWeight: 500 }}>{feature}</td>
-                  <td className="p-4 sm:p-5 text-center">
-                    <img src={greenCheckAsset.url} alt="Yes" className="inline-block w-6 h-6 transition-transform duration-200 hover:scale-125" />
-                  </td>
-                  <td className="p-4 sm:p-5 text-center">
-                    <img src={redCrossAsset.url} alt="No" className="inline-block w-6 h-6 transition-transform duration-200 hover:scale-125" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section className="relative z-10 max-w-4xl sm:pt-20 md:pt-28 text-center mr-auto ml-auto pt-14 pb-12">
-
-        {/* Social proof */}
-
-        <div className="mb-6 flex items-center justify-center gap-4">
-
-          <div className="flex -space-x-3">
-
-            <img src={avatarMcp.url} alt="Client 1" className="h-9 w-9 rounded-full ring-2 ring-white/20 object-cover" />
-
-            <img src={avatarMaster.url} alt="Client 2" className="h-9 w-9 rounded-full ring-2 ring-white/20 object-cover" />
-
-            <img src={avatarGirl.url} alt="Client 3" className="h-9 w-9 rounded-full ring-2 ring-white/20 object-cover" />
-
-            <img src={avatarWoody.url} alt="Client 4" className="h-9 w-9 rounded-full ring-2 ring-white/20 object-cover" />
-
-
-
+              );
+            })}
           </div>
-
-          <div className="flex flex-col items-start">
-
-            <div className="flex items-center">
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 fill-white"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 fill-white"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 fill-white"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 fill-white"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 fill-white"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-
-            </div>
-
-            <p className="mt-1 text-xs font-medium text-white/70">100+&nbsp;</p>
-
-          </div>
-
         </div>
-
-        <h2 className="max-w-5xl sm:text-5xl md:text-7xl text-4xl tracking-tighter mr-auto ml-auto">
-          Ready to
-          <span className="font-display-italic text-white tracking-tight">&nbsp;find&nbsp;</span>
-          your next&nbsp;
-          <br />
-          Digital Product
-        </h2>
-
-        <p className="max-w-2xl sm:text-lg text-base font-normal text-white/70 mt-6 mr-auto ml-auto">
-          Buy Original PC, PlayStation, and Xbox games at best prices — The software and subscriptions you actually use. 100% genuine Digital Download
-        </p>
-
-        <div className="flex flex-col gap-3 sm:flex-row mt-8 items-center justify-center">
-
-          <Link to="/games" className="group inline-flex overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] rounded-full pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative items-center justify-center">
-
-            {/* Spinning Border Beam (Visible on Hover) */}
-
-            <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#ffffff_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
-
-            {/* Default Static Border */}
-
-            <span className="absolute inset-0 rounded-full bg-zinc-800 transition-opacity duration-300 group-hover:opacity-0"></span>
-
-            {/* 3D Button Surface & Content */}
-
-            <span className="flex items-center justify-center gap-2 uppercase transition-colors duration-300 group-hover:text-white text-xs font-medium text-zinc-400 tracking-widest bg-gradient-to-b from-zinc-800 to-zinc-950 w-full h-full rounded-full pt-2.5 pr-6 pb-2.5 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">
-
-              <span className="relative z-10">SHOP NOW</span>
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5">
-
-                <path d="M5 12h14"></path>
-
-                <path d="m12 5 7 7-7 7"></path>
-
-              </svg>
-
-            </span>
-
-          </Link>
-
-        </div>
-
-        {/* Glow plate */}
-
       </section>
 
+      <section className="market-final-cta">
+        <div className="market-final-cta__avatars" aria-hidden="true">
+          {[avatarMcp.url, avatarMaster.url, avatarGirl.url, avatarWoody.url].map((src, i) => (
+            <img key={i} src={src} alt="" className="h-10 w-10 rounded-full object-cover ring-2 ring-white/20" loading="lazy" />
+          ))}
+        </div>
+        <div className="market-final-cta__stars" aria-label="Five star rating">
+          {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
+        </div>
+        <h2>Ready to find your next digital product?</h2>
+        <p>Browse the live catalog, add your product to cart, and pay securely in rupees while viewing prices in dollars whenever you want.</p>
+        <Link to="/games" className="market-btn market-btn--primary btn-press">
+          Shop now <ArrowRight className="h-4 w-4" />
+        </Link>
+      </section>
     </>
+  );
+}
+
+function ProductRail({
+  id,
+  kicker,
+  title,
+  linkTo,
+  linkLabel,
+  products,
+  pending,
+}: {
+  id: string;
+  kicker: string;
+  title: string;
+  linkTo: "/games" | "/games/steam-games" | "/games/playstation-games";
+  linkLabel: string;
+  products: NonNullable<Awaited<ReturnType<typeof listProducts>>>;
+  pending: boolean;
+}) {
+  return (
+    <section id={id} className="market-section market-product-rail">
+      <div className="market-section-head">
+        <div>
+          <span className="market-kicker">{kicker}</span>
+          <h2>{title}</h2>
+        </div>
+        <Link to={linkTo} className="market-view-link">
+          {linkLabel} <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+      <HorizontalScroller>
+        {pending && products.length === 0
+          ? Array.from({ length: 10 }).map((_, i) => (
+              <div key={`sk-${id}-${i}`} className="shrink-0 w-[58vw] sm:w-[31vw] lg:w-[21vw] xl:w-[18vw]">
+                <ProductCardSkeleton />
+              </div>
+            ))
+          : products.map((p) => {
+              const sale = Math.round(p.priceCents / 100);
+              const regular = p.oldPriceCents > 0 ? Math.round(p.oldPriceCents / 100) : sale;
+              const img = p.coverImage || p.screenshots[0] || "";
+              return (
+                <div key={p.id} className="shrink-0 w-[58vw] sm:w-[31vw] lg:w-[21vw] xl:w-[18vw]">
+                  <HomeProductCard
+                    id={p.id}
+                    variantId={p.variantId}
+                    slug={p.slug || p.id}
+                    title={p.title}
+                    img={img}
+                    sale={sale}
+                    regular={regular}
+                    platform={(p.platforms[0] || "pc") as any}
+                  />
+                </div>
+              );
+            })}
+      </HorizontalScroller>
+    </section>
   );
 }
 
