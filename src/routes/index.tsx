@@ -168,16 +168,9 @@ function HomePage() {
   }, [productsPending, windowLoaded]);
 
   const all = fsProducts || [];
-  const countBy = (platform: string) =>
-    all.filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === platform)).length;
 
-  const categories = [
-    { title: "PC / Steam", desc: "Steam accounts & PC titles", to: "/games/steam-games", count: countBy("pc") },
-    { title: "PlayStation", desc: "PS4 & PS5 digital games", to: "/games/playstation-games", count: countBy("ps") },
-    { title: "Xbox", desc: "Xbox & Game Pass titles", to: "/games/all", count: countBy("xbox") },
-    { title: "Subscriptions", desc: "Streaming, music & AI tools", to: "/games/subscriptions", count: countBy("sub") },
-    { title: "All Products", desc: "Browse the whole catalogue", to: "/games/all", count: all.length },
-  ];
+  const categories = (catCounts ?? []).filter((c) => c.count > 0);
+
 
   return (
     <div className="bg-[var(--home-bg)] text-white" style={{ fontFamily: "'Geist', Inter, sans-serif" }}>
