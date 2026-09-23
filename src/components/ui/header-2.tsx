@@ -192,7 +192,7 @@ export function Header() {
               key={l.label}
               to={l.href}
               className={`group relative text-sm leading-none flex items-center font-semibold whitespace-nowrap ${
-                isActive(l.href) ? "text-[#00BA7C]" : "text-white/65 hover:text-white"
+                isActive(l.href) ? "text-[var(--green)]" : "text-white/65 hover:text-white"
               }`}
             >
               <span className="relative inline-block overflow-hidden h-[1.1em] leading-[1.1em]">
@@ -239,7 +239,7 @@ export function Header() {
                 aria-pressed={currency === c}
                 aria-label={c === "INR" ? "Show prices in Indian rupees" : "Show prices in US dollars"}
                 className={`shrink-0 h-6 w-7 rounded-full text-[12px] font-semibold leading-none transition-colors ${
-                  currency === c ? "bg-[#00BA7C] text-black" : "text-white/55 hover:text-white"
+                  currency === c ? "bg-[var(--green)] text-black" : "text-white/55 hover:text-white"
                 }`}
               >
                 {c === "INR" ? "₹" : "$"}
@@ -249,7 +249,7 @@ export function Header() {
           <button
             aria-label="Search"
             onClick={() => setSearchOpen(true)}
-            className="shrink-0 p-2 inline-flex items-center justify-center text-white/65 hover:text-[#00BA7C] transition-colors"
+            className="shrink-0 p-2 inline-flex items-center justify-center text-white/65 hover:text-[var(--green)] transition-colors"
           >
             <Search className="w-5 h-5" />
           </button>
@@ -258,7 +258,7 @@ export function Header() {
               type="button"
               onClick={() => setAccountOpen((v) => !v)}
               aria-label="Account"
-              className="shrink-0 p-2 inline-flex items-center justify-center text-white/65 hover:text-[#00BA7C] transition-colors"
+              className="shrink-0 p-2 inline-flex items-center justify-center text-white/65 hover:text-[var(--green)] transition-colors"
             >
               <User className="w-5 h-5" />
             </button>
@@ -270,7 +270,7 @@ export function Header() {
             onClick={() => setCartOpen(true)}
             aria-label="Cart"
             data-cart-target
-            className="shrink-0 relative p-2 inline-flex items-center justify-center text-white/70 hover:text-white transition-colors rounded-full border border-white/10 bg-white/[0.03] hover:border-[#00BA7C]/50"
+            className="shrink-0 relative p-2 inline-flex items-center justify-center text-white/70 hover:text-white transition-colors rounded-full border border-white/10 bg-white/[0.03] hover:border-[color:var(--green)]"
           >
             <img src={cartIconAsset.url} alt="" className="w-6 h-6 block" />
             {count > 0 && (
