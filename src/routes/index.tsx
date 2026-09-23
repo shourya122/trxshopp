@@ -148,6 +148,47 @@ function HomePage() {
     staleTime: 60_000,
   });
 
+  // Real catalogue counts per category (the product list above is capped at 80).
+  const { data: catCounts } = useQuery({
+    queryKey: ["home", "category-counts"],
+    staleTime: 5 * 60_000,
+    queryFn: async () => {
+      const countPlatform = async (p: string) => {
+        const { count } = await supabase
+          .from("products")
+          .select("id", { count: "exact", head: true })
+          .eq("active", true)
+          .contains("platforms", [p]);
+        return count ?? 0;
+      };
+      const [pc, ps, xbox, subs, total] = await Promise.all([
+        countPlatform("pc"),
+        countPlatform("ps"),
+        countPlatform("xbox"),
+        supabase
+          .from("products")
+          .select("id", { count: "exact", head: true })
+          .eq("active", true)
+          .in("category", ["subscription", "subscriptions", "streaming", "music", "digital-products", "digital products"])
+          .then((r) => r.count ?? 0),
+        supabase
+          .from("products")
+          .select("id", { count: "exact", head: true })
+          .eq("active", true)
+          .then((r) => r.count ?? 0),
+      ]);
+      return [
+        { title: "PC / Steam", desc: "Steam accounts & PC titles", to: "/games/steam-games", count: pc },
+        { title: "PlayStation", desc: "PS4 & PS5 digital games", to: "/games/playstation-games", count: ps },
+        { title: "Xbox", desc: "Xbox & Game Pass titles", to: "/games/all", count: xbox },
+        { title: "Subscriptions", desc: "Streaming, music & AI tools", to: "/games/subscriptions", count: subs },
+        { title: "All Products", desc: "Browse the whole catalogue", to: "/games/all", count: total },
+      ];
+    },
+  });
+
+
+
   // Full-page loader until products + window.load are ready
   const [pageReady, setPageReady] = useState(false);
   const [windowLoaded, setWindowLoaded] = useState(false);
