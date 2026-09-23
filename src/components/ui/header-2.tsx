@@ -143,7 +143,7 @@ export function Header() {
   const links = [
     { label: "Home", href: "/" },
     { label: "Products", href: "/games" },
-    { label: "Contact", href: "/contactus" },
+    { label: "Contact", href: "/#contact" },
   ];
 
   const isActive = (href: string) =>
@@ -168,15 +168,15 @@ export function Header() {
             aria-label="Site announcement"
             className="block bg-black text-white text-[10px] sm:text-[12px] text-center px-3 sm:px-4 whitespace-nowrap overflow-hidden py-1.5 sm:py-2 tracking-[0.12em] sm:tracking-[0.14em] uppercase font-semibold shadow-[0_8px_0_#000]"
           >
-            <div className="truncate">LIVE MARKETPLACE — INSTANT DIGITAL DELIVERY · SECURE CHECKOUT · 24/7 SUPPORT</div>
+            <div className="truncate">GRAND OPENING — 10% OFF ORDERS ABOVE ₹299 · INSTANT DIGITAL DELIVERY</div>
           </div>
         )}
 
         <header
-          className={`text-white font-['Inter'] font-medium mx-0 rounded-none border-b border-white/10 overflow-visible transition-all duration-300 ease-[cubic-bezier(0.7,0,0.3,1)] sm:rounded-full sm:border ${
+          className={`text-white font-['Inter'] font-medium mx-0 rounded-none border-b border-white/10 overflow-visible transition-all duration-300 ease-[cubic-bezier(0.7,0,0.3,1)] sm:rounded-2xl sm:border ${
             scrolled
-              ? "sm:mx-auto sm:max-w-[min(92%,66rem)] sm:bg-black/90 sm:backdrop-blur-md sm:border-white/10 sm:shadow-[0_8px_32px_rgba(0,0,0,0.5)] bg-black/90 backdrop-blur-sm"
-              : "sm:mx-auto sm:max-w-6xl sm:bg-black/25 sm:backdrop-blur-sm sm:border-white/10 sm:shadow-none bg-transparent"
+              ? "sm:mx-auto sm:max-w-[min(92%,64rem)] sm:bg-black/90 sm:backdrop-blur-md sm:border-white/10 sm:shadow-[0_8px_32px_rgba(0,0,0,0.5)] bg-black/90 backdrop-blur-sm"
+              : "sm:mx-auto sm:max-w-6xl sm:bg-transparent sm:backdrop-blur-0 sm:border-transparent sm:shadow-none bg-transparent"
           }`}
         >
 
@@ -191,8 +191,8 @@ export function Header() {
             <Link
               key={l.label}
               to={l.href}
-              className={`group relative text-sm leading-none flex items-center font-semibold whitespace-nowrap ${
-                isActive(l.href) ? "text-[var(--green)]" : "text-white/65 hover:text-white"
+              className={`group relative text-sm leading-none flex items-center font-medium whitespace-nowrap ${
+                isActive(l.href) ? "text-white" : "text-white/60 hover:text-white"
               }`}
             >
               <span className="relative inline-block overflow-hidden h-[1.1em] leading-[1.1em]">
@@ -229,7 +229,7 @@ export function Header() {
           <div
             role="group"
             aria-label="Currency"
-            className="mr-1 hidden sm:inline-flex shrink-0 items-center rounded-full border border-white/15 bg-black/40 p-0.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+            className="mr-1 hidden sm:inline-flex shrink-0 items-center rounded-full border border-white/15 bg-white/[0.04] p-0.5"
           >
             {(["INR", "USD"] as const).map((c) => (
               <button
@@ -239,7 +239,7 @@ export function Header() {
                 aria-pressed={currency === c}
                 aria-label={c === "INR" ? "Show prices in Indian rupees" : "Show prices in US dollars"}
                 className={`shrink-0 h-6 w-7 rounded-full text-[12px] font-semibold leading-none transition-colors ${
-                  currency === c ? "bg-[var(--green)] text-black" : "text-white/55 hover:text-white"
+                  currency === c ? "bg-white text-black" : "text-white/55 hover:text-white"
                 }`}
               >
                 {c === "INR" ? "₹" : "$"}
@@ -249,7 +249,7 @@ export function Header() {
           <button
             aria-label="Search"
             onClick={() => setSearchOpen(true)}
-            className="shrink-0 p-2 inline-flex items-center justify-center text-white/65 hover:text-[var(--green)] transition-colors"
+            className="shrink-0 p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
           >
             <Search className="w-5 h-5" />
           </button>
@@ -258,7 +258,7 @@ export function Header() {
               type="button"
               onClick={() => setAccountOpen((v) => !v)}
               aria-label="Account"
-              className="shrink-0 p-2 inline-flex items-center justify-center text-white/65 hover:text-[var(--green)] transition-colors"
+              className="shrink-0 p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
             >
               <User className="w-5 h-5" />
             </button>
@@ -270,7 +270,7 @@ export function Header() {
             onClick={() => setCartOpen(true)}
             aria-label="Cart"
             data-cart-target
-            className="shrink-0 relative p-2 inline-flex items-center justify-center text-white/70 hover:text-white transition-colors rounded-full border border-white/10 bg-white/[0.03] hover:border-[color:var(--green)]"
+            className="shrink-0 relative p-2 inline-flex items-center justify-center text-white/60 hover:text-white transition-colors"
           >
             <img src={cartIconAsset.url} alt="" className="w-6 h-6 block" />
             {count > 0 && (
