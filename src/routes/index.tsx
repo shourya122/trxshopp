@@ -129,7 +129,7 @@ const PAYMENT_METHODS = [
 function HomePage() {
   const { data: fsProducts, isPending: productsPending } = useQuery({
     queryKey: ["products", "active", "home"],
-    queryFn: () => listProducts({ activeOnly: true, max: 80 }),
+    queryFn: () => listProducts({ activeOnly: true, max: 300 }),
     staleTime: 30_000,
   });
 
@@ -327,7 +327,7 @@ function HomePage() {
           {categories.map((c) => (
             <Link
               key={c.title}
-              to={c.to}
+              to={c.to as any}
               className="group relative overflow-hidden rounded-2xl border border-[var(--home-line)] bg-[var(--home-panel)] p-5 transition-colors hover:border-[var(--home-accent)]/40 hover:bg-[var(--home-panel-2)]"
             >
               <div
