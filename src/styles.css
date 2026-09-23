@@ -998,3 +998,33 @@ html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.12) transparen
 .trx-rte li::marker, .trx-rte-view li::marker { color: #fff; }
 .trx-rte a, .trx-rte-view a { text-decoration: underline; }
 .trx-rte-view strong { font-weight: 700; color: #fff; }
+
+/* ----------------------------------------------------------------
+   Home page (dark-green storefront theme)
+   ---------------------------------------------------------------- */
+:root {
+  --home-bg: #040a06;
+  --home-panel: #091208;
+  --home-panel-2: #0c170c;
+  --home-line: rgba(255, 255, 255, 0.08);
+  --home-accent: #3ee253;
+  --home-accent-deep: #14a02a;
+  --home-accent-soft: rgba(62, 226, 83, 0.14);
+}
+
+.home-dots {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.16) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+
+.home-hero-wash {
+  background:
+    radial-gradient(70% 60% at 50% 0%, rgba(20, 160, 42, 0.30), transparent 70%),
+    radial-gradient(45% 45% at 12% 15%, rgba(62, 226, 83, 0.16), transparent 70%),
+    radial-gradient(55% 50% at 88% 25%, rgba(10, 120, 60, 0.20), transparent 72%),
+    var(--home-bg);
+}
+
+.home-accent-text {
+  color: var(--home-accent);
+}
