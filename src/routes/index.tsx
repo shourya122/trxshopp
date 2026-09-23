@@ -36,9 +36,6 @@ import adobeLogo from "@/assets/logos/adobe.svg.asset.json";
 import canvaLogo from "@/assets/logos/canva.svg.asset.json";
 import primeVideoLogo from "@/assets/logos/prime-video.svg.asset.json";
 import cartIconAsset from "@/assets/cart-icon-v2.svg.asset.json";
-import greenCheckAsset from "@/assets/check.png.asset.json";
-import redCrossAsset from "@/assets/cross.png.asset.json";
-import { ImageWithSkeleton } from "@/components/ImageWithSkeleton";
 import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
 import { flyToCart } from "@/lib/fly-to-cart";
 import { canAddToCart } from "@/lib/rate-limit";
@@ -48,19 +45,6 @@ const HERO_TAGLINES = [
   "Instant Key Delivery",
   "Best Prices Guaranteed",
   "Official Keys, Worldwide",
-];
-
-type NewProduct = { title: string; img: string; sale: number; regular: number };
-
-const NEWLY_ADDED: NewProduct[] = [
-  { title: "007 First Light PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image_6.png?v=1778582083&width=800", sale: 599, regular: 3499 },
-  { title: "Forza Horizon 6 Premium Edition PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image_5.png?v=1778580602&width=800", sale: 599, regular: 9699 },
-  { title: "PRAGMATA Deluxe Edition PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image_4.png?v=1776380128&width=800", sale: 599, regular: 4399 },
-  { title: "Crimson Desert Deluxe Edition PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image_d05f2b22-52d2-4435-b0bc-ced8bc14b463.png?v=1773684936&width=800", sale: 599, regular: 5129 },
-  { title: "DEATH STRANDING 2: ON THE BEACH PRE-ORDER PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image-1_fb902a59-20d8-47c6-9f37-41fadb246041.png?v=1773684839&width=800", sale: 599, regular: 5599 },
-  { title: "Resident Evil Requiem Deluxe Edition PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image_3.png?v=1771618285&width=800", sale: 599, regular: 4799 },
-  { title: "WWE 2K26 PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image-2_01780c41-c07b-4a6d-ac4e-f7a36057b171.png?v=1773684683&width=800", sale: 599, regular: 3999 },
-  { title: "Nioh 3 Digital Deluxe Edition PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image-2_585481df-99f2-4714-92dd-ef8d91f14d97.png?v=1771153070&width=800", sale: 599, regular: 7700 },
 ];
 
 const blurSlideVariants = {
@@ -137,8 +121,6 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-type Filter = "all" | "pc" | "ps" | "xbox";
-
 function HomePage() {
   const { data: fsProducts, isPending: productsPending } = useQuery({
     queryKey: ["products", "active", "home"],
@@ -186,7 +168,6 @@ function HomePage() {
   const products = fsProducts || [];
   const pcProducts = products.filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "pc"));
   const psProducts = products.filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "ps"));
-  const xboxProducts = products.filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "xbox"));
   const subscriptionProducts = products.filter((p) => /spotify|discord|youtube|prime|canva|adobe|chatgpt|claude|gemini|grok|perplexity|subscription/i.test(`${p.title} ${p.genre}`));
   const biggestDeals = products
     .slice()
