@@ -49,7 +49,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "default-src 'self'",
           "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.gpteng.co https://*.gstatic.com https://www.googletagmanager.com https://cdn.jsdelivr.net https://sdk.cashfree.com",
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.fontshare.com",
-          "font-src 'self' data: https://fonts.gstatic.com https://cdn.gpteng.co https://cdn.fontshare.com",
+          "font-src 'self' data: https://fonts.gstatic.com https://cdn.gpteng.co https://cdn.fontshare.com https://fonts.cdnfonts.com",
           "img-src 'self' data: blob: https:",
           "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://assets.unicorn.studio https://cdn.jsdelivr.net https://www.google-analytics.com https://api.cashfree.com https://payments.cashfree.com https://sandbox.cashfree.com https://payments-test.cashfree.com",
           "frame-src 'self' https://sdk.cashfree.com https://api.cashfree.com https://payments.cashfree.com https://sandbox.cashfree.com https://payments-test.cashfree.com",
@@ -70,8 +70,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "TRXSHOP — Game Store & Digital Marketplace" },
       { name: "twitter:description", content: "Buy Original PC, PlayStation, and Xbox games at best prices — The software and subscriptions you actually use. 100% genuine Digital Download" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/1e2bb937-a6dd-4eea-8c80-d8b43877e643" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/1e2bb937-a6dd-4eea-8c80-d8b43877e643" },
       { name: "google-site-verification", content: "3byZATFsV59pj8TnMzqhhkrHxH-8MDcbX5YKo69zVRc" },
     ],
     links: [
