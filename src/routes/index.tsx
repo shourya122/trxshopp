@@ -614,6 +614,7 @@ function HomeProductCard({
   const { add } = useCart();
   const { format } = useCurrency();
   const [adding, setAdding] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
   const lockRef = useRef(false);
   const btnRef = useRef<HTMLButtonElement>(null);
   const numericId = Array.from(id).reduce((a, c) => a + c.charCodeAt(0), 0);
@@ -642,12 +643,19 @@ function HomeProductCard({
   return (
     <Link to="/products/$id" params={{ id: slug }} className="group block content-in">
       <div className="relative overflow-hidden bg-neutral-900 aspect-[3/4] rounded-sm card-tilt">
-        <img
-          src={img}
-          alt={`${title} game cover`}
-          loading="lazy"
-          className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-        />
+        {img && !imageFailed ? (
+          <img
+            src={img}
+            alt={`${title} game cover`}
+            loading="lazy"
+            onError={() => setImageFailed(true)}
+            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-neutral-950 px-5 text-center text-sm font-semibold text-white/70">
+            {title}
+          </div>
+        )}
         <span
           className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full"
           style={{ fontSize: "12px", fontWeight: 700, lineHeight: 1 }}
