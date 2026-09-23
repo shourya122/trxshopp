@@ -1,17 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { Loader2, ShoppingBag, ArrowRight, Zap, ShieldCheck, Headphones, Star, MessageCircle, BadgeCheck } from "lucide-react";
 
 import { listProducts } from "@/lib/products";
+import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/lib/cart";
 import { useCurrency } from "@/lib/currency";
-import { TextEffect } from "@/components/ui/text-effect";
-import { BlurFade } from "@/components/ui/blur-fade";
-import { motion } from "framer-motion";
-import { Zap, ShieldCheck, BadgeCheck, Gamepad2, Flame, Check, X, Loader2 } from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
-import { AmbientBackground } from "@/components/AmbientBackground";
 import { Loader } from "@/components/Loader";
+import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
+import { flyToCart } from "@/lib/fly-to-cart";
+import { canAddToCart } from "@/lib/rate-limit";
+import { toast } from "sonner";
 
 import xboxLogo from "@/assets/logos/Xbox.svg.asset.json";
 import spotifyLogo from "@/assets/logos/Spotify.svg.asset.json";
@@ -24,69 +26,20 @@ import rockstarLogo from "@/assets/logos/Rockstar_Games.svg.asset.json";
 import crunchyrollLogo from "@/assets/logos/Crunchyroll.svg.asset.json";
 import steamLogo from "@/assets/logos/Steam.svg.asset.json";
 import youtubeLogo from "@/assets/logos/YouTube.svg.asset.json";
-import logo3 from "@/assets/logos/logo_2-2.svg.asset.json";
 import kimiLogo from "@/assets/logos/kimi.svg.asset.json";
 import copilotLogo from "@/assets/logos/copilot.svg.asset.json";
 import grokLogo from "@/assets/logos/grok.png.asset.json";
 import geminiLogo from "@/assets/logos/gemini.svg.asset.json";
-import avatarMcp from "@/assets/mcpfp.png.asset.json";
-import avatarMaster from "@/assets/masteroog.png.asset.json";
-import avatarGirl from "@/assets/dp_for_girls.jpeg.asset.json";
-import avatarWoody from "@/assets/woody2.png.asset.json";
-
 import adobeLogo from "@/assets/logos/adobe.svg.asset.json";
 import canvaLogo from "@/assets/logos/canva.svg.asset.json";
 import primeVideoLogo from "@/assets/logos/prime-video.svg.asset.json";
 import cartIconAsset from "@/assets/cart-icon-v2.svg.asset.json";
 import greenCheckAsset from "@/assets/check.png.asset.json";
 import redCrossAsset from "@/assets/cross.png.asset.json";
-import { ImageWithSkeleton } from "@/components/ImageWithSkeleton";
-import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
-import { flyToCart } from "@/lib/fly-to-cart";
-import { canAddToCart } from "@/lib/rate-limit";
-import { toast } from "sonner";
-
-const HERO_TAGLINES = [
-  "Instant Key Delivery",
-  "Best Prices Guaranteed",
-  "Official Keys, Worldwide",
-];
-
-type NewProduct = { title: string; img: string; sale: number; regular: number };
-
-const NEWLY_ADDED: NewProduct[] = [
-  { title: "007 First Light PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image_6.png?v=1778582083&width=800", sale: 599, regular: 3499 },
-  { title: "Forza Horizon 6 Premium Edition PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image_5.png?v=1778580602&width=800", sale: 599, regular: 9699 },
-  { title: "PRAGMATA Deluxe Edition PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image_4.png?v=1776380128&width=800", sale: 599, regular: 4399 },
-  { title: "Crimson Desert Deluxe Edition PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image_d05f2b22-52d2-4435-b0bc-ced8bc14b463.png?v=1773684936&width=800", sale: 599, regular: 5129 },
-  { title: "DEATH STRANDING 2: ON THE BEACH PRE-ORDER PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image-1_fb902a59-20d8-47c6-9f37-41fadb246041.png?v=1773684839&width=800", sale: 599, regular: 5599 },
-  { title: "Resident Evil Requiem Deluxe Edition PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image_3.png?v=1771618285&width=800", sale: 599, regular: 4799 },
-  { title: "WWE 2K26 PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image-2_01780c41-c07b-4a6d-ac4e-f7a36057b171.png?v=1773684683&width=800", sale: 599, regular: 3999 },
-  { title: "Nioh 3 Digital Deluxe Edition PC (Steam Account)", img: "https://digitaldownload.in/cdn/shop/files/image-2_585481df-99f2-4714-92dd-ef8d91f14d97.png?v=1771153070&width=800", sale: 599, regular: 7700 },
-];
-
-const blurSlideVariants = {
-  container: {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.01 } },
-    exit: { transition: { staggerChildren: 0.01, staggerDirection: 1 } },
-  },
-  item: {
-    hidden: { opacity: 0, filter: "blur(10px) brightness(0%)", y: 0 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px) brightness(100%)",
-      transition: { duration: 0.4 },
-    },
-    exit: {
-      opacity: 0,
-      y: -30,
-      filter: "blur(10px) brightness(0%)",
-      transition: { duration: 0.4 },
-    },
-  },
-};
+import avatarMcp from "@/assets/mcpfp.png.asset.json";
+import avatarMaster from "@/assets/masteroog.png.asset.json";
+import avatarGirl from "@/assets/dp_for_girls.jpeg.asset.json";
+import avatarWoody from "@/assets/woody2.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -96,9 +49,9 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "TRXSHOP — Buy Cheap PC, PlayStation & Xbox Game Keys" },
       { property: "og:description", content: "Original game keys at unbeatable prices. Instant digital delivery for PC, PlayStation, and Xbox." },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://trxshop.xyz/" },
+      { property: "og:url", content: "https://trxshop.in/" },
     ],
-    links: [{ rel: "canonical", href: "https://trxshop.xyz/" }],
+    links: [{ rel: "canonical", href: "https://trxshop.in/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -106,10 +59,10 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "TRXSHOP",
-          url: "https://trxshop.xyz/",
+          url: "https://trxshop.in/",
           potentialAction: {
             "@type": "SearchAction",
-            target: "https://trxshop.xyz/games?q={search_term_string}",
+            target: "https://trxshop.in/games?q={search_term_string}",
             "query-input": "required name=search_term_string",
           },
         }),
@@ -120,8 +73,8 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "Organization",
           name: "TRXSHOP",
-          url: "https://trxshop.xyz/",
-          logo: "https://trxshop.xyz/favicon.ico",
+          url: "https://trxshop.in/",
+          logo: "https://trxshop.in/favicon.ico",
           contactPoint: {
             "@type": "ContactPoint",
             telephone: "+91-7000286871",
@@ -136,20 +89,68 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-type Filter = "all" | "pc" | "ps" | "xbox";
+const BRAND_LOGOS = [
+  { src: steamLogo.url, alt: "Steam" },
+  { src: xboxLogo.url, alt: "Xbox" },
+  { src: rockstarLogo.url, alt: "Rockstar Games" },
+  { src: spotifyLogo.url, alt: "Spotify" },
+  { src: youtubeLogo.url, alt: "YouTube" },
+  { src: primeVideoLogo.url, alt: "Prime Video" },
+  { src: crunchyrollLogo.url, alt: "Crunchyroll" },
+  { src: chatgptLogo.url, alt: "ChatGPT" },
+  { src: claudeLogo.url, alt: "Claude" },
+  { src: geminiLogo.url, alt: "Gemini" },
+  { src: perplexityLogo.url, alt: "Perplexity" },
+  { src: deepseekLogo.url, alt: "DeepSeek" },
+  { src: copilotLogo.url, alt: "Copilot" },
+  { src: grokLogo.url, alt: "Grok" },
+  { src: kimiLogo.url, alt: "Kimi" },
+  { src: adobeLogo.url, alt: "Adobe" },
+  { src: canvaLogo.url, alt: "Canva" },
+  { src: discordLogo.url, alt: "Discord" },
+];
+
+const PAYMENT_METHODS = [
+  "UPI",
+  "Google Pay",
+  "PhonePe",
+  "Paytm",
+  "Visa",
+  "Mastercard",
+  "RuPay",
+  "Net Banking",
+  "₿ Bitcoin",
+  "Ξ Ethereum",
+  "USDT",
+  "Ł Litecoin",
+  "◎ Solana",
+];
 
 function HomePage() {
-  const { add } = useCart();
   const { data: fsProducts, isPending: productsPending } = useQuery({
     queryKey: ["products", "active", "home"],
     queryFn: () => listProducts({ activeOnly: true, max: 80 }),
     staleTime: 30_000,
   });
 
-  // Full-page loader: wait until products + their images + window.load are ready
+  const { data: reviews } = useQuery({
+    queryKey: ["reviews", "home"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("id, author_name, body, rating, product_title, time_label, verified")
+        .eq("published", true)
+        .order("sort_order", { ascending: true })
+        .limit(6);
+      if (error) return [];
+      return data ?? [];
+    },
+    staleTime: 60_000,
+  });
+
+  // Full-page loader until products + window.load are ready
   const [pageReady, setPageReady] = useState(false);
   const [windowLoaded, setWindowLoaded] = useState(false);
-  const [imagesReady, setImagesReady] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -163,413 +164,238 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    // Don't gate first paint on preloading 18 remote images. Mark ready once
-    // products query resolves; the loader overlay then needs only window.load.
-    if (productsPending) return;
-    setImagesReady(true);
-  }, [productsPending, fsProducts]);
+    if (!productsPending && windowLoaded) setPageReady(true);
+  }, [productsPending, windowLoaded]);
 
+  const all = fsProducts || [];
+  const countBy = (platform: string) =>
+    all.filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === platform)).length;
 
-  useEffect(() => {
-    if (!productsPending && windowLoaded && imagesReady) {
-      setPageReady(true);
-    }
-  }, [productsPending, windowLoaded, imagesReady]);
-
-
-  // rotating hero tagline (TextEffect with exit)
-  const [taglineIdx, setTaglineIdx] = useState(0);
-  const [taglineTrigger, setTaglineTrigger] = useState(true);
-  useEffect(() => {
-    const id = setInterval(() => {
-      setTaglineTrigger(false);
-      setTimeout(() => {
-        setTaglineIdx((i) => (i + 1) % HERO_TAGLINES.length);
-        setTaglineTrigger(true);
-      }, 500);
-    }, 2800);
-    return () => clearInterval(id);
-  }, []);
-
-  // Unicorn Studio animated background — enabled on all devices.
-  // Lag is prevented via: lazy-load on idle (never blocks first paint),
-  // pause when scrolled offscreen, pause when tab hidden, and respect
-  // prefers-reduced-motion for accessibility.
-  const heroBgRef = useRef<HTMLDivElement | null>(null);
-  const [enableHeroBg, setEnableHeroBg] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mql.matches) return; // a11y: honor reduced motion
-    // Skip the WebGL canvas on phones — it dominates GPU time on mid-range Android.
-    if (window.matchMedia("(max-width: 767px)").matches) return;
-    setEnableHeroBg(true);
-  }, []);
-
-
-
-  useEffect(() => {
-    if (!enableHeroBg || typeof window === "undefined") return;
-    const el = heroBgRef.current;
-    if (!el) return;
-    let started = false;
-    let cleanup: (() => void) | undefined;
-    const start = () => {
-      if (started) return;
-      started = true;
-      const init = () => {
-        try { (window as any).UnicornStudio?.init?.(); } catch {}
-      };
-      if ((window as any).UnicornStudio) {
-        init();
-      } else {
-        const existing = document.querySelector<HTMLScriptElement>("script[data-unicorn]");
-        if (existing) {
-          existing.addEventListener("load", init, { once: true });
-        } else {
-          const script = document.createElement("script");
-          script.src = "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js";
-          script.async = true;
-          script.dataset.unicorn = "1";
-          script.onload = init;
-          document.head.appendChild(script);
-        }
-      }
-      // Pause the canvas when scrolled offscreen
-      const io = new IntersectionObserver((entries) => {
-        for (const e of entries) {
-          el.style.visibility = e.isIntersecting ? "visible" : "hidden";
-        }
-      }, { threshold: 0 });
-      io.observe(el);
-      const onVis = () => {
-        el.style.visibility = document.hidden ? "hidden" : "visible";
-      };
-      document.addEventListener("visibilitychange", onVis);
-      cleanup = () => {
-        io.disconnect();
-        document.removeEventListener("visibilitychange", onVis);
-      };
-    };
-    const idle = (window as any).requestIdleCallback as
-      | ((cb: () => void, opts?: { timeout: number }) => number)
-      | undefined;
-    const handle = idle ? idle(start, { timeout: 1500 }) : window.setTimeout(start, 600);
-    return () => {
-      if (idle && typeof handle === "number") {
-        (window as any).cancelIdleCallback?.(handle);
-      } else {
-        clearTimeout(handle as unknown as number);
-      }
-      cleanup?.();
-    };
-  }, [enableHeroBg]);
+  const categories = [
+    { title: "PC / Steam", desc: "Steam accounts & PC titles", to: "/games/steam-games", count: countBy("pc") },
+    { title: "PlayStation", desc: "PS4 & PS5 digital games", to: "/games/playstation-games", count: countBy("ps") },
+    { title: "Xbox", desc: "Xbox & Game Pass titles", to: "/games/all", count: countBy("xbox") },
+    { title: "Subscriptions", desc: "Streaming, music & AI tools", to: "/games/subscriptions", count: countBy("sub") },
+    { title: "All Products", desc: "Browse the whole catalogue", to: "/games/all", count: all.length },
+  ];
 
   return (
-    <>
-      {/* Full-page loader until products + images + window.load are ready */}
+    <div className="bg-[var(--home-bg)] text-white" style={{ fontFamily: "'Geist', Inter, sans-serif" }}>
+      {/* Full-page loader */}
       <div
         aria-hidden={pageReady}
-        className={`fixed inset-0 z-[100] flex items-center justify-center bg-black transition-opacity duration-500 ${pageReady ? "opacity-0 pointer-events-none" : "opacity-100"}`}
-        style={{ fontFamily: "'Geist', sans-serif" }}
+        className={`fixed inset-0 z-[100] flex items-center justify-center bg-[var(--home-bg)] transition-opacity duration-500 ${pageReady ? "opacity-0 pointer-events-none" : "opacity-100"}`}
       >
         <div className="flex flex-col items-center gap-6">
           <Loader size={120} />
-          <div className="text-white/80 text-sm tracking-widest uppercase">Loading TRX Shop</div>
+          <div className="text-sm uppercase tracking-widest text-white/70">Loading TRX Shop</div>
         </div>
-
       </div>
 
-      <section className="hero">
-        <AmbientBackground />
+      {/* ============ HERO ============ */}
+      <section className="home-hero-wash relative overflow-hidden">
+        <div aria-hidden className="home-dots pointer-events-none absolute inset-0 opacity-[0.25]" />
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[var(--home-bg)] to-transparent" />
 
-
-
-        
-        <div className="hero-left">
+        <div className="relative mx-auto max-w-5xl px-5 pb-20 pt-16 text-center sm:pb-28 sm:pt-24">
           <motion.h1
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 text-balance text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl lg:text-7xl"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="text-balance text-4xl font-extrabold leading-[1.02] tracking-[-0.035em] sm:text-6xl lg:text-7xl"
           >
-            <span className="gradient-text">Every Platform.</span>
+            Original games &amp; accounts,
             <br />
-            <span className="gradient-text">One Store.</span>
-            <br />
-            <span className="bg-[linear-gradient(110deg,#7ec8ff_10%,#fff_45%,#a78bfa_90%)] bg-clip-text text-transparent">
-              Fast delivery.
-            </span>
+            <span className="home-accent-text">delivered in seconds, not days.</span>
           </motion.h1>
+
           <motion.p
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-3 max-w-xl text-pretty text-sm text-white/65 sm:text-base sm:mt-4"
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="mx-auto mt-6 max-w-2xl text-pretty text-sm text-white/70 sm:text-lg"
           >
-            Buy Original PC, PlayStation, and Xbox games at unbeatable prices — The software and subscriptions you actually use. 100% genuine Digital Download
+            PC, PlayStation and Xbox games plus the software and subscriptions you actually use — every one
+            genuine, priced far below retail, and sent to you within seconds after paying.
           </motion.p>
-          <div className="hero-pf fu d3 mt-6">
-            <div className="pb pb-pc">PC / Steam</div>
-            <div className="pb pb-ps">PlayStation</div>
-            <div className="pb pb-xb">Xbox</div>
-          </div>
-          <div className="hero-actions fu d4">
-            <style>{`
-              @keyframes beam-spin { to { transform: rotate(360deg); } }
-              @keyframes dots-move { 0% { background-position: 0 0; } 100% { background-position: 24px 24px; } }
-              @media (max-width: 767px) {
-                /* Pause hero infinite animations on phones — GPU/CPU savings. */
-                .hero-cta-beam, .hero-cta-dots { animation: none !important; }
-                .hero-cta-beam { background: #1D9BF0 !important; }
-              }
-            `}</style>
 
-            <Link to="/games" className="group inline-flex overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] rounded-full pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative items-center justify-center">
-              {/* Spinning Border Beam (Visible on Hover) */}
-              <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#ffffff_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
-              {/* Default Static Border */}
-              <span className="absolute inset-0 rounded-full bg-zinc-800 transition-opacity duration-300 group-hover:opacity-0"></span>
-              {/* 3D Button Surface & Content */}
-              <span className="flex items-center justify-center gap-2.5 uppercase transition-colors duration-300 group-hover:text-white text-sm font-medium text-zinc-400 tracking-widest bg-gradient-to-b from-zinc-800 to-zinc-950 w-full h-full rounded-full pt-3.5 pr-8 pb-3.5 pl-8 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">
-                <span className="relative z-10">SHOP ALL PRODUCTS</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-              </span>
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.28 }}
+            className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row"
+          >
+            <Link
+              to="/games"
+              className="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[var(--home-accent)] px-7 py-3.5 text-[15px] font-semibold text-black shadow-[0_10px_40px_-12px_rgba(62,226,83,0.7)] transition-transform hover:-translate-y-0.5 sm:w-auto"
+            >
+              <ShoppingBag size={18} />
+              Shop Now
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
+            <Link
+              to="/contactus"
+              className="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-[var(--home-line)] bg-white/[0.04] px-7 py-3.5 text-[15px] font-semibold text-white transition-colors hover:bg-white/[0.09] sm:w-auto"
+            >
+              <MessageCircle size={18} />
+              Talk to Support
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </motion.div>
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm text-white/70">
+            {["Instant Delivery", "Secure Payments", "24/7 Support"].map((t) => (
+              <span key={t} className="inline-flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--home-accent)]" />
+                {t}
+              </span>
+            ))}
           </div>
         </div>
+
+        {/* brand marquee */}
+        <div className="relative border-y border-[var(--home-line)] bg-black/40 py-5">
+          <Marquee speed={22} direction="right" className="!mt-0">
+            {BRAND_LOGOS.map((logo, i) => (
+              <div key={i} className="flex shrink-0 items-center px-7">
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  loading="lazy"
+                  decoding="async"
+                  draggable={false}
+                  className="h-8 w-auto select-none object-contain opacity-70 transition-opacity duration-300 hover:opacity-100 sm:h-10"
+                />
+              </div>
+            ))}
+          </Marquee>
+        </div>
       </section>
 
-      {/* MARQUEE */}
-      <Marquee speed={20} direction="right" className="!mt-0">
-        {[
-          { src: xboxLogo.url, alt: "Xbox" },
-          { src: spotifyLogo.url, alt: "Spotify" },
-          { src: discordLogo.url, alt: "Discord" },
-          { src: chatgptLogo.url, alt: "ChatGPT" },
-          { src: claudeLogo.url, alt: "Claude" },
-          { src: perplexityLogo.url, alt: "Perplexity" },
-          { src: deepseekLogo.url, alt: "DeepSeek" },
-          { src: rockstarLogo.url, alt: "Rockstar Games" },
-          { src: crunchyrollLogo.url, alt: "Crunchyroll" },
-          { src: steamLogo.url, alt: "Steam" },
-          { src: youtubeLogo.url, alt: "YouTube" },
-          { src: geminiLogo.url, alt: "Gemini" },
-          { src: copilotLogo.url, alt: "Copilot" },
-          { src: grokLogo.url, alt: "Grok" },
-          { src: kimiLogo.url, alt: "Kimi" },
-          { src: adobeLogo.url, alt: "Adobe" },
-          { src: canvaLogo.url, alt: "Canva" },
-          { src: primeVideoLogo.url, alt: "Prime Video" },
-          { src: logo3.url, alt: "Brand" },
-        ].map((logo, i) => {
-          const small = ["Canva", "Adobe", "Kimi", "Grok"].includes(logo.alt);
-          const large = ["YouTube", "Steam", "Prime Video", "Crunchyroll", "DeepSeek", "Perplexity", "Discord"].includes(logo.alt);
-          const sizeClass = small
-            ? "h-8 sm:h-10"
-            : large
-            ? "h-16 sm:h-20"
-            : "h-12 sm:h-14";
-          return (
-            <div key={i} className="flex items-center px-8 shrink-0">
-              <img
-                src={logo.src}
-                alt={logo.alt}
-                loading="lazy"
-                decoding="async"
-                draggable={false}
-                className={`w-auto object-contain opacity-80 hover:opacity-100 transition-opacity duration-300 select-none ${sizeClass}`}
+      {/* ============ CATEGORIES ============ */}
+      <section className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Shop by category</h2>
+            <p className="mt-2 text-sm text-white/60 sm:text-base">
+              Pick a category to narrow things down, or browse the whole catalogue.
+            </p>
+          </div>
+          <Link
+            to="/games/all"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--home-line)] px-5 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.06] hover:text-white"
+          >
+            All products <ArrowRight size={15} />
+          </Link>
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {categories.map((c) => (
+            <Link
+              key={c.title}
+              to={c.to}
+              className="group relative overflow-hidden rounded-2xl border border-[var(--home-line)] bg-[var(--home-panel)] p-5 transition-colors hover:border-[var(--home-accent)]/40 hover:bg-[var(--home-panel-2)]"
+            >
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
+                style={{ background: "var(--home-accent-soft)" }}
               />
-            </div>
-          );
-        })}
-      </Marquee>
+              <div className="relative">
+                <h3 className="text-lg font-semibold">{c.title}</h3>
+                <p className="mt-1 text-sm text-white/55">{c.desc}</p>
+                <div className="mt-5 flex items-center justify-between">
+                  <span className="rounded-full bg-[var(--home-accent-soft)] px-3 py-1 text-xs font-semibold text-[var(--home-accent)]">
+                    {c.count} {c.count === 1 ? "product" : "products"}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-white/70 transition-colors group-hover:text-white">
+                    Browse <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
 
-      {/* NEWLY ADDED — digitaldownload.in style */}
-      <section
+      {/* ============ PRODUCT ROWS ============ */}
+      <ProductRow
         id="games"
-        className="px-4 sm:px-8 lg:px-16 py-12 lg:py-16 bg-black text-white"
-        style={{ fontFamily: "Inter, Avenir, 'Helvetica Neue', Helvetica, sans-serif" }}
-      >
-        <div className="flex items-end justify-between mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white" style={{ fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
-            Newly Added
-          </h2>
-          <Link
-            to="/games"
-            className="text-sm font-medium text-neutral-300 underline underline-offset-4 hover:text-white"
-          >
-            View all newly added games
-          </Link>
-        </div>
-        <HorizontalScroller>
-          {productsPending && !fsProducts
-            ? Array.from({ length: 10 }).map((_, i) => (
-                <div key={`sk-${i}`} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
-                  <ProductCardSkeleton />
-                </div>
-              ))
-            : (fsProducts || []).slice(0, 20).map((p) => {
-                const sale = Math.round(p.priceCents / 100);
-                const regular = p.oldPriceCents > 0 ? Math.round(p.oldPriceCents / 100) : sale;
-                const img = p.coverImage || p.screenshots[0] || "";
-                return (
-                  <div key={p.id} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
-                    <HomeProductCard
-                      id={p.id}
-                      variantId={p.variantId}
-                      slug={p.slug || p.id}
-                      title={p.title}
-                      img={img}
-                      sale={sale}
-                      regular={regular}
-                      platform={(p.platforms[0] || "pc") as any}
-                    />
-                  </div>
-                );
-              })}
-        </HorizontalScroller>
-      </section>
+        title="Newly Added"
+        linkTo="/games"
+        linkLabel="View all newly added"
+        pending={productsPending && !fsProducts}
+        products={all.slice(0, 20)}
+      />
 
-      {/* PC GAMES */}
-      <section
+      <ProductRow
         id="pc-games"
-        className="px-4 sm:px-8 lg:px-16 py-12 lg:py-16 bg-black text-white"
-        style={{ fontFamily: "Inter, Avenir, 'Helvetica Neue', Helvetica, sans-serif" }}
-      >
-        <div className="flex items-end justify-between mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white" style={{ fontFamily: "'Geist', sans-serif" }}>
-            PC Games
-          </h2>
-          <Link
-            to="/games/steam-games"
-            className="text-sm font-medium text-neutral-300 underline underline-offset-4 hover:text-white"
-          >
-            View all PC games
-          </Link>
-        </div>
-        <HorizontalScroller>
-          {productsPending && !fsProducts
-            ? Array.from({ length: 10 }).map((_, i) => (
-                <div key={`sk-pc-${i}`} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
-                  <ProductCardSkeleton />
-                </div>
-              ))
-            : (fsProducts || [])
-                .filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "pc"))
-                .slice()
-                .sort((a, b) => (b.oldPriceCents - b.priceCents) - (a.oldPriceCents - a.priceCents))
-                .slice(0, 20)
+        title="PC Games"
+        linkTo="/games/steam-games"
+        linkLabel="View all PC games"
+        pending={productsPending && !fsProducts}
+        products={all
+          .filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "pc"))
+          .slice()
+          .sort((a, b) => b.oldPriceCents - b.priceCents - (a.oldPriceCents - a.priceCents))
+          .slice(0, 20)}
+      />
 
-                .map((p) => {
-                  const sale = Math.round(p.priceCents / 100);
-                  const regular = p.oldPriceCents > 0 ? Math.round(p.oldPriceCents / 100) : sale;
-                  const img = p.coverImage || p.screenshots[0] || "";
-                  return (
-                    <div key={p.id} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
-                      <HomeProductCard
-                        id={p.id}
-                        variantId={p.variantId}
-                        slug={p.slug || p.id}
-                        title={p.title}
-                        img={img}
-                        sale={sale}
-                        regular={regular}
-                        platform="pc"
-                      />
-                    </div>
-                  );
-                })}
-        </HorizontalScroller>
-      </section>
-
-      {/* PS GAMES */}
-      <section
+      <ProductRow
         id="ps-games"
-        className="px-4 sm:px-8 lg:px-16 py-12 lg:py-16 bg-black text-white"
-        style={{ fontFamily: "Inter, Avenir, 'Helvetica Neue', Helvetica, sans-serif" }}
-      >
-        <div className="flex items-end justify-between mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white" style={{ fontFamily: "'Geist', sans-serif" }}>
-            PlayStation Games
+        title="PlayStation Games"
+        linkTo="/games/playstation-games"
+        linkLabel="View all PS games"
+        pending={productsPending && !fsProducts}
+        products={all
+          .filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "ps"))
+          .slice(0, 20)}
+      />
 
-          </h2>
-          <Link
-            to="/games/playstation-games"
-            className="text-sm font-medium text-neutral-300 underline underline-offset-4 hover:text-white"
-          >
-            View all PS games
-          </Link>
+      {/* ============ WHY CHOOSE ============ */}
+      <section id="about" className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Why Choose TRX Shop</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm text-white/60 sm:text-base">
+            We're here to make it simple — genuine products, fair prices, and real people when you need help.
+          </p>
         </div>
-        <HorizontalScroller>
-          {productsPending && !fsProducts
-            ? Array.from({ length: 10 }).map((_, i) => (
-                <div key={`sk-ps-${i}`} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
-                  <ProductCardSkeleton />
-                </div>
-              ))
-            : (fsProducts || [])
-                .filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "ps"))
-                .slice(0, 20)
-                .map((p) => {
-                  const sale = Math.round(p.priceCents / 100);
-                  const regular = p.oldPriceCents > 0 ? Math.round(p.oldPriceCents / 100) : sale;
-                  const img = p.coverImage || p.screenshots[0] || "";
-                  return (
-                    <div key={p.id} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
-                      <HomeProductCard
-                        id={p.id}
-                        variantId={p.variantId}
-                        slug={p.slug || p.id}
-                        title={p.title}
-                        img={img}
-                        sale={sale}
-                        regular={regular}
-                        platform="ps"
-                      />
-                    </div>
-                  );
-                })}
-        </HorizontalScroller>
-      </section>
 
+        <div className="mt-10 grid gap-4 lg:grid-cols-3">
+          {[
+            { icon: Zap, title: "Delivered in seconds", body: "Pay and your key or account details land straight in your inbox and order page." },
+            { icon: ShieldCheck, title: "Genuine & verified", body: "Every product is checked before it ships — no shady keys, no surprises." },
+            { icon: Headphones, title: "Real people, fast", body: "Reach us on the site, WhatsApp or email. Whoever answers can fix your issue." },
+          ].map(({ icon: Icon, title, body }) => (
+            <div key={title} className="rounded-2xl border border-[var(--home-line)] bg-[var(--home-panel)] p-6">
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--home-accent-soft)] text-[var(--home-accent)]">
+                <Icon size={20} />
+              </span>
+              <h3 className="mt-4 text-lg font-semibold">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-white/60">{body}</p>
+            </div>
+          ))}
+        </div>
 
-
-      {/* WHY GAMERS TRUST US — digitaldownload.in style */}
-      <section
-        id="about"
-        className="px-4 sm:px-8 lg:px-16 py-12 lg:py-20 bg-black text-white"
-        style={{ fontFamily: "Inter, Avenir, 'Helvetica Neue', Helvetica, sans-serif" }}
-      >
-        <h2 className="text-center font-bold tracking-tight text-white mb-8 sm:mb-12" style={{ fontSize: "clamp(28px, 4vw, 40px)", lineHeight: 1.2 }}>
-          Why Gamers Trust Us?
-        </h2>
-        <div className="max-w-3xl mx-auto overflow-hidden rounded-2xl border border-white/10">
+        {/* comparison table */}
+        <div className="mx-auto mt-10 max-w-3xl overflow-hidden rounded-2xl border border-[var(--home-line)] bg-[var(--home-panel)]">
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-white/[0.04]">
-                <th className="text-left p-4 sm:p-5 font-semibold text-white" style={{ fontSize: "16px" }}>Features</th>
-                <th className="text-center p-4 sm:p-5 font-semibold text-white" style={{ fontSize: "16px" }}>TRX Shop</th>
-                <th className="text-center p-4 sm:p-5 font-semibold text-neutral-400" style={{ fontSize: "16px" }}>Other Stores</th>
+                <th className="p-4 text-left text-[15px] font-semibold sm:p-5">Features</th>
+                <th className="p-4 text-center text-[15px] font-semibold text-[var(--home-accent)] sm:p-5">TRX Shop</th>
+                <th className="p-4 text-center text-[15px] font-semibold text-white/50 sm:p-5">Other Stores</th>
               </tr>
             </thead>
             <tbody>
-              {[
-                "Fast Delivery After Purchase",
-                "Genuine & Verified Products",
-                "Fair Pricing",
-                "Customer Support",
-              ].map((feature) => (
-                <tr key={feature} className="border-t border-white/10">
-                  <td className="p-4 sm:p-5 text-white" style={{ fontSize: "15px", fontWeight: 500 }}>{feature}</td>
-                  <td className="p-4 sm:p-5 text-center">
-                    <img src={greenCheckAsset.url} alt="Yes" className="inline-block w-6 h-6 transition-transform duration-200 hover:scale-125" />
+              {["Fast Delivery After Purchase", "Genuine & Verified Products", "Fair Pricing", "Customer Support"].map((feature) => (
+                <tr key={feature} className="border-t border-[var(--home-line)]">
+                  <td className="p-4 text-[15px] font-medium sm:p-5">{feature}</td>
+                  <td className="p-4 text-center sm:p-5">
+                    <img src={greenCheckAsset.url} alt="Yes" className="inline-block h-6 w-6 transition-transform duration-200 hover:scale-125" />
                   </td>
-                  <td className="p-4 sm:p-5 text-center">
-                    <img src={redCrossAsset.url} alt="No" className="inline-block w-6 h-6 transition-transform duration-200 hover:scale-125" />
+                  <td className="p-4 text-center sm:p-5">
+                    <img src={redCrossAsset.url} alt="No" className="inline-block h-6 w-6 transition-transform duration-200 hover:scale-125" />
                   </td>
                 </tr>
               ))}
@@ -578,97 +404,160 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="relative z-10 max-w-4xl sm:pt-20 md:pt-28 text-center mr-auto ml-auto pt-14 pb-12">
-
-        {/* Social proof */}
-
-        <div className="mb-6 flex items-center justify-center gap-4">
-
-          <div className="flex -space-x-3">
-
-            <img src={avatarMcp.url} alt="Client 1" className="h-9 w-9 rounded-full ring-2 ring-white/20 object-cover" />
-
-            <img src={avatarMaster.url} alt="Client 2" className="h-9 w-9 rounded-full ring-2 ring-white/20 object-cover" />
-
-            <img src={avatarGirl.url} alt="Client 3" className="h-9 w-9 rounded-full ring-2 ring-white/20 object-cover" />
-
-            <img src={avatarWoody.url} alt="Client 4" className="h-9 w-9 rounded-full ring-2 ring-white/20 object-cover" />
-
-
-
-          </div>
-
-          <div className="flex flex-col items-start">
-
-            <div className="flex items-center">
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 fill-white"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 fill-white"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 fill-white"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 fill-white"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 fill-white"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-
-            </div>
-
-            <p className="mt-1 text-xs font-medium text-white/70">100+&nbsp;</p>
-
-          </div>
-
-        </div>
-
-        <h2 className="max-w-5xl sm:text-5xl md:text-7xl text-4xl tracking-tighter mr-auto ml-auto">
-          Ready to
-          <span className="font-display-italic text-white tracking-tight">&nbsp;find&nbsp;</span>
-          your next&nbsp;
-          <br />
-          Digital Product
-        </h2>
-
-        <p className="max-w-2xl sm:text-lg text-base font-normal text-white/70 mt-6 mr-auto ml-auto">
-          Buy Original PC, PlayStation, and Xbox games at best prices — The software and subscriptions you actually use. 100% genuine Digital Download
+      {/* ============ PAYMENTS ============ */}
+      <section className="border-y border-[var(--home-line)] bg-black/40 py-12">
+        <h2 className="px-5 text-center text-2xl font-bold tracking-tight sm:text-3xl">Pay the way you want</h2>
+        <p className="mt-2 px-5 text-center text-sm text-white/60">
+          UPI, cards and net banking in rupees, or crypto if you prefer.
         </p>
-
-        <div className="flex flex-col gap-3 sm:flex-row mt-8 items-center justify-center">
-
-          <Link to="/games" className="group inline-flex overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] rounded-full pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative items-center justify-center">
-
-            {/* Spinning Border Beam (Visible on Hover) */}
-
-            <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#ffffff_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
-
-            {/* Default Static Border */}
-
-            <span className="absolute inset-0 rounded-full bg-zinc-800 transition-opacity duration-300 group-hover:opacity-0"></span>
-
-            {/* 3D Button Surface & Content */}
-
-            <span className="flex items-center justify-center gap-2 uppercase transition-colors duration-300 group-hover:text-white text-xs font-medium text-zinc-400 tracking-widest bg-gradient-to-b from-zinc-800 to-zinc-950 w-full h-full rounded-full pt-2.5 pr-6 pb-2.5 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">
-
-              <span className="relative z-10">SHOP NOW</span>
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5">
-
-                <path d="M5 12h14"></path>
-
-                <path d="m12 5 7 7-7 7"></path>
-
-              </svg>
-
-            </span>
-
-          </Link>
-
+        <div className="mt-7">
+          <Marquee speed={26} className="!mt-0">
+            {PAYMENT_METHODS.map((m, i) => (
+              <div key={i} className="shrink-0 px-2.5">
+                <span className="inline-flex items-center rounded-full border border-[var(--home-line)] bg-[var(--home-panel)] px-5 py-2.5 text-sm font-medium text-white/80">
+                  {m}
+                </span>
+              </div>
+            ))}
+          </Marquee>
         </div>
-
-        {/* Glow plate */}
-
       </section>
 
-    </>
+      {/* ============ REVIEWS ============ */}
+      {reviews && reviews.length > 0 && (
+        <section className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">What customers say</h2>
+            <p className="mt-3 text-sm text-white/60 sm:text-base">Real reviews from real orders.</p>
+          </div>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {reviews.map((r) => (
+              <div key={r.id} className="rounded-2xl border border-[var(--home-line)] bg-[var(--home-panel)] p-6">
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      size={15}
+                      className={i < Math.round(Number(r.rating) || 5) ? "fill-[var(--home-accent)] text-[var(--home-accent)]" : "text-white/20"}
+                    />
+                  ))}
+                </div>
+                <p className="mt-4 text-sm leading-relaxed text-white/75">{r.body}</p>
+                <div className="mt-5 flex items-center justify-between gap-3 text-xs text-white/50">
+                  <span className="inline-flex items-center gap-1.5 font-medium text-white/80">
+                    {r.author_name}
+                    {r.verified && <BadgeCheck size={14} className="text-[var(--home-accent)]" />}
+                  </span>
+                  <span>{r.time_label}</span>
+                </div>
+                {r.product_title && <p className="mt-2 truncate text-xs text-white/40">{r.product_title}</p>}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ============ FINAL CTA ============ */}
+      <section className="px-5 pb-20 sm:px-8">
+        <div className="home-hero-wash relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[var(--home-line)] px-6 py-16 text-center sm:py-20">
+          <div aria-hidden className="home-dots pointer-events-none absolute inset-0 opacity-[0.2]" />
+          <div className="relative">
+            <div className="mb-6 flex items-center justify-center gap-3">
+              <div className="flex -space-x-3">
+                {[avatarMcp.url, avatarMaster.url, avatarGirl.url, avatarWoody.url].map((src, i) => (
+                  <img key={i} src={src} alt="" className="h-9 w-9 rounded-full object-cover ring-2 ring-white/20" />
+                ))}
+              </div>
+              <div className="flex flex-col items-start">
+                <div className="flex">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} size={14} className="fill-[var(--home-accent)] text-[var(--home-accent)]" />
+                  ))}
+                </div>
+                <p className="mt-1 text-xs font-medium text-white/70">100+ happy customers</p>
+              </div>
+            </div>
+
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-5xl">
+              Ready to find your next <span className="home-accent-text">digital product?</span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm text-white/70 sm:text-base">
+              Browse the catalogue and get it delivered within seconds of paying.
+            </p>
+            <Link
+              to="/games"
+              className="group mt-8 inline-flex items-center justify-center gap-2.5 rounded-full bg-[var(--home-accent)] px-8 py-3.5 text-[15px] font-semibold text-black shadow-[0_10px_40px_-12px_rgba(62,226,83,0.7)] transition-transform hover:-translate-y-0.5"
+            >
+              Shop Now
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function ProductRow({
+  id,
+  title,
+  linkTo,
+  linkLabel,
+  pending,
+  products,
+}: {
+  id: string;
+  title: string;
+  linkTo: string;
+  linkLabel: string;
+  pending: boolean;
+  products: Array<{
+    id: string;
+    variantId: string;
+    slug: string;
+    title: string;
+    coverImage: string;
+    screenshots: string[];
+    priceCents: number;
+    oldPriceCents: number;
+    platforms: string[];
+  }>;
+}) {
+  if (!pending && products.length === 0) return null;
+  return (
+    <section id={id} className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14">
+      <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
+        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h2>
+        <Link
+          to={linkTo}
+          className="text-sm font-medium text-[var(--home-accent)] underline-offset-4 hover:underline"
+        >
+          {linkLabel}
+        </Link>
+      </div>
+      <HorizontalScroller>
+        {pending
+          ? Array.from({ length: 10 }).map((_, i) => (
+              <div key={`sk-${id}-${i}`} className="w-[42vw] shrink-0 sm:w-[28vw] lg:w-[21vw]">
+                <ProductCardSkeleton />
+              </div>
+            ))
+          : products.map((p) => (
+              <div key={p.id} className="w-[42vw] shrink-0 sm:w-[28vw] lg:w-[21vw]">
+                <HomeProductCard
+                  id={p.id}
+                  variantId={p.variantId}
+                  slug={p.slug || p.id}
+                  title={p.title}
+                  img={p.coverImage || p.screenshots[0] || ""}
+                  sale={Math.round(p.priceCents / 100)}
+                  regular={p.oldPriceCents > 0 ? Math.round(p.oldPriceCents / 100) : Math.round(p.priceCents / 100)}
+                  platform={(p.platforms[0] || "pc") as any}
+                />
+              </div>
+            ))}
+      </HorizontalScroller>
+    </section>
   );
 }
 
@@ -726,7 +615,6 @@ function HorizontalScroller({ children }: { children: React.ReactNode }) {
   };
 
   const onDown = (e: React.PointerEvent) => {
-    // Let native scrolling handle touch/pen — JS drag causes stutter on mobile
     if (e.pointerType !== "mouse") return;
     const el = ref.current;
     if (!el) return;
@@ -743,10 +631,6 @@ function HorizontalScroller({ children }: { children: React.ReactNode }) {
       velocity: 0,
       targetScroll: el.scrollLeft,
     };
-    // NOTE: don't capture the pointer here — capturing retargets the click
-    // event to this container and product links stop working. Capture only
-    // once an actual drag starts (see onMove).
-
   };
 
   const onMove = (e: React.PointerEvent) => {
@@ -769,12 +653,14 @@ function HorizontalScroller({ children }: { children: React.ReactNode }) {
     drag.current.targetScroll = drag.current.startScroll - dx;
     scheduleScroll();
   };
+
   const onUp = (e: React.PointerEvent) => {
     if (!drag.current.down) return;
     drag.current.down = false;
     try { ref.current?.releasePointerCapture(e.pointerId); } catch {}
     if (Math.abs(drag.current.velocity) > 0.5) startMomentum();
   };
+
   const onClickCapture = (e: React.MouseEvent) => {
     if (drag.current.moved) {
       e.preventDefault();
@@ -791,7 +677,7 @@ function HorizontalScroller({ children }: { children: React.ReactNode }) {
       onPointerUp={onUp}
       onPointerCancel={onUp}
       onClickCapture={onClickCapture}
-      className="flex gap-4 overflow-x-auto overflow-y-hidden pb-4 cursor-grab active:cursor-grabbing select-none [scrollbar-width:thin] [scroll-behavior:auto]"
+      className="flex cursor-grab select-none gap-4 overflow-x-auto overflow-y-hidden pb-4 [scroll-behavior:auto] [scrollbar-width:thin] active:cursor-grabbing"
       style={{ WebkitOverflowScrolling: "touch", overscrollBehaviorX: "contain" }}
     >
       {children}
@@ -848,19 +734,18 @@ function HomeProductCard({
 
   return (
     <Link to="/products/$id" params={{ id: slug }} className="group block content-in">
-      <div className="relative overflow-hidden bg-neutral-900 aspect-[3/4] rounded-sm card-tilt">
+      <div className="card-tilt relative aspect-[3/4] overflow-hidden rounded-xl border border-[var(--home-line)] bg-[var(--home-panel)]">
         <img
           src={img}
-          alt={`${title} game cover`}
+          alt={`${title} cover`}
           loading="lazy"
-          className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
         />
-        <span
-          className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full"
-          style={{ fontSize: "12px", fontWeight: 700, lineHeight: 1 }}
-        >
-          Sale
-        </span>
+        {regular > sale && (
+          <span className="absolute right-3 top-3 rounded-full bg-[var(--home-accent)] px-3 py-1 text-[12px] font-bold leading-none text-black">
+            -{Math.round(((regular - sale) / regular) * 100)}%
+          </span>
+        )}
         <button
           ref={btnRef}
           type="button"
@@ -868,26 +753,17 @@ function HomeProductCard({
           onClick={handleQuickAdd}
           disabled={adding}
           aria-busy={adding}
-          className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white text-neutral-900 rounded-full pl-3 pr-3.5 py-1.5 text-sm font-semibold shadow-md border border-neutral-200 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all hover:bg-neutral-100 disabled:cursor-not-allowed"
+          className="absolute bottom-3 right-3 inline-flex translate-y-1 items-center gap-1.5 rounded-full bg-white py-1.5 pl-3 pr-3.5 text-sm font-semibold text-neutral-900 opacity-0 shadow-md transition-all hover:bg-neutral-100 disabled:cursor-not-allowed group-hover:translate-y-0 group-hover:opacity-100"
         >
-          {adding ? <Loader2 size={18} className="animate-spin" /> : <img src={cartIconAsset.url} alt="" className="w-[18px] h-[18px]" />}
+          {adding ? <Loader2 size={18} className="animate-spin" /> : <img src={cartIconAsset.url} alt="" className="h-[18px] w-[18px]" />}
           <span>Add</span>
         </button>
       </div>
-      <h3
-        className="mt-3 text-white line-clamp-2"
-        style={{ fontSize: "16px", fontWeight: 500, lineHeight: "24px", letterSpacing: 0 }}
-      >
-        {title}
-      </h3>
+      <h3 className="mt-3 line-clamp-2 text-[15px] font-medium leading-6 text-white">{title}</h3>
       <div className="mt-1.5 flex items-baseline gap-2">
-        <span className="text-white" style={{ fontSize: "16px", fontWeight: 700, lineHeight: "24px" }}>
-          {format(sale * 100, { rs: true })}
-        </span>
+        <span className="text-base font-bold leading-6 text-white">{format(sale * 100, { rs: true })}</span>
         {regular > sale && (
-          <span className="text-neutral-500 line-through" style={{ fontSize: "14px", fontWeight: 400, lineHeight: "20px" }}>
-            {format(regular * 100, { rs: true })}
-          </span>
+          <span className="text-sm leading-5 text-white/40 line-through">{format(regular * 100, { rs: true })}</span>
         )}
       </div>
     </Link>
