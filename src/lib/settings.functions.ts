@@ -30,6 +30,18 @@ export const getPublicSettings = createServerFn({ method: "GET" }).handler(async
   return { usdInrRate };
 });
 
+/** Visitor country from the edge (Cloudflare) request headers. */
+export const getVisitorCountry = createServerFn({ method: "GET" }).handler(async () => {
+  const { getRequestHeader } = await import("@tanstack/react-start/server");
+  const raw =
+    getRequestHeader("cf-ipcountry") ||
+    getRequestHeader("x-vercel-ip-country") ||
+    getRequestHeader("x-country-code") ||
+    "";
+  const country = raw.trim().toUpperCase();
+  return { country: /^[A-Z]{2}$/.test(country) && country !== "XX" ? country : null };
+});
+
 /** Admin-only write of the USD rate. */
 export const adminUpdateUsdRate = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
