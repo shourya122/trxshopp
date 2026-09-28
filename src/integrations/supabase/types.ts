@@ -510,6 +510,135 @@ export type Database = {
         }
         Relationships: []
       }
+      supplier_items: {
+        Row: {
+          cost_cents: number
+          created_at: string
+          edition_name: string
+          id: string
+          product_id: string
+          supplier_id: string
+        }
+        Insert: {
+          cost_cents?: number
+          created_at?: string
+          edition_name?: string
+          id?: string
+          product_id: string
+          supplier_id: string
+        }
+        Update: {
+          cost_cents?: number
+          created_at?: string
+          edition_name?: string
+          id?: string
+          product_id?: string
+          supplier_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplier_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_items_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      supplier_restocks: {
+        Row: {
+          cost_cents: number
+          created_at: string
+          edition_name: string
+          id: string
+          notes: string
+          product_id: string | null
+          quantity: number
+          restocked_at: string
+          supplier_id: string | null
+        }
+        Insert: {
+          cost_cents?: number
+          created_at?: string
+          edition_name?: string
+          id?: string
+          notes?: string
+          product_id?: string | null
+          quantity?: number
+          restocked_at?: string
+          supplier_id?: string | null
+        }
+        Update: {
+          cost_cents?: number
+          created_at?: string
+          edition_name?: string
+          id?: string
+          notes?: string
+          product_id?: string | null
+          quantity?: number
+          restocked_at?: string
+          supplier_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplier_restocks_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_restocks_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      suppliers: {
+        Row: {
+          active: boolean
+          contact_discord: string
+          contact_email: string
+          created_at: string
+          id: string
+          name: string
+          notes: string
+          phone: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          contact_discord?: string
+          contact_email?: string
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string
+          phone?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          contact_discord?: string
+          contact_email?: string
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string
+          phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       suppressed_emails: {
         Row: {
           created_at: string
