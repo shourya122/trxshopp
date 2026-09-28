@@ -3,6 +3,7 @@ export type Platform = "pc" | "ps" | "xbox";
 export interface Edition {
   name: string;
   priceCents: number;
+  outOfStock?: boolean;
 }
 
 /** Optional per-product choice selector (Shopify-style variant options). */

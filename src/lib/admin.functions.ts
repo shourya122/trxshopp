@@ -262,6 +262,7 @@ const productPatch = z.object({
   editions: z.array(z.object({
     name: z.string().trim().min(1).max(60),
     price_cents: z.number().int().min(0),
+    out_of_stock: z.boolean().optional(),
   })).max(20).optional(),
   editions_label: z.string().trim().max(60).optional(),
   option_groups: z.array(z.object({
