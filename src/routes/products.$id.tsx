@@ -187,7 +187,7 @@ function ProductPage() {
   const sale = Math.round(effectiveCents / 100);
   const regular = product.oldPriceCents > 0 ? Math.round(product.oldPriceCents / 100) : sale;
   const related = (allProducts || []).filter((p) => p.id !== product.id).slice(0, 4);
-  const outOfStock = typeof product.stock === "number" && product.stock <= 0;
+  const outOfStock = (typeof product.stock === "number" && product.stock <= 0) || !!activeEdition?.outOfStock;
 
   const numericId = Array.from(product.id).reduce((a, c) => a + c.charCodeAt(0), 0);
   const handleAddToCart = async () => {
