@@ -38,7 +38,7 @@ export type EditableProduct = {
   active?: boolean | null;
   featured?: boolean | null;
   badge?: string | null;
-  editions?: { name: string; price_cents: number; out_of_stock?: boolean }[] | null;
+  editions?: { name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null }[] | null;
   editions_label?: string | null;
 
 
@@ -136,7 +136,7 @@ export function ProductEditDialog({ product, onClose }: Props) {
   };
 
   const editions = form.editions ?? [];
-  const updateEdition = (i: number, patch: Partial<{ name: string; price_cents: number; out_of_stock?: boolean }>) => {
+  const updateEdition = (i: number, patch: Partial<{ name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null }>) => {
     const next = editions.map((e, idx) => (idx === i ? { ...e, ...patch } : e));
     set("editions", next);
   };
@@ -174,7 +174,16 @@ export function ProductEditDialog({ product, onClose }: Props) {
       featured: !!form.featured,
       badge: form.badge ?? "",
       editions: editions
-        .map((e) => ({ name: e.name.trim(), price_cents: Math.max(0, Math.round(Number(e.price_cents) || 0)), out_of_stock: !!e.out_of_stock }))
+        .map((e) => {
+          const hasStock = e.stock !== null && e.stock !== undefined && Number.isFinite(Number(e.stock));
+          const stock = hasStock ? Math.max(0, Math.floor(Number(e.stock))) : null;
+          return {
+            name: e.name.trim(),
+            price_cents: Math.max(0, Math.round(Number(e.price_cents) || 0)),
+            out_of_stock: !!e.out_of_stock || stock === 0,
+            stock,
+          };
+        })
         .filter((e) => e.name.length > 0),
       editions_label: (form.editions_label ?? "").trim(),
     };
