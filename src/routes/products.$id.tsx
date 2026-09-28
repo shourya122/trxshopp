@@ -323,7 +323,9 @@ function ProductPage() {
               </div>
               <div className="flex flex-wrap gap-2">
                 {editions.map((e) => {
-                  const oos = !!e.outOfStock;
+                  const left = typeof e.stock === "number" ? e.stock : null;
+                  const oos = !!e.outOfStock || left === 0;
+                  const low = !oos && left !== null && left <= 5;
                   const on = e.name === selectedEdition && !oos;
                   return (
                     <button
@@ -331,8 +333,12 @@ function ProductPage() {
                       type="button"
                       disabled={oos}
                       onClick={() => !oos && setSelectedEdition(e.name)}
-                      className={`relative isolate min-w-[170px] rounded-full border border-neutral-700 px-6 py-3.5 text-[15px] font-semibold transition-colors duration-300 ${oos ? "cursor-not-allowed opacity-40 line-through" : ""}`}
-                      title={oos ? "Out of stock" : undefined}
+                      className={`relative isolate min-w-[170px] rounded-full border px-6 py-3.5 text-[15px] font-semibold transition-colors duration-300 ${
+                        oos
+                          ? "cursor-not-allowed border-red-500/60 bg-red-500/10 text-red-400"
+                          : "border-neutral-700"
+                      }`}
+                      title={oos ? "Out of stock" : left !== null ? `${left} left in stock` : undefined}
                     >
                       {on && (
                         <motion.span
@@ -341,12 +347,23 @@ function ProductPage() {
                           className="absolute inset-0 -z-10 rounded-full bg-white"
                         />
                       )}
-                      <span className={on ? "text-black" : "text-neutral-300"}>
-                        {e.name}
-                        <span className={`ml-1.5 font-normal ${on ? "text-black" : "text-neutral-500"}`}>
-                          {oos ? "Out of stock" : format(e.priceCents)}
+                      <span className={oos ? "text-red-400" : on ? "text-black" : "text-neutral-300"}>
+                        <span className={oos ? "line-through decoration-red-500/70" : ""}>{e.name}</span>
+                        <span className={`ml-1.5 font-normal ${oos ? "text-red-400" : on ? "text-black" : "text-neutral-500"}`}>
+                          {oos ? "Sold out" : format(e.priceCents)}
                         </span>
                       </span>
+                      {!oos && left !== null && (
+                        <span
+                          className={`mt-0.5 block text-[11px] font-semibold ${
+                            low
+                              ? on ? "text-red-600" : "text-red-400"
+                              : on ? "text-neutral-600" : "text-emerald-400"
+                          }`}
+                        >
+                          {low ? `Only ${left} left` : `${left} in stock`}
+                        </span>
+                      )}
                     </button>
                   );
                 })}
