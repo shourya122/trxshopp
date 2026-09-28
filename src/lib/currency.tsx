@@ -1,11 +1,13 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { DEFAULT_USD_INR_RATE, getPublicSettings } from "@/lib/settings.functions";
+import { DEFAULT_USD_INR_RATE, getPublicSettings, getVisitorCountry } from "@/lib/settings.functions";
 
 export type Currency = "INR" | "USD";
 
 const STORAGE_KEY = "trx-currency";
+/** Visitors from these countries see rupees by default; everyone else sees dollars. */
+const INR_COUNTRIES = new Set(["IN", "NP", "BD", "LK"]);
 
 export type FormatOpts = {
   /** Use the "Rs. 599.00" style instead of "₹599" (INR only). */
@@ -46,14 +48,25 @@ function usd(cents: number, rate: number) {
 export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const [currency, setCurrencyState] = useState<Currency>("INR");
 
+  const countryFn = useServerFn(getVisitorCountry);
   useEffect(() => {
+    let saved: string | null = null;
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved === "USD" || saved === "INR") setCurrencyState(saved);
+      saved = localStorage.getItem(STORAGE_KEY);
     } catch {
       /* ignore */
     }
-  }, []);
+    if (saved === "USD" || saved === "INR") {
+      setCurrencyState(saved);
+      return;
+    }
+    // No manual choice yet: pick by visitor location.
+    countryFn()
+      .then(({ country }) => {
+        if (country && !INR_COUNTRIES.has(country)) setCurrencyState("USD");
+      })
+      .catch(() => {});
+  }, [countryFn]);
 
   const setCurrency = useCallback((c: Currency) => {
     setCurrencyState(c);
