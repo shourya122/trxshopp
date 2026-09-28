@@ -461,7 +461,8 @@ export function ProductEditDialog({ product, onClose }: Props) {
             <div className="rounded-xl border border-white/[0.08] bg-[#111113] p-4">
               <div className="text-[13px] font-semibold text-white">Variants</div>
               <p className="mt-1 text-[11.5px] text-[#71717A]">
-                Optional. Add editions and their prices. The label below is shown above the selector on the product
+                Optional. Add editions, their prices and how many are left in stock. Leave stock blank to not track it;
+                set it to 0 to mark that edition sold out. The label below is shown above the selector on the product
                 page — leave it blank to show “Edition”.
               </p>
 
