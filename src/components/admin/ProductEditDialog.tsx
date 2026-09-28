@@ -482,11 +482,11 @@ export function ProductEditDialog({ product, onClose }: Props) {
                       </p>
                     )}
                     {editions.map((e, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <div className="flex-1">
+                      <div key={i} className="flex flex-wrap items-center gap-2">
+                        <div className="min-w-0 flex-1">
                           <Input value={e.name} onChange={(v) => updateEdition(i, { name: v })} placeholder="Edition name (e.g. Standard)" />
                         </div>
-                        <div className="w-32">
+                        <div className="w-28 shrink-0">
                           <Input
                             type="number"
                             value={((e.price_cents ?? 0) / 100).toString()}
@@ -494,13 +494,25 @@ export function ProductEditDialog({ product, onClose }: Props) {
                             placeholder="Price (₹)"
                           />
                         </div>
+                        <div className="w-24 shrink-0">
+                          <Input
+                            type="number"
+                            value={e.stock === null || e.stock === undefined ? "" : String(e.stock)}
+                            onChange={(v) =>
+                              updateEdition(i, {
+                                stock: v.trim() === "" ? null : Math.max(0, Math.floor(Number(v) || 0)),
+                              })
+                            }
+                            placeholder="Stock"
+                          />
+                        </div>
                         <button
                           type="button"
                           onClick={() => updateEdition(i, { out_of_stock: !e.out_of_stock })}
                           title="Toggle stock for this edition"
-                          className={`h-8 shrink-0 rounded-md border px-2.5 text-[11px] font-medium transition ${e.out_of_stock ? "border-[#EF4444]/40 bg-[#EF4444]/[0.1] text-[#f87171]" : "border-[#22c55e]/30 bg-[#22c55e]/[0.08] text-[#4ade80]"}`}
+                          className={`h-8 shrink-0 rounded-md border px-2.5 text-[11px] font-medium transition ${e.out_of_stock || e.stock === 0 ? "border-[#EF4444]/40 bg-[#EF4444]/[0.1] text-[#f87171]" : "border-[#22c55e]/30 bg-[#22c55e]/[0.08] text-[#4ade80]"}`}
                         >
-                          {e.out_of_stock ? "Out of stock" : "In stock"}
+                          {e.out_of_stock || e.stock === 0 ? "Out of stock" : "In stock"}
                         </button>
                         <button onClick={() => removeEdition(i)} className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-white/[0.06] text-[#f87171] hover:bg-[#EF4444]/[0.08]">
                           <Trash2 className="h-3.5 w-3.5" />
