@@ -32,16 +32,27 @@ type Row = {
   updated_at: string;
 };
 
-function parseEditions(raw: unknown): { name: string; priceCents: number; outOfStock: boolean }[] {
+function parseEditions(raw: unknown): { name: string; priceCents: number; outOfStock: boolean; stock: number | null }[] {
   if (!Array.isArray(raw)) return [];
-  const out: { name: string; priceCents: number; outOfStock: boolean }[] = [];
+  const out: { name: string; priceCents: number; outOfStock: boolean; stock: number | null }[] = [];
   for (const e of raw) {
     if (!e || typeof e !== "object") continue;
     const rec = e as Record<string, unknown>;
     const name = typeof rec.name === "string" ? rec.name.trim() : "";
     const priceCents = Number(rec.price_cents ?? rec.priceCents);
     if (!name || !Number.isFinite(priceCents) || priceCents < 0) continue;
-    out.push({ name, priceCents: Math.round(priceCents), outOfStock: rec.out_of_stock === true || rec.outOfStock === true });
+    const rawStock = rec.stock;
+    const stockNum = Number(rawStock);
+    const stock =
+      rawStock === null || rawStock === undefined || rawStock === "" || !Number.isFinite(stockNum)
+        ? null
+        : Math.max(0, Math.floor(stockNum));
+    out.push({
+      name,
+      priceCents: Math.round(priceCents),
+      outOfStock: rec.out_of_stock === true || rec.outOfStock === true || stock === 0,
+      stock,
+    });
   }
   return out;
 }

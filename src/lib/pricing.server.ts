@@ -94,7 +94,11 @@ export async function resolvePricing(
       if (!match) {
         return { ok: false, error: `Edition unavailable: ${it.edition_name}` };
       }
-      if ((match as { out_of_stock?: boolean }).out_of_stock === true) {
+      const matchStock = Number((match as { stock?: unknown }).stock);
+      if (
+        (match as { out_of_stock?: boolean }).out_of_stock === true ||
+        (Number.isFinite(matchStock) && matchStock <= 0)
+      ) {
         return { ok: false, error: `${it.edition_name} is out of stock` };
       }
       unitCents = Number(match.price_cents) || unitCents;

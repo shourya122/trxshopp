@@ -4,6 +4,8 @@ export interface Edition {
   name: string;
   priceCents: number;
   outOfStock?: boolean;
+  /** Optional per-edition stock count. null/undefined = not tracked. */
+  stock?: number | null;
 }
 
 /** Optional per-product choice selector (Shopify-style variant options). */

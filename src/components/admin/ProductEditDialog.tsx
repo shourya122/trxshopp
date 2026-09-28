@@ -38,7 +38,7 @@ export type EditableProduct = {
   active?: boolean | null;
   featured?: boolean | null;
   badge?: string | null;
-  editions?: { name: string; price_cents: number; out_of_stock?: boolean }[] | null;
+  editions?: { name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null }[] | null;
   editions_label?: string | null;
 
 
@@ -136,7 +136,7 @@ export function ProductEditDialog({ product, onClose }: Props) {
   };
 
   const editions = form.editions ?? [];
-  const updateEdition = (i: number, patch: Partial<{ name: string; price_cents: number; out_of_stock?: boolean }>) => {
+  const updateEdition = (i: number, patch: Partial<{ name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null }>) => {
     const next = editions.map((e, idx) => (idx === i ? { ...e, ...patch } : e));
     set("editions", next);
   };
@@ -174,7 +174,16 @@ export function ProductEditDialog({ product, onClose }: Props) {
       featured: !!form.featured,
       badge: form.badge ?? "",
       editions: editions
-        .map((e) => ({ name: e.name.trim(), price_cents: Math.max(0, Math.round(Number(e.price_cents) || 0)), out_of_stock: !!e.out_of_stock }))
+        .map((e) => {
+          const hasStock = e.stock !== null && e.stock !== undefined && Number.isFinite(Number(e.stock));
+          const stock = hasStock ? Math.max(0, Math.floor(Number(e.stock))) : null;
+          return {
+            name: e.name.trim(),
+            price_cents: Math.max(0, Math.round(Number(e.price_cents) || 0)),
+            out_of_stock: !!e.out_of_stock || stock === 0,
+            stock,
+          };
+        })
         .filter((e) => e.name.length > 0),
       editions_label: (form.editions_label ?? "").trim(),
     };
@@ -452,7 +461,8 @@ export function ProductEditDialog({ product, onClose }: Props) {
             <div className="rounded-xl border border-white/[0.08] bg-[#111113] p-4">
               <div className="text-[13px] font-semibold text-white">Variants</div>
               <p className="mt-1 text-[11.5px] text-[#71717A]">
-                Optional. Add editions and their prices. The label below is shown above the selector on the product
+                Optional. Add editions, their prices and how many are left in stock. Leave stock blank to not track it;
+                set it to 0 to mark that edition sold out. The label below is shown above the selector on the product
                 page — leave it blank to show “Edition”.
               </p>
 
@@ -473,11 +483,11 @@ export function ProductEditDialog({ product, onClose }: Props) {
                       </p>
                     )}
                     {editions.map((e, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <div className="flex-1">
+                      <div key={i} className="flex flex-wrap items-center gap-2">
+                        <div className="min-w-0 flex-1">
                           <Input value={e.name} onChange={(v) => updateEdition(i, { name: v })} placeholder="Edition name (e.g. Standard)" />
                         </div>
-                        <div className="w-32">
+                        <div className="w-28 shrink-0">
                           <Input
                             type="number"
                             value={((e.price_cents ?? 0) / 100).toString()}
@@ -485,13 +495,25 @@ export function ProductEditDialog({ product, onClose }: Props) {
                             placeholder="Price (₹)"
                           />
                         </div>
+                        <div className="w-24 shrink-0">
+                          <Input
+                            type="number"
+                            value={e.stock === null || e.stock === undefined ? "" : String(e.stock)}
+                            onChange={(v) =>
+                              updateEdition(i, {
+                                stock: v.trim() === "" ? null : Math.max(0, Math.floor(Number(v) || 0)),
+                              })
+                            }
+                            placeholder="Stock"
+                          />
+                        </div>
                         <button
                           type="button"
                           onClick={() => updateEdition(i, { out_of_stock: !e.out_of_stock })}
                           title="Toggle stock for this edition"
-                          className={`h-8 shrink-0 rounded-md border px-2.5 text-[11px] font-medium transition ${e.out_of_stock ? "border-[#EF4444]/40 bg-[#EF4444]/[0.1] text-[#f87171]" : "border-[#22c55e]/30 bg-[#22c55e]/[0.08] text-[#4ade80]"}`}
+                          className={`h-8 shrink-0 rounded-md border px-2.5 text-[11px] font-medium transition ${e.out_of_stock || e.stock === 0 ? "border-[#EF4444]/40 bg-[#EF4444]/[0.1] text-[#f87171]" : "border-[#22c55e]/30 bg-[#22c55e]/[0.08] text-[#4ade80]"}`}
                         >
-                          {e.out_of_stock ? "Out of stock" : "In stock"}
+                          {e.out_of_stock || e.stock === 0 ? "Out of stock" : "In stock"}
                         </button>
                         <button onClick={() => removeEdition(i)} className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-white/[0.06] text-[#f87171] hover:bg-[#EF4444]/[0.08]">
                           <Trash2 className="h-3.5 w-3.5" />
