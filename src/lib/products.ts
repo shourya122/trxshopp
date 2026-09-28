@@ -32,16 +32,16 @@ type Row = {
   updated_at: string;
 };
 
-function parseEditions(raw: unknown): { name: string; priceCents: number }[] {
+function parseEditions(raw: unknown): { name: string; priceCents: number; outOfStock: boolean }[] {
   if (!Array.isArray(raw)) return [];
-  const out: { name: string; priceCents: number }[] = [];
+  const out: { name: string; priceCents: number; outOfStock: boolean }[] = [];
   for (const e of raw) {
     if (!e || typeof e !== "object") continue;
     const rec = e as Record<string, unknown>;
     const name = typeof rec.name === "string" ? rec.name.trim() : "";
     const priceCents = Number(rec.price_cents ?? rec.priceCents);
     if (!name || !Number.isFinite(priceCents) || priceCents < 0) continue;
-    out.push({ name, priceCents: Math.round(priceCents) });
+    out.push({ name, priceCents: Math.round(priceCents), outOfStock: rec.out_of_stock === true || rec.outOfStock === true });
   }
   return out;
 }

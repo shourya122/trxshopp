@@ -130,10 +130,13 @@ function ProductPage() {
 
   const editions = product?.editions ?? [];
   const hasEditions = editions.length > 0;
-  const [selectedEdition, setSelectedEdition] = useState<string>(editions[0]?.name ?? "");
+  const [selectedEdition, setSelectedEdition] = useState<string>((editions.find((e) => !e.outOfStock) ?? editions[0])?.name ?? "");
   useEffect(() => {
-    if (hasEditions && !editions.find((e) => e.name === selectedEdition)) {
-      setSelectedEdition(editions[0].name);
+    const cur = editions.find((e) => e.name === selectedEdition);
+    if (hasEditions && (!cur || cur.outOfStock)) {
+      const firstIn = editions.find((e) => !e.outOfStock);
+      if (firstIn && firstIn.name !== selectedEdition) setSelectedEdition(firstIn.name);
+      else if (!cur) setSelectedEdition(editions[0].name);
     }
     if (!hasEditions && selectedEdition) setSelectedEdition("");
   }, [hasEditions, editions, selectedEdition]);
@@ -320,13 +323,16 @@ function ProductPage() {
               </div>
               <div className="flex flex-wrap gap-2">
                 {editions.map((e) => {
-                  const on = e.name === selectedEdition;
+                  const oos = !!e.outOfStock;
+                  const on = e.name === selectedEdition && !oos;
                   return (
                     <button
                       key={e.name}
                       type="button"
-                      onClick={() => setSelectedEdition(e.name)}
-                      className="relative isolate min-w-[170px] rounded-full border border-neutral-700 px-6 py-3.5 text-[15px] font-semibold transition-colors duration-300"
+                      disabled={oos}
+                      onClick={() => !oos && setSelectedEdition(e.name)}
+                      className={`relative isolate min-w-[170px] rounded-full border border-neutral-700 px-6 py-3.5 text-[15px] font-semibold transition-colors duration-300 ${oos ? "cursor-not-allowed opacity-40 line-through" : ""}`}
+                      title={oos ? "Out of stock" : undefined}
                     >
                       {on && (
                         <motion.span
@@ -338,7 +344,7 @@ function ProductPage() {
                       <span className={on ? "text-black" : "text-neutral-300"}>
                         {e.name}
                         <span className={`ml-1.5 font-normal ${on ? "text-black" : "text-neutral-500"}`}>
-                          {format(e.priceCents)}
+                          {oos ? "Out of stock" : format(e.priceCents)}
                         </span>
                       </span>
                     </button>

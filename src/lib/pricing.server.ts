@@ -94,6 +94,9 @@ export async function resolvePricing(
       if (!match) {
         return { ok: false, error: `Edition unavailable: ${it.edition_name}` };
       }
+      if ((match as { out_of_stock?: boolean }).out_of_stock === true) {
+        return { ok: false, error: `${it.edition_name} is out of stock` };
+      }
       unitCents = Number(match.price_cents) || unitCents;
       editionName = match.name as string;
     }
