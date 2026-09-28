@@ -32,6 +32,7 @@ import { Route as GamesPlaystationGamesRouteImport } from './routes/games.playst
 import { Route as GamesAllRouteImport } from './routes/games.all'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as AdminSupportRouteImport } from './routes/admin.support'
+import { Route as AdminSuppliersRouteImport } from './routes/admin.suppliers'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminReviewsRouteImport } from './routes/admin.reviews'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
@@ -166,6 +167,11 @@ const AdminSupportRoute = AdminSupportRouteImport.update({
   path: '/support',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSuppliersRoute = AdminSuppliersRouteImport.update({
+  id: '/suppliers',
+  path: '/suppliers',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -284,6 +290,7 @@ export interface FileRoutesByFullPath {
   '/admin/products': typeof AdminProductsRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/suppliers': typeof AdminSuppliersRoute
   '/admin/support': typeof AdminSupportRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/games/all': typeof GamesAllRoute
@@ -326,6 +333,7 @@ export interface FileRoutesByTo {
   '/admin/products': typeof AdminProductsRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/suppliers': typeof AdminSuppliersRoute
   '/admin/support': typeof AdminSupportRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/games/all': typeof GamesAllRoute
@@ -370,6 +378,7 @@ export interface FileRoutesById {
   '/admin/products': typeof AdminProductsRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/suppliers': typeof AdminSuppliersRoute
   '/admin/support': typeof AdminSupportRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/games/all': typeof GamesAllRoute
@@ -415,6 +424,7 @@ export interface FileRouteTypes {
     | '/admin/products'
     | '/admin/reviews'
     | '/admin/settings'
+    | '/admin/suppliers'
     | '/admin/support'
     | '/email/unsubscribe'
     | '/games/all'
@@ -457,6 +467,7 @@ export interface FileRouteTypes {
     | '/admin/products'
     | '/admin/reviews'
     | '/admin/settings'
+    | '/admin/suppliers'
     | '/admin/support'
     | '/email/unsubscribe'
     | '/games/all'
@@ -500,6 +511,7 @@ export interface FileRouteTypes {
     | '/admin/products'
     | '/admin/reviews'
     | '/admin/settings'
+    | '/admin/suppliers'
     | '/admin/support'
     | '/email/unsubscribe'
     | '/games/all'
@@ -719,6 +731,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSupportRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/suppliers': {
+      id: '/admin/suppliers'
+      path: '/suppliers'
+      fullPath: '/admin/suppliers'
+      preLoaderRoute: typeof AdminSuppliersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/settings': {
       id: '/admin/settings'
       path: '/settings'
@@ -857,6 +876,7 @@ interface AdminRouteChildren {
   AdminProductsRoute: typeof AdminProductsRoute
   AdminReviewsRoute: typeof AdminReviewsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSuppliersRoute: typeof AdminSuppliersRoute
   AdminSupportRoute: typeof AdminSupportRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -870,6 +890,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminProductsRoute: AdminProductsRoute,
   AdminReviewsRoute: AdminReviewsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminSuppliersRoute: AdminSuppliersRoute,
   AdminSupportRoute: AdminSupportRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
