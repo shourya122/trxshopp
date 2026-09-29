@@ -183,7 +183,7 @@ export function Header() {
 
 
       {/* Main bar */}
-      <div className="w-full px-3 sm:px-8 h-12 sm:h-16 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-4">
+      <div className="relative w-full px-3 sm:px-8 h-12 sm:h-16 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-4">
 
         {/* Left: nav (desktop) / menu btn (mobile) */}
         <nav className="hidden sm:flex min-w-0 items-center gap-4 lg:gap-8 self-center h-full">
@@ -219,7 +219,7 @@ export function Header() {
         <Link
           to="/"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="flex min-w-0 items-center justify-self-center"
+          className="absolute left-1/2 top-1/2 flex min-w-0 -translate-x-1/2 -translate-y-1/2 items-center"
         >
           <img src={trxshopLogo} alt="TRXSHOP logo" className="h-10 sm:h-20 w-auto max-w-full" />
         </Link>
