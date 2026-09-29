@@ -335,7 +335,6 @@ export function ProductEditDialog({ product, onClose }: Props) {
             </Field>
 
 
-            {(() => { const hasEditions = (form.editions ?? []).length > 0; return null; })()}
             <div className={`grid grid-cols-2 gap-3 ${(form.editions ?? []).length > 0 ? "sm:grid-cols-3" : "sm:grid-cols-4"}`}>
               <Field label="Price (₹)"><Input type="number" value={((form.price_cents ?? 0) / 100).toString()} onChange={(v) => set("price_cents", Math.round((Number(v) || 0) * 100))} /></Field>
               <Field label="Compare at (₹)"><Input type="number" value={((form.old_price_cents ?? 0) / 100).toString()} onChange={(v) => set("old_price_cents", Math.round((Number(v) || 0) * 100))} /></Field>
