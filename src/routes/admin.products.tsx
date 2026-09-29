@@ -113,6 +113,44 @@ function Products() {
     );
   };
 
+  const bulkStock = async (inStock: boolean) => {
+    const targets = rows.filter((p) => selected.has(p.id as string));
+    if (!targets.length) return;
+    toastPromise(
+      (async () => {
+        for (const p of targets) {
+          const editions = Array.isArray(p.editions) ? (p.editions as { name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null }[]) : [];
+          const patch: Record<string, unknown> = editions.length
+            ? {
+                editions: editions.map((e) => ({
+                  ...e,
+                  out_of_stock: !inStock,
+                  stock: inStock ? (e.stock && e.stock > 0 ? e.stock : 999) : 0,
+                })),
+              }
+            : { stock: inStock ? 999 : 0 };
+          try { await updateFn({ data: { id: p.id as string, patch } }); } catch { /* ignore */ }
+        }
+        setSelected(new Set());
+        invalidate();
+      })(),
+      {
+        loading: inStock ? `Marking ${targets.length} in stock…` : `Marking ${targets.length} sold out…`,
+        success: inStock ? "Marked in stock" : "Marked sold out",
+        error: (e) => (e as Error).message,
+      },
+    );
+  };
+
+  const allFilteredSelected = filtered.length > 0 && filtered.every((p) => selected.has(p.id as string));
+  const toggleAll = () => {
+    if (allFilteredSelected) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(filtered.map((p) => p.id as string)));
+    }
+  };
+
   return (
     <div>
       <PageHeader
@@ -145,8 +183,10 @@ function Products() {
         </div>
 
         {selected.size > 0 && (
-          <div className="flex items-center gap-2 border-b border-white/[0.06] bg-[#2563EB]/[0.07] px-5 py-2 text-[12px]">
+          <div className="flex flex-wrap items-center gap-2 border-b border-white/[0.06] bg-[#2563EB]/[0.07] px-5 py-2 text-[12px]">
             <span className="text-white">{selected.size} selected</span>
+            <button onClick={() => bulkStock(true)} className="rounded-md px-2 py-1 text-[#4ade80] hover:bg-[#22C55E]/[0.1]">Mark in stock</button>
+            <button onClick={() => bulkStock(false)} className="rounded-md px-2 py-1 text-[#fbbf24] hover:bg-[#F59E0B]/[0.1]">Mark sold out</button>
             <button onClick={bulkDelete} className="rounded-md px-2 py-1 text-[#f87171] hover:bg-[#EF4444]/[0.1]">Delete</button>
             <button onClick={() => setSelected(new Set())} className="ml-auto rounded-md px-2 py-1 text-[#A1A1AA] hover:bg-white/[0.04] hover:text-white">Clear</button>
           </div>
@@ -156,7 +196,9 @@ function Products() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/[0.04] text-left text-[11px] uppercase tracking-wider text-[#52525B]">
-                <th className="w-10 px-5 py-2.5"></th>
+                <th className="w-10 px-5 py-2.5">
+                  <input type="checkbox" checked={allFilteredSelected} onChange={toggleAll} title="Select all" className="h-3.5 w-3.5 cursor-pointer rounded border-white/20 bg-transparent accent-[#2563EB]" />
+                </th>
                 <th className="px-3 py-2.5 font-medium">Product</th>
                 <th className="px-3 py-2.5 font-medium">Category</th>
                 <th className="px-3 py-2.5 font-medium">Price</th>
