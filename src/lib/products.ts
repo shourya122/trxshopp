@@ -14,6 +14,7 @@ type Row = {
   cover_image: string | null;
   screenshots: string[] | null;
   platforms: string[] | null;
+  category: string | null;
   genre: string | null;
   developer: string | null;
   publisher: string | null;
@@ -105,6 +106,7 @@ function rowToProduct(r: Row): Product {
     releaseDate: r.release_date ?? "",
     languages: r.languages ?? "English",
     platforms: ((r.platforms ?? ["pc"]) as Platform[]),
+    category: r.category ?? "",
     coverImage: r.cover_image ?? "",
     screenshots: r.screenshots ?? [],
     priceCents: r.price_cents,
