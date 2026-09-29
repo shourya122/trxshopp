@@ -459,7 +459,11 @@ function HomePage() {
                 </div>
               ))
             : (fsProducts || [])
-                .filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "pc"))
+                .filter((p) => {
+                  const cat = (p.category || "").trim().toLowerCase();
+                  if (cat) return cat === "pc";
+                  return (p.platforms || []).some((pl) => String(pl).toLowerCase() === "pc");
+                })
                 .slice()
                 .sort((a, b) => (b.oldPriceCents - b.priceCents) - (a.oldPriceCents - a.priceCents))
                 .slice(0, 20)
@@ -512,7 +516,11 @@ function HomePage() {
                 </div>
               ))
             : (fsProducts || [])
-                .filter((p) => (p.platforms || []).some((pl) => String(pl).toLowerCase() === "ps"))
+                .filter((p) => {
+                  const cat = (p.category || "").trim().toLowerCase();
+                  if (cat) return cat === "ps";
+                  return (p.platforms || []).some((pl) => String(pl).toLowerCase() === "ps");
+                })
                 .slice(0, 20)
                 .map((p) => {
                   const sale = Math.round(p.priceCents / 100);
