@@ -142,7 +142,7 @@ function HomePage() {
   const { add } = useCart();
   const { data: fsProducts, isPending: productsPending } = useQuery({
     queryKey: ["products", "active", "home"],
-    queryFn: () => listProducts({ activeOnly: true, max: 80 }),
+    queryFn: () => listProducts({ activeOnly: true, max: 400 }),
     staleTime: 30_000,
   });
 
