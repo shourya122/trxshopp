@@ -63,7 +63,18 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
     // No manual choice yet: pick by visitor location.
     countryFn()
       .then(({ country }) => {
-        if (country && !INR_COUNTRIES.has(country)) setCurrencyState("USD");
+        if (country) {
+          if (!INR_COUNTRIES.has(country)) setCurrencyState("USD");
+          return;
+        }
+        // Header unavailable (e.g. some hosts): infer from device timezone.
+        try {
+          const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+          const inrTz = ["Asia/Kolkata", "Asia/Calcutta", "Asia/Kathmandu", "Asia/Dhaka", "Asia/Colombo"];
+          if (tz && !inrTz.includes(tz)) setCurrencyState("USD");
+        } catch {
+          /* ignore */
+        }
       })
       .catch(() => {});
   }, [countryFn]);
