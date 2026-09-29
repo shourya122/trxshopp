@@ -37,6 +37,7 @@ export interface Product {
   releaseDate: string;
   languages: string;
   platforms: Platform[];
+  category: string;
   coverImage: string;
   screenshots: string[];
   priceCents: number;

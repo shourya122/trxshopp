@@ -14,6 +14,7 @@ type Row = {
   cover_image: string | null;
   screenshots: string[] | null;
   platforms: string[] | null;
+  category: string | null;
   genre: string | null;
   developer: string | null;
   publisher: string | null;
