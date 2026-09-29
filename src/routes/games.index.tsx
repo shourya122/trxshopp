@@ -233,7 +233,7 @@ export function ProductsBrowser({
             <p className="text-sm">Try adjusting your filters.</p>
           </div>
         ) : (
-          <div className={`grid gap-x-6 gap-y-10 ${dense ? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"}`}>
+          <div className={`grid gap-x-6 gap-y-10 ${dense ? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-6" : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"}`}>
             {filtered.map((g) => <ProductCard key={g.id} g={g} />)}
           </div>
         )}
