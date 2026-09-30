@@ -825,6 +825,7 @@ function HomeProductCard({
   sale: number;
   regular: number;
   platform: any;
+  hasOptions?: boolean;
 }) {
   const { add } = useCart();
   const { format } = useCurrency();
@@ -834,6 +835,9 @@ function HomeProductCard({
   const numericId = Array.from(id).reduce((a, c) => a + c.charCodeAt(0), 0);
 
   const handleQuickAdd = (e: React.MouseEvent) => {
+    // Products with editions/options must be configured on the product page —
+    // let the surrounding link navigate there instead of adding directly.
+    if (hasOptions) return;
     e.preventDefault();
     e.stopPropagation();
     if (lockRef.current) return;
