@@ -427,6 +427,7 @@ function HomePage() {
                       sale={sale}
                       regular={regular}
                       platform={(p.platforms[0] || "pc") as any}
+                      hasOptions={(p.editions?.length ?? 0) > 0}
                     />
                   </div>
                 );
@@ -483,6 +484,7 @@ function HomePage() {
                         sale={sale}
                         regular={regular}
                         platform="pc"
+                        hasOptions={(p.editions?.length ?? 0) > 0}
                       />
                     </div>
                   );
@@ -537,6 +539,7 @@ function HomePage() {
                         sale={sale}
                         regular={regular}
                         platform="ps"
+                        hasOptions={(p.editions?.length ?? 0) > 0}
                       />
                     </div>
                   );
@@ -816,6 +819,7 @@ function HomeProductCard({
   sale,
   regular,
   platform,
+  hasOptions,
 }: {
   id: string;
   variantId: string;
@@ -825,6 +829,7 @@ function HomeProductCard({
   sale: number;
   regular: number;
   platform: any;
+  hasOptions?: boolean;
 }) {
   const { add } = useCart();
   const { format } = useCurrency();
@@ -834,6 +839,9 @@ function HomeProductCard({
   const numericId = Array.from(id).reduce((a, c) => a + c.charCodeAt(0), 0);
 
   const handleQuickAdd = (e: React.MouseEvent) => {
+    // Products with editions/options must be configured on the product page —
+    // let the surrounding link navigate there instead of adding directly.
+    if (hasOptions) return;
     e.preventDefault();
     e.stopPropagation();
     if (lockRef.current) return;
