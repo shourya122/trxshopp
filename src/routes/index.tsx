@@ -819,6 +819,7 @@ function HomeProductCard({
   sale,
   regular,
   platform,
+  hasOptions,
 }: {
   id: string;
   variantId: string;
