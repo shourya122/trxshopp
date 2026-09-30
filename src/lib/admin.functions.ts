@@ -312,7 +312,15 @@ export const adminCreateProduct = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: row, error } = await supabaseAdmin
       .from("products")
-      .insert({ ...data, active: false, stock: 0, status: "draft" })
+      .insert({
+        ...data,
+        description: "",
+        product_details: "",
+        terms_conditions: "",
+        active: false,
+        stock: 0,
+        status: "draft",
+      })
       .select("id").single();
     if (error) throw new Error(error.message);
     return { ok: true as const, id: row.id as string };
