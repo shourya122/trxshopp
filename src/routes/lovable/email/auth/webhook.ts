@@ -69,6 +69,18 @@ export const Route = createFileRoute('/lovable/email/auth/webhook')({
           },
         })
 
+        // Silently drop emails to banned addresses or spammy repeat requests.
+        try {
+          const { findEmail, allowAuthEmail } = await import('@/lib/email-gate.server')
+          const body = await request.clone().json().catch(() => null)
+          const email = findEmail(body)
+          if (email && !(await allowAuthEmail(email))) {
+            return Response.json({ ok: true })
+          }
+        } catch (e) {
+          console.error('[auth-webhook] gate check failed', e)
+        }
+
         return handler(request)
       },
     },
