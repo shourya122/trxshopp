@@ -3,11 +3,11 @@ import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion } from "framer-motion";
-import { Mail, MessageSquare, MoreHorizontal, Search, Loader2 } from "lucide-react";
+import { Mail, MessageSquare, MoreHorizontal, Search, Ban } from "lucide-react";
 import { Loader } from "@/components/Loader";
 import { toast } from "sonner";
 import { Card, PageHeader, Badge } from "@/components/admin/ui";
-import { adminListCustomersRich } from "@/lib/admin.functions";
+import { adminListCustomersRich, adminSetEmailBan } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/260519/customers")({ component: Customers });
 
@@ -31,7 +31,14 @@ const colorFor = (s: string) => palette[Math.abs(s.split("").reduce((a, c) => a 
 
 function Customers() {
   const listFn = useServerFn(adminListCustomersRich);
-  const { data: rows = [], isLoading } = useQuery({
+  const banFn = useServerFn(adminSetEmailBan);
+  const [banEmail, setBanEmail] = useState("");
+  const setBan = async (email: string, banned: boolean) => {
+    if (banned && !confirm(`Permanently ban ${email}? They won't be able to sign in or get codes.`)) return;
+    try { await banFn({ data: { email, banned } }); await refetch(); toast.success(banned ? `Banned ${email}` : `Unbanned ${email}`); }
+    catch (e) { toast.error((e as Error).message); }
+  };
+  const { data: rows = [], isLoading, refetch } = useQuery({
     queryKey: ["admin-customers"],
     queryFn: () => listFn(),
     refetchOnWindowFocus: false,
@@ -47,7 +54,7 @@ function Customers() {
     <div>
       <PageHeader
         title="Customers"
-        description="Everyone who has shopped on TRXSHOP."
+        description="Every account and shopper on TRXSHOP. Ban an email to silently block sign-in and codes."
         actions={
           <span className="text-[11.5px] text-[#71717A]">{rows.length} total</span>
         }
@@ -59,7 +66,9 @@ function Customers() {
             <Search className="h-3.5 w-3.5 text-[#71717A]" />
             <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search customers" className="w-full bg-transparent text-[12px] text-white outline-none placeholder:text-[#52525B]" />
           </div>
-          <span className="ml-auto text-[11.5px] text-[#71717A]">{list.length} of {rows.length}</span>
+          <input value={banEmail} onChange={(e) => setBanEmail(e.target.value.trim())} placeholder="Ban any email…" className="ml-auto h-8 w-48 rounded-md border border-white/[0.06] bg-[#0B0B0E] px-2.5 text-[12px] text-white outline-none placeholder:text-[#52525B]" />
+          <button disabled={!banEmail.includes("@")} onClick={() => { void setBan(banEmail, true); setBanEmail(""); }} className="h-8 rounded-md bg-[#EF4444]/15 px-3 text-[12px] text-[#f87171] hover:bg-[#EF4444]/25 disabled:opacity-40">Ban</button>
+          <span className="text-[11.5px] text-[#71717A]">{list.length} of {rows.length}</span>
         </div>
 
         <div className="divide-y divide-white/[0.04]">
@@ -86,6 +95,7 @@ function Customers() {
                   <div className="flex items-center gap-2">
                     <span className="truncate text-[13px] text-white">{c.name || c.email}</span>
                     <Badge tone={tier === "vip" ? "info" : tier === "new" ? "warning" : "neutral"}>{tier}</Badge>
+                    {c.banned && <Badge tone="danger">banned</Badge>}
                   </div>
                   <div className="truncate text-[11.5px] text-[#71717A]">{c.email}</div>
                 </div>
@@ -102,6 +112,7 @@ function Customers() {
                   <span className="text-[11px] text-[#71717A]">Last order</span>
                 </div>
                 <div className="flex items-center gap-1">
+                  <button onClick={() => setBan(c.email, !c.banned)} title={c.banned ? "Unban" : "Ban permanently"} className={`grid h-7 w-7 place-items-center rounded-md hover:bg-white/[0.04] ${c.banned ? "text-[#f87171]" : "text-[#A1A1AA] hover:text-[#f87171]"}`} aria-label={c.banned ? "Unban" : "Ban"}><Ban className="h-3.5 w-3.5" /></button>
                   <a href={`mailto:${c.email}`} className="grid h-7 w-7 place-items-center rounded-md text-[#A1A1AA] hover:bg-white/[0.04] hover:text-white" aria-label="Email"><Mail className="h-3.5 w-3.5" /></a>
                   <button onClick={() => toast(`Open conversation with ${c.email}`)} className="grid h-7 w-7 place-items-center rounded-md text-[#A1A1AA] hover:bg-white/[0.04] hover:text-white" aria-label="Message"><MessageSquare className="h-3.5 w-3.5" /></button>
                   <button onClick={() => { navigator.clipboard?.writeText(c.email); toast(`Copied ${c.email}`); }} className="grid h-7 w-7 place-items-center rounded-md text-[#A1A1AA] hover:bg-white/[0.04] hover:text-white" aria-label="Copy"><MoreHorizontal className="h-3.5 w-3.5" /></button>

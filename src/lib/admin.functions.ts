@@ -358,7 +358,36 @@ export const adminListCustomersRich = createServerFn({ method: "GET" })
     for (const o of crypto ?? []) {
       bump((o.customer_email as string) || null, Number(o.amount_inr ?? 0), o.created_at as string, o.status === "paid");
     }
-    return Array.from(map.values()).sort((a, b) => b.ltv - a.ltv);
+    const { data: bans } = await supabaseAdmin.from("banned_emails").select("email");
+    const banned = new Set((bans ?? []).map((b) => (b.email as string).toLowerCase()));
+    for (const b of banned) if (!map.has(b)) map.set(b, { email: b, name: null, orders: 0, ltv: 0, last: null, created_at: null });
+    return Array.from(map.values())
+      .map((c) => ({ ...c, banned: banned.has(c.email) }))
+      .sort((a, b) => b.ltv - a.ltv);
+  });
+
+export const adminSetEmailBan = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ email: z.string().trim().email().max(255), banned: z.boolean() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const email = data.email.toLowerCase();
+    const { data: cust } = await supabaseAdmin.from("customers").select("id").ilike("email", email).maybeSingle();
+    if (cust?.id === context.userId) throw new Error("You can't ban yourself");
+    if (data.banned) {
+      const { error } = await supabaseAdmin.from("banned_emails").upsert({ email }, { onConflict: "email" });
+      if (error) throw new Error(error.message);
+    } else {
+      await supabaseAdmin.from("banned_emails").delete().eq("email", email);
+    }
+    if (cust?.id) {
+      const { error } = await supabaseAdmin.auth.admin.updateUserById(cust.id as string, {
+        ban_duration: data.banned ? "876000h" : "none",
+      });
+      if (error) throw new Error(error.message);
+    }
+    return { ok: true };
   });
 
 // -------- Notifications feed (recent activity) --------

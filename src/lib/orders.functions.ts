@@ -51,6 +51,11 @@ export const placeOrder = createServerFn({ method: "POST" })
       { auth: { persistSession: false, autoRefreshToken: false } },
     );
 
+    const { isEmailBanned } = await import("@/lib/email-gate.server");
+    if (await isEmailBanned(data.email)) {
+      return { ok: false as const, error: "Unable to place this order right now." };
+    }
+
     // Fetch product prices from DB by id (preferred) or by variantId fallback
     const ids = data.items.map((i) => i.product_id || i.variantId).filter(Boolean) as string[];
     const { data: products } = await admin
