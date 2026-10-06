@@ -11,7 +11,7 @@ import {
   adminUnlinkSupplierItem, adminLogRestock, adminDeleteRestock, type Supplier,
 } from "@/lib/suppliers.functions";
 
-export const Route = createFileRoute("/admin/suppliers")({ component: Suppliers });
+export const Route = createFileRoute("/260519/suppliers")({ component: Suppliers });
 
 const inr = (c: number) => `₹${(c / 100).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
 const when = (d: string) => new Date(d).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });

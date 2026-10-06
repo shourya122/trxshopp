@@ -28,7 +28,7 @@ function NotFoundComponent() {
   return <NotFound404 />;
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: { error: unknown; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   return (
@@ -149,7 +149,7 @@ function RootComponent() {
 
   const isProductRoute = pathname.startsWith("/products/") || pathname.startsWith("/games");
   const isHomePage = pathname === "/";
-  const isAdminRoute = pathname.startsWith("/admin");
+  const isAdminRoute = pathname.startsWith("/260519");
   const isCheckoutRoute = pathname.startsWith("/checkout");
   const isVerifyCodeRoute = pathname.startsWith("/verify-code");
   const isSignInRoute = pathname.startsWith("/signin");

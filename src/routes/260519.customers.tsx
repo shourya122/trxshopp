@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { Card, PageHeader, Badge } from "@/components/admin/ui";
 import { adminListCustomersRich } from "@/lib/admin.functions";
 
-export const Route = createFileRoute("/admin/customers")({ component: Customers });
+export const Route = createFileRoute("/260519/customers")({ component: Customers });
 
 const inr = (v: number) => `₹${v.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
 const timeAgo = (iso: string | null) => {
