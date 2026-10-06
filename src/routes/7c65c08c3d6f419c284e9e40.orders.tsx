@@ -12,7 +12,7 @@ import { Card, PageHeader, Badge } from "@/components/admin/ui";
 import { adminListAllOrders, type AdminOrder } from "@/lib/admin.functions";
 import { adminUpdateOrder } from "@/lib/orders.functions";
 
-export const Route = createFileRoute("/260519/orders")({ component: Orders });
+export const Route = createFileRoute("/7c65c08c3d6f419c284e9e40/orders")({ component: Orders });
 
 type FulfillStatus = "unfulfilled" | "in_progress" | "fulfilled" | "on_hold" | "delivered";
 const FULFILL_OPTIONS: { value: FulfillStatus; label: string }[] = [

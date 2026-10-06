@@ -11,7 +11,7 @@ import { ArrowUpRight, MoreHorizontal, Loader2 } from "lucide-react";
 import { Card, PageHeader, Stat, Badge } from "@/components/admin/ui";
 import { adminDashboardStats } from "@/lib/admin.functions";
 
-export const Route = createFileRoute("/260519/")({
+export const Route = createFileRoute("/7c65c08c3d6f419c284e9e40/")({
   component: Dashboard,
 });
 

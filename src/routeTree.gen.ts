@@ -20,10 +20,10 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as ContactusRouteImport } from './routes/contactus'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as AccountRouteImport } from './routes/account'
-import { Route as R260519RouteImport } from './routes/260519'
+import { Route as R7c65c08c3d6f419c284e9e40RouteImport } from './routes/7c65c08c3d6f419c284e9e40'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GamesIndexRouteImport } from './routes/games.index'
-import { Route as R260519IndexRouteImport } from './routes/260519.index'
+import { Route as R7c65c08c3d6f419c284e9e40IndexRouteImport } from './routes/7c65c08c3d6f419c284e9e40.index'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
 import { Route as OrderIdRouteImport } from './routes/order.$id'
 import { Route as GamesSubscriptionsRouteImport } from './routes/games.subscriptions'
@@ -31,16 +31,16 @@ import { Route as GamesSteamGamesRouteImport } from './routes/games.steam-games'
 import { Route as GamesPlaystationGamesRouteImport } from './routes/games.playstation-games'
 import { Route as GamesAllRouteImport } from './routes/games.all'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
-import { Route as R260519SupportRouteImport } from './routes/260519.support'
-import { Route as R260519SuppliersRouteImport } from './routes/260519.suppliers'
-import { Route as R260519SettingsRouteImport } from './routes/260519.settings'
-import { Route as R260519ReviewsRouteImport } from './routes/260519.reviews'
-import { Route as R260519ProductsRouteImport } from './routes/260519.products'
-import { Route as R260519OrdersRouteImport } from './routes/260519.orders'
-import { Route as R260519CustomersRouteImport } from './routes/260519.customers'
-import { Route as R260519CouponsRouteImport } from './routes/260519.coupons'
-import { Route as R260519CategoriesRouteImport } from './routes/260519.categories'
-import { Route as R260519AnalyticsRouteImport } from './routes/260519.analytics'
+import { Route as R7c65c08c3d6f419c284e9e40SupportRouteImport } from './routes/7c65c08c3d6f419c284e9e40.support'
+import { Route as R7c65c08c3d6f419c284e9e40SuppliersRouteImport } from './routes/7c65c08c3d6f419c284e9e40.suppliers'
+import { Route as R7c65c08c3d6f419c284e9e40SettingsRouteImport } from './routes/7c65c08c3d6f419c284e9e40.settings'
+import { Route as R7c65c08c3d6f419c284e9e40ReviewsRouteImport } from './routes/7c65c08c3d6f419c284e9e40.reviews'
+import { Route as R7c65c08c3d6f419c284e9e40ProductsRouteImport } from './routes/7c65c08c3d6f419c284e9e40.products'
+import { Route as R7c65c08c3d6f419c284e9e40OrdersRouteImport } from './routes/7c65c08c3d6f419c284e9e40.orders'
+import { Route as R7c65c08c3d6f419c284e9e40CustomersRouteImport } from './routes/7c65c08c3d6f419c284e9e40.customers'
+import { Route as R7c65c08c3d6f419c284e9e40CouponsRouteImport } from './routes/7c65c08c3d6f419c284e9e40.coupons'
+import { Route as R7c65c08c3d6f419c284e9e40CategoriesRouteImport } from './routes/7c65c08c3d6f419c284e9e40.categories'
+import { Route as R7c65c08c3d6f419c284e9e40AnalyticsRouteImport } from './routes/7c65c08c3d6f419c284e9e40.analytics'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicOxapayWebhookRouteImport } from './routes/api/public/oxapay-webhook'
 import { Route as ApiPublicCfSdkRouteImport } from './routes/api/public/cf-sdk'
@@ -107,11 +107,12 @@ const AccountRoute = AccountRouteImport.update({
   path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
-const R260519Route = R260519RouteImport.update({
-  id: '/260519',
-  path: '/260519',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const R7c65c08c3d6f419c284e9e40Route =
+  R7c65c08c3d6f419c284e9e40RouteImport.update({
+    id: '/7c65c08c3d6f419c284e9e40',
+    path: '/7c65c08c3d6f419c284e9e40',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -122,11 +123,12 @@ const GamesIndexRoute = GamesIndexRouteImport.update({
   path: '/games/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const R260519IndexRoute = R260519IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => R260519Route,
-} as any)
+const R7c65c08c3d6f419c284e9e40IndexRoute =
+  R7c65c08c3d6f419c284e9e40IndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
+  } as any)
 const ProductsIdRoute = ProductsIdRouteImport.update({
   id: '/products/$id',
   path: '/products/$id',
@@ -162,56 +164,66 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
-const R260519SupportRoute = R260519SupportRouteImport.update({
-  id: '/support',
-  path: '/support',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519SuppliersRoute = R260519SuppliersRouteImport.update({
-  id: '/suppliers',
-  path: '/suppliers',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519SettingsRoute = R260519SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519ReviewsRoute = R260519ReviewsRouteImport.update({
-  id: '/reviews',
-  path: '/reviews',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519ProductsRoute = R260519ProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519OrdersRoute = R260519OrdersRouteImport.update({
-  id: '/orders',
-  path: '/orders',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519CustomersRoute = R260519CustomersRouteImport.update({
-  id: '/customers',
-  path: '/customers',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519CouponsRoute = R260519CouponsRouteImport.update({
-  id: '/coupons',
-  path: '/coupons',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519CategoriesRoute = R260519CategoriesRouteImport.update({
-  id: '/categories',
-  path: '/categories',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519AnalyticsRoute = R260519AnalyticsRouteImport.update({
-  id: '/analytics',
-  path: '/analytics',
-  getParentRoute: () => R260519Route,
-} as any)
+const R7c65c08c3d6f419c284e9e40SupportRoute =
+  R7c65c08c3d6f419c284e9e40SupportRouteImport.update({
+    id: '/support',
+    path: '/support',
+    getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
+  } as any)
+const R7c65c08c3d6f419c284e9e40SuppliersRoute =
+  R7c65c08c3d6f419c284e9e40SuppliersRouteImport.update({
+    id: '/suppliers',
+    path: '/suppliers',
+    getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
+  } as any)
+const R7c65c08c3d6f419c284e9e40SettingsRoute =
+  R7c65c08c3d6f419c284e9e40SettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
+  } as any)
+const R7c65c08c3d6f419c284e9e40ReviewsRoute =
+  R7c65c08c3d6f419c284e9e40ReviewsRouteImport.update({
+    id: '/reviews',
+    path: '/reviews',
+    getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
+  } as any)
+const R7c65c08c3d6f419c284e9e40ProductsRoute =
+  R7c65c08c3d6f419c284e9e40ProductsRouteImport.update({
+    id: '/products',
+    path: '/products',
+    getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
+  } as any)
+const R7c65c08c3d6f419c284e9e40OrdersRoute =
+  R7c65c08c3d6f419c284e9e40OrdersRouteImport.update({
+    id: '/orders',
+    path: '/orders',
+    getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
+  } as any)
+const R7c65c08c3d6f419c284e9e40CustomersRoute =
+  R7c65c08c3d6f419c284e9e40CustomersRouteImport.update({
+    id: '/customers',
+    path: '/customers',
+    getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
+  } as any)
+const R7c65c08c3d6f419c284e9e40CouponsRoute =
+  R7c65c08c3d6f419c284e9e40CouponsRouteImport.update({
+    id: '/coupons',
+    path: '/coupons',
+    getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
+  } as any)
+const R7c65c08c3d6f419c284e9e40CategoriesRoute =
+  R7c65c08c3d6f419c284e9e40CategoriesRouteImport.update({
+    id: '/categories',
+    path: '/categories',
+    getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
+  } as any)
+const R7c65c08c3d6f419c284e9e40AnalyticsRoute =
+  R7c65c08c3d6f419c284e9e40AnalyticsRouteImport.update({
+    id: '/analytics',
+    path: '/analytics',
+    getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
+  } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -270,7 +282,7 @@ const ApiPublicProductImageSplatRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/260519': typeof R260519RouteWithChildren
+  '/7c65c08c3d6f419c284e9e40': typeof R7c65c08c3d6f419c284e9e40RouteWithChildren
   '/account': typeof AccountRoute
   '/checkout': typeof CheckoutRoute
   '/contactus': typeof ContactusRoute
@@ -282,16 +294,16 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/verify-code': typeof VerifyCodeRoute
-  '/260519/analytics': typeof R260519AnalyticsRoute
-  '/260519/categories': typeof R260519CategoriesRoute
-  '/260519/coupons': typeof R260519CouponsRoute
-  '/260519/customers': typeof R260519CustomersRoute
-  '/260519/orders': typeof R260519OrdersRoute
-  '/260519/products': typeof R260519ProductsRoute
-  '/260519/reviews': typeof R260519ReviewsRoute
-  '/260519/settings': typeof R260519SettingsRoute
-  '/260519/suppliers': typeof R260519SuppliersRoute
-  '/260519/support': typeof R260519SupportRoute
+  '/7c65c08c3d6f419c284e9e40/analytics': typeof R7c65c08c3d6f419c284e9e40AnalyticsRoute
+  '/7c65c08c3d6f419c284e9e40/categories': typeof R7c65c08c3d6f419c284e9e40CategoriesRoute
+  '/7c65c08c3d6f419c284e9e40/coupons': typeof R7c65c08c3d6f419c284e9e40CouponsRoute
+  '/7c65c08c3d6f419c284e9e40/customers': typeof R7c65c08c3d6f419c284e9e40CustomersRoute
+  '/7c65c08c3d6f419c284e9e40/orders': typeof R7c65c08c3d6f419c284e9e40OrdersRoute
+  '/7c65c08c3d6f419c284e9e40/products': typeof R7c65c08c3d6f419c284e9e40ProductsRoute
+  '/7c65c08c3d6f419c284e9e40/reviews': typeof R7c65c08c3d6f419c284e9e40ReviewsRoute
+  '/7c65c08c3d6f419c284e9e40/settings': typeof R7c65c08c3d6f419c284e9e40SettingsRoute
+  '/7c65c08c3d6f419c284e9e40/suppliers': typeof R7c65c08c3d6f419c284e9e40SuppliersRoute
+  '/7c65c08c3d6f419c284e9e40/support': typeof R7c65c08c3d6f419c284e9e40SupportRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/games/all': typeof GamesAllRoute
   '/games/playstation-games': typeof GamesPlaystationGamesRoute
@@ -299,7 +311,7 @@ export interface FileRoutesByFullPath {
   '/games/subscriptions': typeof GamesSubscriptionsRoute
   '/order/$id': typeof OrderIdRoute
   '/products/$id': typeof ProductsIdRoute
-  '/260519/': typeof R260519IndexRoute
+  '/7c65c08c3d6f419c284e9e40/': typeof R7c65c08c3d6f419c284e9e40IndexRoute
   '/games/': typeof GamesIndexRoute
   '/api/public/cashfree-webhook': typeof ApiPublicCashfreeWebhookRoute
   '/api/public/cf-sdk': typeof ApiPublicCfSdkRoute
@@ -325,16 +337,16 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/verify-code': typeof VerifyCodeRoute
-  '/260519/analytics': typeof R260519AnalyticsRoute
-  '/260519/categories': typeof R260519CategoriesRoute
-  '/260519/coupons': typeof R260519CouponsRoute
-  '/260519/customers': typeof R260519CustomersRoute
-  '/260519/orders': typeof R260519OrdersRoute
-  '/260519/products': typeof R260519ProductsRoute
-  '/260519/reviews': typeof R260519ReviewsRoute
-  '/260519/settings': typeof R260519SettingsRoute
-  '/260519/suppliers': typeof R260519SuppliersRoute
-  '/260519/support': typeof R260519SupportRoute
+  '/7c65c08c3d6f419c284e9e40/analytics': typeof R7c65c08c3d6f419c284e9e40AnalyticsRoute
+  '/7c65c08c3d6f419c284e9e40/categories': typeof R7c65c08c3d6f419c284e9e40CategoriesRoute
+  '/7c65c08c3d6f419c284e9e40/coupons': typeof R7c65c08c3d6f419c284e9e40CouponsRoute
+  '/7c65c08c3d6f419c284e9e40/customers': typeof R7c65c08c3d6f419c284e9e40CustomersRoute
+  '/7c65c08c3d6f419c284e9e40/orders': typeof R7c65c08c3d6f419c284e9e40OrdersRoute
+  '/7c65c08c3d6f419c284e9e40/products': typeof R7c65c08c3d6f419c284e9e40ProductsRoute
+  '/7c65c08c3d6f419c284e9e40/reviews': typeof R7c65c08c3d6f419c284e9e40ReviewsRoute
+  '/7c65c08c3d6f419c284e9e40/settings': typeof R7c65c08c3d6f419c284e9e40SettingsRoute
+  '/7c65c08c3d6f419c284e9e40/suppliers': typeof R7c65c08c3d6f419c284e9e40SuppliersRoute
+  '/7c65c08c3d6f419c284e9e40/support': typeof R7c65c08c3d6f419c284e9e40SupportRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/games/all': typeof GamesAllRoute
   '/games/playstation-games': typeof GamesPlaystationGamesRoute
@@ -342,7 +354,7 @@ export interface FileRoutesByTo {
   '/games/subscriptions': typeof GamesSubscriptionsRoute
   '/order/$id': typeof OrderIdRoute
   '/products/$id': typeof ProductsIdRoute
-  '/260519': typeof R260519IndexRoute
+  '/7c65c08c3d6f419c284e9e40': typeof R7c65c08c3d6f419c284e9e40IndexRoute
   '/games': typeof GamesIndexRoute
   '/api/public/cashfree-webhook': typeof ApiPublicCashfreeWebhookRoute
   '/api/public/cf-sdk': typeof ApiPublicCfSdkRoute
@@ -358,7 +370,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/260519': typeof R260519RouteWithChildren
+  '/7c65c08c3d6f419c284e9e40': typeof R7c65c08c3d6f419c284e9e40RouteWithChildren
   '/account': typeof AccountRoute
   '/checkout': typeof CheckoutRoute
   '/contactus': typeof ContactusRoute
@@ -370,16 +382,16 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/verify-code': typeof VerifyCodeRoute
-  '/260519/analytics': typeof R260519AnalyticsRoute
-  '/260519/categories': typeof R260519CategoriesRoute
-  '/260519/coupons': typeof R260519CouponsRoute
-  '/260519/customers': typeof R260519CustomersRoute
-  '/260519/orders': typeof R260519OrdersRoute
-  '/260519/products': typeof R260519ProductsRoute
-  '/260519/reviews': typeof R260519ReviewsRoute
-  '/260519/settings': typeof R260519SettingsRoute
-  '/260519/suppliers': typeof R260519SuppliersRoute
-  '/260519/support': typeof R260519SupportRoute
+  '/7c65c08c3d6f419c284e9e40/analytics': typeof R7c65c08c3d6f419c284e9e40AnalyticsRoute
+  '/7c65c08c3d6f419c284e9e40/categories': typeof R7c65c08c3d6f419c284e9e40CategoriesRoute
+  '/7c65c08c3d6f419c284e9e40/coupons': typeof R7c65c08c3d6f419c284e9e40CouponsRoute
+  '/7c65c08c3d6f419c284e9e40/customers': typeof R7c65c08c3d6f419c284e9e40CustomersRoute
+  '/7c65c08c3d6f419c284e9e40/orders': typeof R7c65c08c3d6f419c284e9e40OrdersRoute
+  '/7c65c08c3d6f419c284e9e40/products': typeof R7c65c08c3d6f419c284e9e40ProductsRoute
+  '/7c65c08c3d6f419c284e9e40/reviews': typeof R7c65c08c3d6f419c284e9e40ReviewsRoute
+  '/7c65c08c3d6f419c284e9e40/settings': typeof R7c65c08c3d6f419c284e9e40SettingsRoute
+  '/7c65c08c3d6f419c284e9e40/suppliers': typeof R7c65c08c3d6f419c284e9e40SuppliersRoute
+  '/7c65c08c3d6f419c284e9e40/support': typeof R7c65c08c3d6f419c284e9e40SupportRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/games/all': typeof GamesAllRoute
   '/games/playstation-games': typeof GamesPlaystationGamesRoute
@@ -387,7 +399,7 @@ export interface FileRoutesById {
   '/games/subscriptions': typeof GamesSubscriptionsRoute
   '/order/$id': typeof OrderIdRoute
   '/products/$id': typeof ProductsIdRoute
-  '/260519/': typeof R260519IndexRoute
+  '/7c65c08c3d6f419c284e9e40/': typeof R7c65c08c3d6f419c284e9e40IndexRoute
   '/games/': typeof GamesIndexRoute
   '/api/public/cashfree-webhook': typeof ApiPublicCashfreeWebhookRoute
   '/api/public/cf-sdk': typeof ApiPublicCfSdkRoute
@@ -404,7 +416,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/260519'
+    | '/7c65c08c3d6f419c284e9e40'
     | '/account'
     | '/checkout'
     | '/contactus'
@@ -416,16 +428,16 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms-and-conditions'
     | '/verify-code'
-    | '/260519/analytics'
-    | '/260519/categories'
-    | '/260519/coupons'
-    | '/260519/customers'
-    | '/260519/orders'
-    | '/260519/products'
-    | '/260519/reviews'
-    | '/260519/settings'
-    | '/260519/suppliers'
-    | '/260519/support'
+    | '/7c65c08c3d6f419c284e9e40/analytics'
+    | '/7c65c08c3d6f419c284e9e40/categories'
+    | '/7c65c08c3d6f419c284e9e40/coupons'
+    | '/7c65c08c3d6f419c284e9e40/customers'
+    | '/7c65c08c3d6f419c284e9e40/orders'
+    | '/7c65c08c3d6f419c284e9e40/products'
+    | '/7c65c08c3d6f419c284e9e40/reviews'
+    | '/7c65c08c3d6f419c284e9e40/settings'
+    | '/7c65c08c3d6f419c284e9e40/suppliers'
+    | '/7c65c08c3d6f419c284e9e40/support'
     | '/email/unsubscribe'
     | '/games/all'
     | '/games/playstation-games'
@@ -433,7 +445,7 @@ export interface FileRouteTypes {
     | '/games/subscriptions'
     | '/order/$id'
     | '/products/$id'
-    | '/260519/'
+    | '/7c65c08c3d6f419c284e9e40/'
     | '/games/'
     | '/api/public/cashfree-webhook'
     | '/api/public/cf-sdk'
@@ -459,16 +471,16 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms-and-conditions'
     | '/verify-code'
-    | '/260519/analytics'
-    | '/260519/categories'
-    | '/260519/coupons'
-    | '/260519/customers'
-    | '/260519/orders'
-    | '/260519/products'
-    | '/260519/reviews'
-    | '/260519/settings'
-    | '/260519/suppliers'
-    | '/260519/support'
+    | '/7c65c08c3d6f419c284e9e40/analytics'
+    | '/7c65c08c3d6f419c284e9e40/categories'
+    | '/7c65c08c3d6f419c284e9e40/coupons'
+    | '/7c65c08c3d6f419c284e9e40/customers'
+    | '/7c65c08c3d6f419c284e9e40/orders'
+    | '/7c65c08c3d6f419c284e9e40/products'
+    | '/7c65c08c3d6f419c284e9e40/reviews'
+    | '/7c65c08c3d6f419c284e9e40/settings'
+    | '/7c65c08c3d6f419c284e9e40/suppliers'
+    | '/7c65c08c3d6f419c284e9e40/support'
     | '/email/unsubscribe'
     | '/games/all'
     | '/games/playstation-games'
@@ -476,7 +488,7 @@ export interface FileRouteTypes {
     | '/games/subscriptions'
     | '/order/$id'
     | '/products/$id'
-    | '/260519'
+    | '/7c65c08c3d6f419c284e9e40'
     | '/games'
     | '/api/public/cashfree-webhook'
     | '/api/public/cf-sdk'
@@ -491,7 +503,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/260519'
+    | '/7c65c08c3d6f419c284e9e40'
     | '/account'
     | '/checkout'
     | '/contactus'
@@ -503,16 +515,16 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms-and-conditions'
     | '/verify-code'
-    | '/260519/analytics'
-    | '/260519/categories'
-    | '/260519/coupons'
-    | '/260519/customers'
-    | '/260519/orders'
-    | '/260519/products'
-    | '/260519/reviews'
-    | '/260519/settings'
-    | '/260519/suppliers'
-    | '/260519/support'
+    | '/7c65c08c3d6f419c284e9e40/analytics'
+    | '/7c65c08c3d6f419c284e9e40/categories'
+    | '/7c65c08c3d6f419c284e9e40/coupons'
+    | '/7c65c08c3d6f419c284e9e40/customers'
+    | '/7c65c08c3d6f419c284e9e40/orders'
+    | '/7c65c08c3d6f419c284e9e40/products'
+    | '/7c65c08c3d6f419c284e9e40/reviews'
+    | '/7c65c08c3d6f419c284e9e40/settings'
+    | '/7c65c08c3d6f419c284e9e40/suppliers'
+    | '/7c65c08c3d6f419c284e9e40/support'
     | '/email/unsubscribe'
     | '/games/all'
     | '/games/playstation-games'
@@ -520,7 +532,7 @@ export interface FileRouteTypes {
     | '/games/subscriptions'
     | '/order/$id'
     | '/products/$id'
-    | '/260519/'
+    | '/7c65c08c3d6f419c284e9e40/'
     | '/games/'
     | '/api/public/cashfree-webhook'
     | '/api/public/cf-sdk'
@@ -536,7 +548,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  R260519Route: typeof R260519RouteWithChildren
+  R7c65c08c3d6f419c284e9e40Route: typeof R7c65c08c3d6f419c284e9e40RouteWithChildren
   AccountRoute: typeof AccountRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactusRoute: typeof ContactusRoute
@@ -647,11 +659,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/260519': {
-      id: '/260519'
-      path: '/260519'
-      fullPath: '/260519'
-      preLoaderRoute: typeof R260519RouteImport
+    '/7c65c08c3d6f419c284e9e40': {
+      id: '/7c65c08c3d6f419c284e9e40'
+      path: '/7c65c08c3d6f419c284e9e40'
+      fullPath: '/7c65c08c3d6f419c284e9e40'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -668,12 +680,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/260519/': {
-      id: '/260519/'
+    '/7c65c08c3d6f419c284e9e40/': {
+      id: '/7c65c08c3d6f419c284e9e40/'
       path: '/'
-      fullPath: '/260519/'
-      preLoaderRoute: typeof R260519IndexRouteImport
-      parentRoute: typeof R260519Route
+      fullPath: '/7c65c08c3d6f419c284e9e40/'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40IndexRouteImport
+      parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
     }
     '/products/$id': {
       id: '/products/$id'
@@ -724,75 +736,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/260519/support': {
-      id: '/260519/support'
+    '/7c65c08c3d6f419c284e9e40/support': {
+      id: '/7c65c08c3d6f419c284e9e40/support'
       path: '/support'
-      fullPath: '/260519/support'
-      preLoaderRoute: typeof R260519SupportRouteImport
-      parentRoute: typeof R260519Route
+      fullPath: '/7c65c08c3d6f419c284e9e40/support'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40SupportRouteImport
+      parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
     }
-    '/260519/suppliers': {
-      id: '/260519/suppliers'
+    '/7c65c08c3d6f419c284e9e40/suppliers': {
+      id: '/7c65c08c3d6f419c284e9e40/suppliers'
       path: '/suppliers'
-      fullPath: '/260519/suppliers'
-      preLoaderRoute: typeof R260519SuppliersRouteImport
-      parentRoute: typeof R260519Route
+      fullPath: '/7c65c08c3d6f419c284e9e40/suppliers'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40SuppliersRouteImport
+      parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
     }
-    '/260519/settings': {
-      id: '/260519/settings'
+    '/7c65c08c3d6f419c284e9e40/settings': {
+      id: '/7c65c08c3d6f419c284e9e40/settings'
       path: '/settings'
-      fullPath: '/260519/settings'
-      preLoaderRoute: typeof R260519SettingsRouteImport
-      parentRoute: typeof R260519Route
+      fullPath: '/7c65c08c3d6f419c284e9e40/settings'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40SettingsRouteImport
+      parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
     }
-    '/260519/reviews': {
-      id: '/260519/reviews'
+    '/7c65c08c3d6f419c284e9e40/reviews': {
+      id: '/7c65c08c3d6f419c284e9e40/reviews'
       path: '/reviews'
-      fullPath: '/260519/reviews'
-      preLoaderRoute: typeof R260519ReviewsRouteImport
-      parentRoute: typeof R260519Route
+      fullPath: '/7c65c08c3d6f419c284e9e40/reviews'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40ReviewsRouteImport
+      parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
     }
-    '/260519/products': {
-      id: '/260519/products'
+    '/7c65c08c3d6f419c284e9e40/products': {
+      id: '/7c65c08c3d6f419c284e9e40/products'
       path: '/products'
-      fullPath: '/260519/products'
-      preLoaderRoute: typeof R260519ProductsRouteImport
-      parentRoute: typeof R260519Route
+      fullPath: '/7c65c08c3d6f419c284e9e40/products'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40ProductsRouteImport
+      parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
     }
-    '/260519/orders': {
-      id: '/260519/orders'
+    '/7c65c08c3d6f419c284e9e40/orders': {
+      id: '/7c65c08c3d6f419c284e9e40/orders'
       path: '/orders'
-      fullPath: '/260519/orders'
-      preLoaderRoute: typeof R260519OrdersRouteImport
-      parentRoute: typeof R260519Route
+      fullPath: '/7c65c08c3d6f419c284e9e40/orders'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40OrdersRouteImport
+      parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
     }
-    '/260519/customers': {
-      id: '/260519/customers'
+    '/7c65c08c3d6f419c284e9e40/customers': {
+      id: '/7c65c08c3d6f419c284e9e40/customers'
       path: '/customers'
-      fullPath: '/260519/customers'
-      preLoaderRoute: typeof R260519CustomersRouteImport
-      parentRoute: typeof R260519Route
+      fullPath: '/7c65c08c3d6f419c284e9e40/customers'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40CustomersRouteImport
+      parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
     }
-    '/260519/coupons': {
-      id: '/260519/coupons'
+    '/7c65c08c3d6f419c284e9e40/coupons': {
+      id: '/7c65c08c3d6f419c284e9e40/coupons'
       path: '/coupons'
-      fullPath: '/260519/coupons'
-      preLoaderRoute: typeof R260519CouponsRouteImport
-      parentRoute: typeof R260519Route
+      fullPath: '/7c65c08c3d6f419c284e9e40/coupons'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40CouponsRouteImport
+      parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
     }
-    '/260519/categories': {
-      id: '/260519/categories'
+    '/7c65c08c3d6f419c284e9e40/categories': {
+      id: '/7c65c08c3d6f419c284e9e40/categories'
       path: '/categories'
-      fullPath: '/260519/categories'
-      preLoaderRoute: typeof R260519CategoriesRouteImport
-      parentRoute: typeof R260519Route
+      fullPath: '/7c65c08c3d6f419c284e9e40/categories'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40CategoriesRouteImport
+      parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
     }
-    '/260519/analytics': {
-      id: '/260519/analytics'
+    '/7c65c08c3d6f419c284e9e40/analytics': {
+      id: '/7c65c08c3d6f419c284e9e40/analytics'
       path: '/analytics'
-      fullPath: '/260519/analytics'
-      preLoaderRoute: typeof R260519AnalyticsRouteImport
-      parentRoute: typeof R260519Route
+      fullPath: '/7c65c08c3d6f419c284e9e40/analytics'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40AnalyticsRouteImport
+      parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
     }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
@@ -867,40 +879,52 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface R260519RouteChildren {
-  R260519AnalyticsRoute: typeof R260519AnalyticsRoute
-  R260519CategoriesRoute: typeof R260519CategoriesRoute
-  R260519CouponsRoute: typeof R260519CouponsRoute
-  R260519CustomersRoute: typeof R260519CustomersRoute
-  R260519OrdersRoute: typeof R260519OrdersRoute
-  R260519ProductsRoute: typeof R260519ProductsRoute
-  R260519ReviewsRoute: typeof R260519ReviewsRoute
-  R260519SettingsRoute: typeof R260519SettingsRoute
-  R260519SuppliersRoute: typeof R260519SuppliersRoute
-  R260519SupportRoute: typeof R260519SupportRoute
-  R260519IndexRoute: typeof R260519IndexRoute
+interface R7c65c08c3d6f419c284e9e40RouteChildren {
+  R7c65c08c3d6f419c284e9e40AnalyticsRoute: typeof R7c65c08c3d6f419c284e9e40AnalyticsRoute
+  R7c65c08c3d6f419c284e9e40CategoriesRoute: typeof R7c65c08c3d6f419c284e9e40CategoriesRoute
+  R7c65c08c3d6f419c284e9e40CouponsRoute: typeof R7c65c08c3d6f419c284e9e40CouponsRoute
+  R7c65c08c3d6f419c284e9e40CustomersRoute: typeof R7c65c08c3d6f419c284e9e40CustomersRoute
+  R7c65c08c3d6f419c284e9e40OrdersRoute: typeof R7c65c08c3d6f419c284e9e40OrdersRoute
+  R7c65c08c3d6f419c284e9e40ProductsRoute: typeof R7c65c08c3d6f419c284e9e40ProductsRoute
+  R7c65c08c3d6f419c284e9e40ReviewsRoute: typeof R7c65c08c3d6f419c284e9e40ReviewsRoute
+  R7c65c08c3d6f419c284e9e40SettingsRoute: typeof R7c65c08c3d6f419c284e9e40SettingsRoute
+  R7c65c08c3d6f419c284e9e40SuppliersRoute: typeof R7c65c08c3d6f419c284e9e40SuppliersRoute
+  R7c65c08c3d6f419c284e9e40SupportRoute: typeof R7c65c08c3d6f419c284e9e40SupportRoute
+  R7c65c08c3d6f419c284e9e40IndexRoute: typeof R7c65c08c3d6f419c284e9e40IndexRoute
 }
 
-const R260519RouteChildren: R260519RouteChildren = {
-  R260519AnalyticsRoute: R260519AnalyticsRoute,
-  R260519CategoriesRoute: R260519CategoriesRoute,
-  R260519CouponsRoute: R260519CouponsRoute,
-  R260519CustomersRoute: R260519CustomersRoute,
-  R260519OrdersRoute: R260519OrdersRoute,
-  R260519ProductsRoute: R260519ProductsRoute,
-  R260519ReviewsRoute: R260519ReviewsRoute,
-  R260519SettingsRoute: R260519SettingsRoute,
-  R260519SuppliersRoute: R260519SuppliersRoute,
-  R260519SupportRoute: R260519SupportRoute,
-  R260519IndexRoute: R260519IndexRoute,
-}
+const R7c65c08c3d6f419c284e9e40RouteChildren: R7c65c08c3d6f419c284e9e40RouteChildren =
+  {
+    R7c65c08c3d6f419c284e9e40AnalyticsRoute:
+      R7c65c08c3d6f419c284e9e40AnalyticsRoute,
+    R7c65c08c3d6f419c284e9e40CategoriesRoute:
+      R7c65c08c3d6f419c284e9e40CategoriesRoute,
+    R7c65c08c3d6f419c284e9e40CouponsRoute:
+      R7c65c08c3d6f419c284e9e40CouponsRoute,
+    R7c65c08c3d6f419c284e9e40CustomersRoute:
+      R7c65c08c3d6f419c284e9e40CustomersRoute,
+    R7c65c08c3d6f419c284e9e40OrdersRoute: R7c65c08c3d6f419c284e9e40OrdersRoute,
+    R7c65c08c3d6f419c284e9e40ProductsRoute:
+      R7c65c08c3d6f419c284e9e40ProductsRoute,
+    R7c65c08c3d6f419c284e9e40ReviewsRoute:
+      R7c65c08c3d6f419c284e9e40ReviewsRoute,
+    R7c65c08c3d6f419c284e9e40SettingsRoute:
+      R7c65c08c3d6f419c284e9e40SettingsRoute,
+    R7c65c08c3d6f419c284e9e40SuppliersRoute:
+      R7c65c08c3d6f419c284e9e40SuppliersRoute,
+    R7c65c08c3d6f419c284e9e40SupportRoute:
+      R7c65c08c3d6f419c284e9e40SupportRoute,
+    R7c65c08c3d6f419c284e9e40IndexRoute: R7c65c08c3d6f419c284e9e40IndexRoute,
+  }
 
-const R260519RouteWithChildren =
-  R260519Route._addFileChildren(R260519RouteChildren)
+const R7c65c08c3d6f419c284e9e40RouteWithChildren =
+  R7c65c08c3d6f419c284e9e40Route._addFileChildren(
+    R7c65c08c3d6f419c284e9e40RouteChildren,
+  )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  R260519Route: R260519RouteWithChildren,
+  R7c65c08c3d6f419c284e9e40Route: R7c65c08c3d6f419c284e9e40RouteWithChildren,
   AccountRoute: AccountRoute,
   CheckoutRoute: CheckoutRoute,
   ContactusRoute: ContactusRoute,

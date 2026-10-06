@@ -63,7 +63,7 @@ function SecurityCard() {
   );
 }
 
-export const Route = createFileRoute("/260519/settings")({ component: Settings });
+export const Route = createFileRoute("/7c65c08c3d6f419c284e9e40/settings")({ component: Settings });
 
 function CurrencyCard() {
   const settingsFn = useServerFn(getPublicSettings);
