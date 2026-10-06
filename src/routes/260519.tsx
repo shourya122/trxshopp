@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AdminShell } from "@/components/admin/AdminShell";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/260519")({
   head: () => ({
     meta: [
       { title: "TRXSHOP Admin" },

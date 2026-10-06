@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 import { Card, PageHeader } from "@/components/admin/ui";
 import { adminUpdateUsdRate, getPublicSettings } from "@/lib/settings.functions";
 
-export const Route = createFileRoute("/admin/settings")({ component: Settings });
+export const Route = createFileRoute("/260519/settings")({ component: Settings });
 
 function CurrencyCard() {
   const settingsFn = useServerFn(getPublicSettings);

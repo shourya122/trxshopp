@@ -47,17 +47,17 @@ type NavItem = {
 };
 
 const nav: NavItem[] = [
-  { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/admin/orders", label: "Orders", icon: ShoppingBag, badge: "24" },
-  { to: "/admin/products", label: "Products", icon: Package },
-  { to: "/admin/categories", label: "Categories", icon: Tags },
-  { to: "/admin/customers", label: "Customers", icon: Users },
-  { to: "/admin/coupons", label: "Coupons", icon: Ticket },
-  { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
-  { to: "/admin/suppliers", label: "Suppliers", icon: Truck },
-  { to: "/admin/reviews", label: "Reviews", icon: Star },
-  { to: "/admin/support", label: "Support", icon: LifeBuoy, badge: "3" },
-  { to: "/admin/settings", label: "Settings", icon: Settings },
+  { to: "/260519", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/260519/orders", label: "Orders", icon: ShoppingBag, badge: "24" },
+  { to: "/260519/products", label: "Products", icon: Package },
+  { to: "/260519/categories", label: "Categories", icon: Tags },
+  { to: "/260519/customers", label: "Customers", icon: Users },
+  { to: "/260519/coupons", label: "Coupons", icon: Ticket },
+  { to: "/260519/analytics", label: "Analytics", icon: BarChart3 },
+  { to: "/260519/suppliers", label: "Suppliers", icon: Truck },
+  { to: "/260519/reviews", label: "Reviews", icon: Star },
+  { to: "/260519/support", label: "Support", icon: LifeBuoy, badge: "3" },
+  { to: "/260519/settings", label: "Settings", icon: Settings },
 ];
 
 const labelFromPath = (p: string) => {
@@ -120,7 +120,7 @@ export function AdminShell() {
     let active = true;
 
     const redirectToSignIn = () => {
-      const redirect = pathname.startsWith("/admin") ? pathname : "/admin";
+      const redirect = pathname.startsWith("/260519") ? pathname : "/260519";
       window.location.assign(`/signin?redirect=${encodeURIComponent(redirect)}`);
     };
 
@@ -474,8 +474,8 @@ export function AdminShell() {
                     <div className="text-[11px] text-[#71717A]">{adminEmail}</div>
                   </div>
                   {[
-                    { label: "Profile settings", to: "/admin/settings" },
-                    { label: "Billing", to: "/admin/settings" },
+                    { label: "Profile settings", to: "/260519/settings" },
+                    { label: "Billing", to: "/260519/settings" },
                     { label: "Switch workspace", to: null },
                   ].map((i) => (
                     <button
@@ -535,7 +535,7 @@ export function AdminShell() {
           <CommandGroup heading="Actions">
             <CommandItem
               onSelect={() => {
-                go("/admin/products");
+                go("/260519/products");
                 setTimeout(() => toast.success("Create product", { description: "Opening product editor" }), 100);
               }}
             >
@@ -543,7 +543,7 @@ export function AdminShell() {
             </CommandItem>
             <CommandItem
               onSelect={() => {
-                go("/admin/orders");
+                go("/260519/orders");
                 setTimeout(() => toast("Issue refund", { description: "Pick an order to refund" }), 100);
               }}
             >
@@ -551,7 +551,7 @@ export function AdminShell() {
             </CommandItem>
             <CommandItem
               onSelect={() => {
-                go("/admin/coupons");
+                go("/260519/coupons");
                 setTimeout(() => toast.success("New coupon", { description: "Opening coupon editor" }), 100);
               }}
             >

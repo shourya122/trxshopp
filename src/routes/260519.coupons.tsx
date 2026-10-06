@@ -8,7 +8,7 @@ import { toastPromise } from "@/lib/toast-utils";
 import { Card, PageHeader, Badge } from "@/components/admin/ui";
 import { listCoupons, createCoupon, deleteCoupon } from "@/lib/coupons.functions";
 
-export const Route = createFileRoute("/admin/coupons")({ component: Coupons });
+export const Route = createFileRoute("/260519/coupons")({ component: Coupons });
 
 const dt = (s: string | null) => (s ? new Date(s).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) : "Never");
 

@@ -418,7 +418,7 @@ export const adminListNotifications = createServerFn({ method: "GET" })
         kind: "order",
         title: `${paid ? "Paid" : "New"} order · ${inr(cents / 100)}`,
         description: (o.customer_email as string) || "Guest checkout",
-        href: "/admin/orders",
+        href: "/260519/orders",
         tone: paid ? "#22C55E" : "#F59E0B",
         created_at: o.created_at as string,
       });
@@ -429,7 +429,7 @@ export const adminListNotifications = createServerFn({ method: "GET" })
         kind: "crypto_order",
         title: `${o.status === "paid" ? "Crypto paid" : "Crypto pending"} · ${inr(Number(o.amount_inr ?? 0))}`,
         description: (o.customer_email as string) || "Guest checkout",
-        href: "/admin/orders",
+        href: "/260519/orders",
         tone: o.status === "paid" ? "#22C55E" : "#2563EB",
         created_at: o.created_at as string,
       });
@@ -440,7 +440,7 @@ export const adminListNotifications = createServerFn({ method: "GET" })
         kind: "customer",
         title: `New customer · ${(c.name as string) || (c.email as string) || "Unknown"}`,
         description: (c.email as string) || undefined,
-        href: "/admin/customers",
+        href: "/260519/customers",
         tone: "#8B5CF6",
         created_at: c.created_at as string,
       });
@@ -452,7 +452,7 @@ export const adminListNotifications = createServerFn({ method: "GET" })
         kind: stock === 0 ? "out_of_stock" : "low_stock",
         title: stock === 0 ? `Out of stock · ${p.title}` : `Low stock · ${p.title}`,
         description: `${stock} left in inventory`,
-        href: "/admin/products",
+        href: "/260519/products",
         tone: stock === 0 ? "#EF4444" : "#F59E0B",
         created_at: (p.updated_at as string) || new Date().toISOString(),
       });

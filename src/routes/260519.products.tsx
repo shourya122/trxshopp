@@ -11,7 +11,7 @@ import { Card, PageHeader, Badge } from "@/components/admin/ui";
 import { adminListProducts, adminUpdateProduct, adminDeleteProduct, adminCreateProduct } from "@/lib/admin.functions";
 import { ProductEditDialog, type EditableProduct } from "@/components/admin/ProductEditDialog";
 
-export const Route = createFileRoute("/admin/products")({ component: Products });
+export const Route = createFileRoute("/260519/products")({ component: Products });
 
 const inr = (cents: number) => `₹${(cents / 100).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
 

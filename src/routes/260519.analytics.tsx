@@ -9,7 +9,7 @@ import { Loader2 } from "lucide-react";
 import { Card, PageHeader, Stat } from "@/components/admin/ui";
 import { adminAnalyticsTrend, adminDashboardStats } from "@/lib/admin.functions";
 
-export const Route = createFileRoute("/admin/analytics")({ component: Analytics });
+export const Route = createFileRoute("/260519/analytics")({ component: Analytics });
 
 const axis = { stroke: "#52525B", tick: { fontSize: 11 } };
 const tooltip = {

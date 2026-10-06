@@ -6,7 +6,7 @@ import { Loader } from "@/components/Loader";
 import { PageHeader, Badge } from "@/components/admin/ui";
 import { adminListCategories } from "@/lib/admin.functions";
 
-export const Route = createFileRoute("/admin/categories")({ component: Categories });
+export const Route = createFileRoute("/260519/categories")({ component: Categories });
 
 const palette = ["#2563EB", "#22C55E", "#F59E0B", "#8b5cf6", "#EF4444", "#0ea5e9"];
 
