@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { Card, PageHeader, Badge } from "@/components/admin/ui";
 import { adminListReviews, adminSaveReview, adminDeleteReview, type AdminReview } from "@/lib/admin.functions";
 
-export const Route = createFileRoute("/260519/reviews")({ component: Reviews });
+export const Route = createFileRoute("/7c65c08c3d6f419c284e9e40/reviews")({ component: Reviews });
 
 type Draft = {
   id: string | null;

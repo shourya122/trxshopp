@@ -3,7 +3,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Card, PageHeader, Badge } from "@/components/admin/ui";
 
-export const Route = createFileRoute("/260519/support")({ component: Support });
+export const Route = createFileRoute("/7c65c08c3d6f419c284e9e40/support")({ component: Support });
 
 type Ticket = {
   id: string; subject: string; customer: string;

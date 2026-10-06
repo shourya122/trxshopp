@@ -149,7 +149,7 @@ function RootComponent() {
 
   const isProductRoute = pathname.startsWith("/products/") || pathname.startsWith("/games");
   const isHomePage = pathname === "/";
-  const isAdminRoute = pathname.startsWith("/260519");
+  const isAdminRoute = pathname.startsWith("/7c65c08c3d6f419c284e9e40");
   const isCheckoutRoute = pathname.startsWith("/checkout");
   const isVerifyCodeRoute = pathname.startsWith("/verify-code");
   const isSignInRoute = pathname.startsWith("/signin");

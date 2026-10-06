@@ -48,21 +48,21 @@ type NavItem = {
 };
 
 const nav: NavItem[] = [
-  { to: "/260519", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/260519/orders", label: "Orders", icon: ShoppingBag, badge: "24" },
-  { to: "/260519/products", label: "Products", icon: Package },
-  { to: "/260519/categories", label: "Categories", icon: Tags },
-  { to: "/260519/customers", label: "Customers", icon: Users },
-  { to: "/260519/coupons", label: "Coupons", icon: Ticket },
-  { to: "/260519/analytics", label: "Analytics", icon: BarChart3 },
-  { to: "/260519/suppliers", label: "Suppliers", icon: Truck },
-  { to: "/260519/reviews", label: "Reviews", icon: Star },
-  { to: "/260519/support", label: "Support", icon: LifeBuoy, badge: "3" },
-  { to: "/260519/settings", label: "Settings", icon: Settings },
+  { to: "/7c65c08c3d6f419c284e9e40", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/7c65c08c3d6f419c284e9e40/orders", label: "Orders", icon: ShoppingBag, badge: "24" },
+  { to: "/7c65c08c3d6f419c284e9e40/products", label: "Products", icon: Package },
+  { to: "/7c65c08c3d6f419c284e9e40/categories", label: "Categories", icon: Tags },
+  { to: "/7c65c08c3d6f419c284e9e40/customers", label: "Customers", icon: Users },
+  { to: "/7c65c08c3d6f419c284e9e40/coupons", label: "Coupons", icon: Ticket },
+  { to: "/7c65c08c3d6f419c284e9e40/analytics", label: "Analytics", icon: BarChart3 },
+  { to: "/7c65c08c3d6f419c284e9e40/suppliers", label: "Suppliers", icon: Truck },
+  { to: "/7c65c08c3d6f419c284e9e40/reviews", label: "Reviews", icon: Star },
+  { to: "/7c65c08c3d6f419c284e9e40/support", label: "Support", icon: LifeBuoy, badge: "3" },
+  { to: "/7c65c08c3d6f419c284e9e40/settings", label: "Settings", icon: Settings },
 ];
 
 const labelFromPath = (p: string) => {
-  const seg = p.replace(/^\/260519\/?/, "").split("/")[0];
+  const seg = p.replace(/^\/7c65c08c3d6f419c284e9e40\/?/, "").split("/")[0];
   if (!seg) return "Dashboard";
   return seg.charAt(0).toUpperCase() + seg.slice(1);
 };
@@ -130,7 +130,7 @@ export function AdminShell() {
     let active = true;
 
     const redirectToSignIn = () => {
-      const redirect = pathname.startsWith("/260519") ? pathname : "/260519";
+      const redirect = pathname.startsWith("/7c65c08c3d6f419c284e9e40") ? pathname : "/7c65c08c3d6f419c284e9e40";
       window.location.assign(`/signin?redirect=${encodeURIComponent(redirect)}`);
     };
 
@@ -289,7 +289,7 @@ export function AdminShell() {
             <button
               onClick={async () => {
                 await supabase.auth.signOut();
-                window.location.assign("/signin?redirect=%2F260519");
+                window.location.assign("/signin?redirect=%2F7c65c08c3d6f419c284e9e40");
               }}
               className="h-9 rounded-md bg-[#2563EB] px-4 text-sm font-medium text-white hover:bg-[#1d4ed8]"
             >
@@ -555,8 +555,8 @@ export function AdminShell() {
                     <div className="text-[11px] text-[#71717A]">{adminEmail}</div>
                   </div>
                   {[
-                    { label: "Profile settings", to: "/260519/settings" },
-                    { label: "Billing", to: "/260519/settings" },
+                    { label: "Profile settings", to: "/7c65c08c3d6f419c284e9e40/settings" },
+                    { label: "Billing", to: "/7c65c08c3d6f419c284e9e40/settings" },
                     { label: "Switch workspace", to: null },
                   ].map((i) => (
                     <button
@@ -571,7 +571,7 @@ export function AdminShell() {
                     onClick={async () => {
                       try { await lockFn(); } catch {}
                       await supabase.auth.signOut();
-                      window.location.assign("/signin?redirect=%2F260519");
+                      window.location.assign("/signin?redirect=%2F7c65c08c3d6f419c284e9e40");
                     }}
                     className="mt-1 block w-full rounded-md border-t border-white/[0.06] px-3 py-2 text-left text-[12.5px] text-[#f87171] hover:bg-[#EF4444]/[0.08]"
                   >
@@ -617,7 +617,7 @@ export function AdminShell() {
           <CommandGroup heading="Actions">
             <CommandItem
               onSelect={() => {
-                go("/260519/products");
+                go("/7c65c08c3d6f419c284e9e40/products");
                 setTimeout(() => toast.success("Create product", { description: "Opening product editor" }), 100);
               }}
             >
@@ -625,7 +625,7 @@ export function AdminShell() {
             </CommandItem>
             <CommandItem
               onSelect={() => {
-                go("/260519/orders");
+                go("/7c65c08c3d6f419c284e9e40/orders");
                 setTimeout(() => toast("Issue refund", { description: "Pick an order to refund" }), 100);
               }}
             >
@@ -633,7 +633,7 @@ export function AdminShell() {
             </CommandItem>
             <CommandItem
               onSelect={() => {
-                go("/260519/coupons");
+                go("/7c65c08c3d6f419c284e9e40/coupons");
                 setTimeout(() => toast.success("New coupon", { description: "Opening coupon editor" }), 100);
               }}
             >
