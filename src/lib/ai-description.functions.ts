@@ -23,10 +23,7 @@ export const adminGenerateDescription = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => Input.parse(d))
   .handler(async ({ data, context }): Promise<{ html: string }> => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: role } = await supabaseAdmin
-      .from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
-    if (!role) throw new Error("Forbidden");
+    await (await import("@/lib/admin-guard.server")).requireAdminAccess(context.userId);
 
     const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) throw new Error("AI is not configured yet. Add the AI key in Cloud settings.");
