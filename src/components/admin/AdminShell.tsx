@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
 import { adminListNotifications, type AdminNotification } from "@/lib/admin.functions";
+import { adminSecurityStatus, adminSetupPin, adminUnlock, adminLock } from "@/lib/admin-security.functions";
 
 const READ_KEY = "trx.admin.notifs.read.v1";
 const loadRead = (): Set<string> => {
@@ -61,7 +62,7 @@ const nav: NavItem[] = [
 ];
 
 const labelFromPath = (p: string) => {
-  const seg = p.replace(/^\/admin\/?/, "").split("/")[0];
+  const seg = p.replace(/^\/260519\/?/, "").split("/")[0];
   if (!seg) return "Dashboard";
   return seg.charAt(0).toUpperCase() + seg.slice(1);
 };
@@ -69,7 +70,16 @@ const labelFromPath = (p: string) => {
 export function AdminShell() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
-  const [access, setAccess] = useState<"loading" | "allowed" | "signed-out" | "forbidden">("loading");
+  const [access, setAccess] = useState<"loading" | "allowed" | "signed-out" | "forbidden" | "ip-blocked" | "setup-pin" | "pin">("loading");
+  const [myIp, setMyIp] = useState("");
+  const [pin, setPin] = useState("");
+  const [pin2, setPin2] = useState("");
+  const [pinBusy, setPinBusy] = useState(false);
+  const [pinErr, setPinErr] = useState("");
+  const statusFn = useServerFn(adminSecurityStatus);
+  const setupFn = useServerFn(adminSetupPin);
+  const unlockFn = useServerFn(adminUnlock);
+  const lockFn = useServerFn(adminLock);
   const [adminEmail, setAdminEmail] = useState("");
   const [cmdOpen, setCmdOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -136,21 +146,23 @@ export function AdminShell() {
         return;
       }
 
-      const { data, error } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id)
-        .eq("role", "admin")
-        .maybeSingle();
-
-      if (!active) return;
       setAdminEmail(user.email ?? "Admin");
-      setAccess(!error && data?.role === "admin" ? "allowed" : "forbidden");
+      try {
+        const st = await statusFn();
+        if (!active) return;
+        if (!st.role) { setAccess("forbidden"); return; }
+        setMyIp(st.ip);
+        if (!st.ipOk) setAccess("ip-blocked");
+        else if (!st.pinSet) setAccess("setup-pin");
+        else setAccess(st.unlocked ? "allowed" : "pin");
+      } catch {
+        if (active) setAccess("forbidden");
+      }
     };
 
     checkAccess();
     return () => { active = false; };
-  }, [navigate, pathname]);
+  }, [navigate]);
 
   useEffect(() => {
     const tick = () =>
@@ -193,6 +205,75 @@ export function AdminShell() {
     );
   }
 
+  const submitPin = async () => {
+    setPinErr("");
+    if (access === "setup-pin") {
+      if (!/^\d{6,12}$/.test(pin)) { setPinErr("Use 6-12 digits"); return; }
+      if (pin !== pin2) { setPinErr("PINs don't match"); return; }
+    }
+    setPinBusy(true);
+    try {
+      if (access === "setup-pin") { await setupFn({ data: { pin } }); setAccess("allowed"); }
+      else {
+        const r = await unlockFn({ data: { pin } });
+        if (r.ok) setAccess("allowed"); else setPinErr(r.error);
+      }
+    } catch (e) { setPinErr(e instanceof Error ? e.message : "Failed"); }
+    finally { setPinBusy(false); setPin(""); setPin2(""); }
+  };
+
+  if (access === "ip-blocked") {
+    return (
+      <div className="grid min-h-screen place-items-center bg-[#09090B] px-6 text-[#FAFAFA]">
+        <div className="w-full max-w-md border border-white/[0.08] bg-[#111113] p-6 text-center">
+          <ShieldAlert className="mx-auto mb-3 h-6 w-6 text-[#f87171]" />
+          <h1 className="text-lg font-semibold">Network not allowed</h1>
+          <p className="mt-2 text-sm text-[#A1A1AA]">This IP ({myIp || "unknown"}) is not on the admin allow list.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (access === "setup-pin" || access === "pin") {
+    const setup = access === "setup-pin";
+    return (
+      <div className="grid min-h-screen place-items-center bg-[#09090B] px-6 text-[#FAFAFA]">
+        <form
+          onSubmit={(e) => { e.preventDefault(); void submitPin(); }}
+          className="w-full max-w-sm border border-white/[0.08] bg-[#111113] p-6"
+        >
+          <ShieldAlert className="mb-3 h-6 w-6 text-[#2563EB]" />
+          <h1 className="text-lg font-semibold">{setup ? "Create your admin PIN" : "Enter admin PIN"}</h1>
+          <p className="mt-1 text-sm text-[#A1A1AA]">
+            {setup ? "6-12 digits. You'll need it every time you open admin." : `Signed in as ${adminEmail}`}
+          </p>
+          <input
+            type="password" inputMode="numeric" autoFocus autoComplete="off" maxLength={12}
+            value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
+            placeholder="PIN"
+            className="mt-4 h-11 w-full rounded-md border border-white/[0.08] bg-[#09090B] px-3 text-center text-lg tracking-[0.4em] outline-none focus:border-[#2563EB]"
+          />
+          {setup && (
+            <input
+              type="password" inputMode="numeric" autoComplete="off" maxLength={12}
+              value={pin2} onChange={(e) => setPin2(e.target.value.replace(/\D/g, ""))}
+              placeholder="Repeat PIN"
+              className="mt-2 h-11 w-full rounded-md border border-white/[0.08] bg-[#09090B] px-3 text-center text-lg tracking-[0.4em] outline-none focus:border-[#2563EB]"
+            />
+          )}
+          {pinErr && <p className="mt-2 text-sm text-[#f87171]">{pinErr}</p>}
+          <button
+            disabled={pinBusy}
+            className="mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-md bg-[#2563EB] text-sm font-medium text-white hover:bg-[#1d4ed8] disabled:opacity-60"
+          >
+            {pinBusy && <Loader2 className="h-4 w-4 animate-spin" />}
+            {setup ? "Save PIN" : "Unlock"}
+          </button>
+        </form>
+      </div>
+    );
+  }
+
   if (access === "forbidden") {
     return (
       <div className="grid min-h-screen place-items-center bg-[#09090B] px-6 text-[#FAFAFA]">
@@ -202,13 +283,13 @@ export function AdminShell() {
           </div>
           <h1 className="text-lg font-semibold">Admin access required</h1>
           <p className="mt-2 text-sm text-[#A1A1AA]">
-            Sign in with the admin account, then open /admin again.
+            Sign in with the admin account, then open the admin page again.
           </p>
           <div className="mt-5 flex justify-center gap-2">
             <button
               onClick={async () => {
                 await supabase.auth.signOut();
-                window.location.assign("/signin?redirect=%2Fadmin");
+                window.location.assign("/signin?redirect=%2F260519");
               }}
               className="h-9 rounded-md bg-[#2563EB] px-4 text-sm font-medium text-white hover:bg-[#1d4ed8]"
             >
@@ -489,7 +570,7 @@ export function AdminShell() {
                   <button
                     onClick={async () => {
                       await supabase.auth.signOut();
-                      window.location.assign("/signin?redirect=%2Fadmin");
+                      window.location.assign("/signin?redirect=%2F260519");
                     }}
                     className="mt-1 block w-full rounded-md border-t border-white/[0.06] px-3 py-2 text-left text-[12.5px] text-[#f87171] hover:bg-[#EF4444]/[0.08]"
                   >
