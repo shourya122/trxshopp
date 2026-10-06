@@ -25,7 +25,7 @@ export const Route = createFileRoute("/order/$id")({
       <div className="min-h-dvh flex items-center justify-center px-6 bg-black text-white">
         <div className="max-w-md w-full text-center space-y-4">
           <h1 className="text-2xl font-bold">Something went wrong</h1>
-          <p className="text-sm text-white/60">{error.message}</p>
+          <p className="text-sm text-white/60">{error instanceof Error ? error.message : String(error)}</p>
           <button
             onClick={() => { reset(); router.invalidate(); }}
             className="px-5 py-2 rounded-md bg-white text-black text-sm font-semibold hover:bg-white/90"
