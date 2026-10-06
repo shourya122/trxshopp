@@ -9,102 +9,52 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VerifyCodeRouteImport } from './routes/verify-code'
-import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SigninRouteImport } from './routes/signin'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as RefundAndCancellationRouteImport } from './routes/refund-and-cancellation'
-import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
-import { Route as HomeRouteImport } from './routes/home'
-import { Route as ContactusRouteImport } from './routes/contactus'
-import { Route as CheckoutRouteImport } from './routes/checkout'
-import { Route as AccountRouteImport } from './routes/account'
-import { Route as R260519RouteImport } from './routes/260519'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as GamesIndexRouteImport } from './routes/games.index'
+import { Route as R260519RouteImport } from './routes/260519'
+import { Route as AccountRouteImport } from './routes/account'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ContactusRouteImport } from './routes/contactus'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as RefundAndCancellationRouteImport } from './routes/refund-and-cancellation'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SigninRouteImport } from './routes/signin'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
+import { Route as VerifyCodeRouteImport } from './routes/verify-code'
 import { Route as R260519IndexRouteImport } from './routes/260519.index'
-import { Route as ProductsIdRouteImport } from './routes/products.$id'
-import { Route as OrderIdRouteImport } from './routes/order.$id'
-import { Route as GamesSubscriptionsRouteImport } from './routes/games.subscriptions'
-import { Route as GamesSteamGamesRouteImport } from './routes/games.steam-games'
-import { Route as GamesPlaystationGamesRouteImport } from './routes/games.playstation-games'
-import { Route as GamesAllRouteImport } from './routes/games.all'
-import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
-import { Route as R260519SupportRouteImport } from './routes/260519.support'
-import { Route as R260519SuppliersRouteImport } from './routes/260519.suppliers'
-import { Route as R260519SettingsRouteImport } from './routes/260519.settings'
-import { Route as R260519ReviewsRouteImport } from './routes/260519.reviews'
-import { Route as R260519ProductsRouteImport } from './routes/260519.products'
-import { Route as R260519OrdersRouteImport } from './routes/260519.orders'
-import { Route as R260519CustomersRouteImport } from './routes/260519.customers'
-import { Route as R260519CouponsRouteImport } from './routes/260519.coupons'
-import { Route as R260519CategoriesRouteImport } from './routes/260519.categories'
 import { Route as R260519AnalyticsRouteImport } from './routes/260519.analytics'
-import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
-import { Route as ApiPublicOxapayWebhookRouteImport } from './routes/api/public/oxapay-webhook'
-import { Route as ApiPublicCfSdkRouteImport } from './routes/api/public/cf-sdk'
+import { Route as R260519CategoriesRouteImport } from './routes/260519.categories'
+import { Route as R260519CouponsRouteImport } from './routes/260519.coupons'
+import { Route as R260519CustomersRouteImport } from './routes/260519.customers'
+import { Route as R260519OrdersRouteImport } from './routes/260519.orders'
+import { Route as R260519ProductsRouteImport } from './routes/260519.products'
+import { Route as R260519ReviewsRouteImport } from './routes/260519.reviews'
+import { Route as R260519SettingsRouteImport } from './routes/260519.settings'
+import { Route as R260519SuppliersRouteImport } from './routes/260519.suppliers'
+import { Route as R260519SupportRouteImport } from './routes/260519.support'
+import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as GamesIndexRouteImport } from './routes/games.index'
+import { Route as GamesAllRouteImport } from './routes/games.all'
+import { Route as GamesPlaystationGamesRouteImport } from './routes/games.playstation-games'
+import { Route as GamesSteamGamesRouteImport } from './routes/games.steam-games'
+import { Route as GamesSubscriptionsRouteImport } from './routes/games.subscriptions'
+import { Route as OrderIdRouteImport } from './routes/order.$id'
+import { Route as ProductsIdRouteImport } from './routes/products.$id'
 import { Route as ApiPublicCashfreeWebhookRouteImport } from './routes/api/public/cashfree-webhook'
-import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
-import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
-import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
-import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
-import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as ApiPublicCfSdkRouteImport } from './routes/api/public/cf-sdk'
+import { Route as ApiPublicOxapayWebhookRouteImport } from './routes/api/public/oxapay-webhook'
+import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicProductImageSplatRouteImport } from './routes/api/public/product-image.$'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 
-const VerifyCodeRoute = VerifyCodeRouteImport.update({
-  id: '/verify-code',
-  path: '/verify-code',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TermsAndConditionsRoute = TermsAndConditionsRouteImport.update({
-  id: '/terms-and-conditions',
-  path: '/terms-and-conditions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SigninRoute = SigninRouteImport.update({
-  id: '/signin',
-  path: '/signin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RefundAndCancellationRoute = RefundAndCancellationRouteImport.update({
-  id: '/refund-and-cancellation',
-  path: '/refund-and-cancellation',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
-  id: '/privacy-policy',
-  path: '/privacy-policy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeRoute = HomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactusRoute = ContactusRouteImport.update({
-  id: '/contactus',
-  path: '/contactus',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CheckoutRoute = CheckoutRouteImport.update({
-  id: '/checkout',
-  path: '/checkout',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AccountRoute = AccountRouteImport.update({
-  id: '/account',
-  path: '/account',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const R260519Route = R260519RouteImport.update({
@@ -112,14 +62,59 @@ const R260519Route = R260519RouteImport.update({
   path: '/260519',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GamesIndexRoute = GamesIndexRouteImport.update({
-  id: '/games/',
-  path: '/games/',
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactusRoute = ContactusRouteImport.update({
+  id: '/contactus',
+  path: '/contactus',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundAndCancellationRoute = RefundAndCancellationRouteImport.update({
+  id: '/refund-and-cancellation',
+  path: '/refund-and-cancellation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsAndConditionsRoute = TermsAndConditionsRouteImport.update({
+  id: '/terms-and-conditions',
+  path: '/terms-and-conditions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyCodeRoute = VerifyCodeRouteImport.update({
+  id: '/verify-code',
+  path: '/verify-code',
   getParentRoute: () => rootRouteImport,
 } as any)
 const R260519IndexRoute = R260519IndexRouteImport.update({
@@ -127,79 +122,9 @@ const R260519IndexRoute = R260519IndexRouteImport.update({
   path: '/',
   getParentRoute: () => R260519Route,
 } as any)
-const ProductsIdRoute = ProductsIdRouteImport.update({
-  id: '/products/$id',
-  path: '/products/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OrderIdRoute = OrderIdRouteImport.update({
-  id: '/order/$id',
-  path: '/order/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GamesSubscriptionsRoute = GamesSubscriptionsRouteImport.update({
-  id: '/games/subscriptions',
-  path: '/games/subscriptions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GamesSteamGamesRoute = GamesSteamGamesRouteImport.update({
-  id: '/games/steam-games',
-  path: '/games/steam-games',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GamesPlaystationGamesRoute = GamesPlaystationGamesRouteImport.update({
-  id: '/games/playstation-games',
-  path: '/games/playstation-games',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GamesAllRoute = GamesAllRouteImport.update({
-  id: '/games/all',
-  path: '/games/all',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
-  id: '/email/unsubscribe',
-  path: '/email/unsubscribe',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const R260519SupportRoute = R260519SupportRouteImport.update({
-  id: '/support',
-  path: '/support',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519SuppliersRoute = R260519SuppliersRouteImport.update({
-  id: '/suppliers',
-  path: '/suppliers',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519SettingsRoute = R260519SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519ReviewsRoute = R260519ReviewsRouteImport.update({
-  id: '/reviews',
-  path: '/reviews',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519ProductsRoute = R260519ProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519OrdersRoute = R260519OrdersRouteImport.update({
-  id: '/orders',
-  path: '/orders',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519CustomersRoute = R260519CustomersRouteImport.update({
-  id: '/customers',
-  path: '/customers',
-  getParentRoute: () => R260519Route,
-} as any)
-const R260519CouponsRoute = R260519CouponsRouteImport.update({
-  id: '/coupons',
-  path: '/coupons',
+const R260519AnalyticsRoute = R260519AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
   getParentRoute: () => R260519Route,
 } as any)
 const R260519CategoriesRoute = R260519CategoriesRouteImport.update({
@@ -207,24 +132,84 @@ const R260519CategoriesRoute = R260519CategoriesRouteImport.update({
   path: '/categories',
   getParentRoute: () => R260519Route,
 } as any)
-const R260519AnalyticsRoute = R260519AnalyticsRouteImport.update({
-  id: '/analytics',
-  path: '/analytics',
+const R260519CouponsRoute = R260519CouponsRouteImport.update({
+  id: '/coupons',
+  path: '/coupons',
   getParentRoute: () => R260519Route,
 } as any)
-const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
-  id: '/lovable/email/suppression',
-  path: '/lovable/email/suppression',
+const R260519CustomersRoute = R260519CustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => R260519Route,
+} as any)
+const R260519OrdersRoute = R260519OrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => R260519Route,
+} as any)
+const R260519ProductsRoute = R260519ProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => R260519Route,
+} as any)
+const R260519ReviewsRoute = R260519ReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => R260519Route,
+} as any)
+const R260519SettingsRoute = R260519SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => R260519Route,
+} as any)
+const R260519SuppliersRoute = R260519SuppliersRouteImport.update({
+  id: '/suppliers',
+  path: '/suppliers',
+  getParentRoute: () => R260519Route,
+} as any)
+const R260519SupportRoute = R260519SupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => R260519Route,
+} as any)
+const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicOxapayWebhookRoute = ApiPublicOxapayWebhookRouteImport.update({
-  id: '/api/public/oxapay-webhook',
-  path: '/api/public/oxapay-webhook',
+const GamesIndexRoute = GamesIndexRouteImport.update({
+  id: '/games/',
+  path: '/games/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicCfSdkRoute = ApiPublicCfSdkRouteImport.update({
-  id: '/api/public/cf-sdk',
-  path: '/api/public/cf-sdk',
+const GamesAllRoute = GamesAllRouteImport.update({
+  id: '/games/all',
+  path: '/games/all',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GamesPlaystationGamesRoute = GamesPlaystationGamesRouteImport.update({
+  id: '/games/playstation-games',
+  path: '/games/playstation-games',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GamesSteamGamesRoute = GamesSteamGamesRouteImport.update({
+  id: '/games/steam-games',
+  path: '/games/steam-games',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GamesSubscriptionsRoute = GamesSubscriptionsRouteImport.update({
+  id: '/games/subscriptions',
+  path: '/games/subscriptions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderIdRoute = OrderIdRouteImport.update({
+  id: '/order/$id',
+  path: '/order/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsIdRoute = ProductsIdRouteImport.update({
+  id: '/products/$id',
+  path: '/products/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicCashfreeWebhookRoute =
@@ -233,10 +218,41 @@ const ApiPublicCashfreeWebhookRoute =
     path: '/api/public/cashfree-webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
-const LovableEmailTransactionalSendRoute =
-  LovableEmailTransactionalSendRouteImport.update({
-    id: '/lovable/email/transactional/send',
-    path: '/lovable/email/transactional/send',
+const ApiPublicCfSdkRoute = ApiPublicCfSdkRouteImport.update({
+  id: '/api/public/cf-sdk',
+  path: '/api/public/cf-sdk',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicOxapayWebhookRoute = ApiPublicOxapayWebhookRouteImport.update({
+  id: '/api/public/oxapay-webhook',
+  path: '/api/public/oxapay-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
+  id: '/lovable/email/suppression',
+  path: '/lovable/email/suppression',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicProductImageSplatRoute =
+  ApiPublicProductImageSplatRouteImport.update({
+    id: '/api/public/product-image/$',
+    path: '/api/public/product-image/$',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
     getParentRoute: () => rootRouteImport,
   } as any)
 const LovableEmailTransactionalPreviewRoute =
@@ -245,26 +261,10 @@ const LovableEmailTransactionalPreviewRoute =
     path: '/lovable/email/transactional/preview',
     getParentRoute: () => rootRouteImport,
   } as any)
-const LovableEmailQueueProcessRoute =
-  LovableEmailQueueProcessRouteImport.update({
-    id: '/lovable/email/queue/process',
-    path: '/lovable/email/queue/process',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
-  id: '/lovable/email/auth/webhook',
-  path: '/lovable/email/auth/webhook',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
-  id: '/lovable/email/auth/preview',
-  path: '/lovable/email/auth/preview',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicProductImageSplatRoute =
-  ApiPublicProductImageSplatRouteImport.update({
-    id: '/api/public/product-image/$',
-    path: '/api/public/product-image/$',
+const LovableEmailTransactionalSendRoute =
+  LovableEmailTransactionalSendRouteImport.update({
+    id: '/lovable/email/transactional/send',
+    path: '/lovable/email/transactional/send',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -570,81 +570,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/verify-code': {
-      id: '/verify-code'
-      path: '/verify-code'
-      fullPath: '/verify-code'
-      preLoaderRoute: typeof VerifyCodeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms-and-conditions': {
-      id: '/terms-and-conditions'
-      path: '/terms-and-conditions'
-      fullPath: '/terms-and-conditions'
-      preLoaderRoute: typeof TermsAndConditionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signin': {
-      id: '/signin'
-      path: '/signin'
-      fullPath: '/signin'
-      preLoaderRoute: typeof SigninRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/refund-and-cancellation': {
-      id: '/refund-and-cancellation'
-      path: '/refund-and-cancellation'
-      fullPath: '/refund-and-cancellation'
-      preLoaderRoute: typeof RefundAndCancellationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy-policy': {
-      id: '/privacy-policy'
-      path: '/privacy-policy'
-      fullPath: '/privacy-policy'
-      preLoaderRoute: typeof PrivacyPolicyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contactus': {
-      id: '/contactus'
-      path: '/contactus'
-      fullPath: '/contactus'
-      preLoaderRoute: typeof ContactusRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/checkout': {
-      id: '/checkout'
-      path: '/checkout'
-      fullPath: '/checkout'
-      preLoaderRoute: typeof CheckoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/account': {
-      id: '/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AccountRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/260519': {
@@ -654,18 +584,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof R260519RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/games/': {
-      id: '/games/'
-      path: '/games'
-      fullPath: '/games/'
-      preLoaderRoute: typeof GamesIndexRouteImport
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contactus': {
+      id: '/contactus'
+      path: '/contactus'
+      fullPath: '/contactus'
+      preLoaderRoute: typeof ContactusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund-and-cancellation': {
+      id: '/refund-and-cancellation'
+      path: '/refund-and-cancellation'
+      fullPath: '/refund-and-cancellation'
+      preLoaderRoute: typeof RefundAndCancellationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms-and-conditions': {
+      id: '/terms-and-conditions'
+      path: '/terms-and-conditions'
+      fullPath: '/terms-and-conditions'
+      preLoaderRoute: typeof TermsAndConditionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-code': {
+      id: '/verify-code'
+      path: '/verify-code'
+      fullPath: '/verify-code'
+      preLoaderRoute: typeof VerifyCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/260519/': {
@@ -675,109 +668,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof R260519IndexRouteImport
       parentRoute: typeof R260519Route
     }
-    '/products/$id': {
-      id: '/products/$id'
-      path: '/products/$id'
-      fullPath: '/products/$id'
-      preLoaderRoute: typeof ProductsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/order/$id': {
-      id: '/order/$id'
-      path: '/order/$id'
-      fullPath: '/order/$id'
-      preLoaderRoute: typeof OrderIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/games/subscriptions': {
-      id: '/games/subscriptions'
-      path: '/games/subscriptions'
-      fullPath: '/games/subscriptions'
-      preLoaderRoute: typeof GamesSubscriptionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/games/steam-games': {
-      id: '/games/steam-games'
-      path: '/games/steam-games'
-      fullPath: '/games/steam-games'
-      preLoaderRoute: typeof GamesSteamGamesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/games/playstation-games': {
-      id: '/games/playstation-games'
-      path: '/games/playstation-games'
-      fullPath: '/games/playstation-games'
-      preLoaderRoute: typeof GamesPlaystationGamesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/games/all': {
-      id: '/games/all'
-      path: '/games/all'
-      fullPath: '/games/all'
-      preLoaderRoute: typeof GamesAllRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/email/unsubscribe': {
-      id: '/email/unsubscribe'
-      path: '/email/unsubscribe'
-      fullPath: '/email/unsubscribe'
-      preLoaderRoute: typeof EmailUnsubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/260519/support': {
-      id: '/260519/support'
-      path: '/support'
-      fullPath: '/260519/support'
-      preLoaderRoute: typeof R260519SupportRouteImport
-      parentRoute: typeof R260519Route
-    }
-    '/260519/suppliers': {
-      id: '/260519/suppliers'
-      path: '/suppliers'
-      fullPath: '/260519/suppliers'
-      preLoaderRoute: typeof R260519SuppliersRouteImport
-      parentRoute: typeof R260519Route
-    }
-    '/260519/settings': {
-      id: '/260519/settings'
-      path: '/settings'
-      fullPath: '/260519/settings'
-      preLoaderRoute: typeof R260519SettingsRouteImport
-      parentRoute: typeof R260519Route
-    }
-    '/260519/reviews': {
-      id: '/260519/reviews'
-      path: '/reviews'
-      fullPath: '/260519/reviews'
-      preLoaderRoute: typeof R260519ReviewsRouteImport
-      parentRoute: typeof R260519Route
-    }
-    '/260519/products': {
-      id: '/260519/products'
-      path: '/products'
-      fullPath: '/260519/products'
-      preLoaderRoute: typeof R260519ProductsRouteImport
-      parentRoute: typeof R260519Route
-    }
-    '/260519/orders': {
-      id: '/260519/orders'
-      path: '/orders'
-      fullPath: '/260519/orders'
-      preLoaderRoute: typeof R260519OrdersRouteImport
-      parentRoute: typeof R260519Route
-    }
-    '/260519/customers': {
-      id: '/260519/customers'
-      path: '/customers'
-      fullPath: '/260519/customers'
-      preLoaderRoute: typeof R260519CustomersRouteImport
-      parentRoute: typeof R260519Route
-    }
-    '/260519/coupons': {
-      id: '/260519/coupons'
-      path: '/coupons'
-      fullPath: '/260519/coupons'
-      preLoaderRoute: typeof R260519CouponsRouteImport
+    '/260519/analytics': {
+      id: '/260519/analytics'
+      path: '/analytics'
+      fullPath: '/260519/analytics'
+      preLoaderRoute: typeof R260519AnalyticsRouteImport
       parentRoute: typeof R260519Route
     }
     '/260519/categories': {
@@ -787,32 +682,116 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof R260519CategoriesRouteImport
       parentRoute: typeof R260519Route
     }
-    '/260519/analytics': {
-      id: '/260519/analytics'
-      path: '/analytics'
-      fullPath: '/260519/analytics'
-      preLoaderRoute: typeof R260519AnalyticsRouteImport
+    '/260519/coupons': {
+      id: '/260519/coupons'
+      path: '/coupons'
+      fullPath: '/260519/coupons'
+      preLoaderRoute: typeof R260519CouponsRouteImport
       parentRoute: typeof R260519Route
     }
-    '/lovable/email/suppression': {
-      id: '/lovable/email/suppression'
-      path: '/lovable/email/suppression'
-      fullPath: '/lovable/email/suppression'
-      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
+    '/260519/customers': {
+      id: '/260519/customers'
+      path: '/customers'
+      fullPath: '/260519/customers'
+      preLoaderRoute: typeof R260519CustomersRouteImport
+      parentRoute: typeof R260519Route
+    }
+    '/260519/orders': {
+      id: '/260519/orders'
+      path: '/orders'
+      fullPath: '/260519/orders'
+      preLoaderRoute: typeof R260519OrdersRouteImport
+      parentRoute: typeof R260519Route
+    }
+    '/260519/products': {
+      id: '/260519/products'
+      path: '/products'
+      fullPath: '/260519/products'
+      preLoaderRoute: typeof R260519ProductsRouteImport
+      parentRoute: typeof R260519Route
+    }
+    '/260519/reviews': {
+      id: '/260519/reviews'
+      path: '/reviews'
+      fullPath: '/260519/reviews'
+      preLoaderRoute: typeof R260519ReviewsRouteImport
+      parentRoute: typeof R260519Route
+    }
+    '/260519/settings': {
+      id: '/260519/settings'
+      path: '/settings'
+      fullPath: '/260519/settings'
+      preLoaderRoute: typeof R260519SettingsRouteImport
+      parentRoute: typeof R260519Route
+    }
+    '/260519/suppliers': {
+      id: '/260519/suppliers'
+      path: '/suppliers'
+      fullPath: '/260519/suppliers'
+      preLoaderRoute: typeof R260519SuppliersRouteImport
+      parentRoute: typeof R260519Route
+    }
+    '/260519/support': {
+      id: '/260519/support'
+      path: '/support'
+      fullPath: '/260519/support'
+      preLoaderRoute: typeof R260519SupportRouteImport
+      parentRoute: typeof R260519Route
+    }
+    '/email/unsubscribe': {
+      id: '/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/oxapay-webhook': {
-      id: '/api/public/oxapay-webhook'
-      path: '/api/public/oxapay-webhook'
-      fullPath: '/api/public/oxapay-webhook'
-      preLoaderRoute: typeof ApiPublicOxapayWebhookRouteImport
+    '/games/': {
+      id: '/games/'
+      path: '/games'
+      fullPath: '/games/'
+      preLoaderRoute: typeof GamesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/cf-sdk': {
-      id: '/api/public/cf-sdk'
-      path: '/api/public/cf-sdk'
-      fullPath: '/api/public/cf-sdk'
-      preLoaderRoute: typeof ApiPublicCfSdkRouteImport
+    '/games/all': {
+      id: '/games/all'
+      path: '/games/all'
+      fullPath: '/games/all'
+      preLoaderRoute: typeof GamesAllRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/games/playstation-games': {
+      id: '/games/playstation-games'
+      path: '/games/playstation-games'
+      fullPath: '/games/playstation-games'
+      preLoaderRoute: typeof GamesPlaystationGamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/games/steam-games': {
+      id: '/games/steam-games'
+      path: '/games/steam-games'
+      fullPath: '/games/steam-games'
+      preLoaderRoute: typeof GamesSteamGamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/games/subscriptions': {
+      id: '/games/subscriptions'
+      path: '/games/subscriptions'
+      fullPath: '/games/subscriptions'
+      preLoaderRoute: typeof GamesSubscriptionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order/$id': {
+      id: '/order/$id'
+      path: '/order/$id'
+      fullPath: '/order/$id'
+      preLoaderRoute: typeof OrderIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products/$id': {
+      id: '/products/$id'
+      path: '/products/$id'
+      fullPath: '/products/$id'
+      preLoaderRoute: typeof ProductsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/cashfree-webhook': {
@@ -822,32 +801,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicCashfreeWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/transactional/send': {
-      id: '/lovable/email/transactional/send'
-      path: '/lovable/email/transactional/send'
-      fullPath: '/lovable/email/transactional/send'
-      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
+    '/api/public/cf-sdk': {
+      id: '/api/public/cf-sdk'
+      path: '/api/public/cf-sdk'
+      fullPath: '/api/public/cf-sdk'
+      preLoaderRoute: typeof ApiPublicCfSdkRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/transactional/preview': {
-      id: '/lovable/email/transactional/preview'
-      path: '/lovable/email/transactional/preview'
-      fullPath: '/lovable/email/transactional/preview'
-      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+    '/api/public/oxapay-webhook': {
+      id: '/api/public/oxapay-webhook'
+      path: '/api/public/oxapay-webhook'
+      fullPath: '/api/public/oxapay-webhook'
+      preLoaderRoute: typeof ApiPublicOxapayWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/queue/process': {
-      id: '/lovable/email/queue/process'
-      path: '/lovable/email/queue/process'
-      fullPath: '/lovable/email/queue/process'
-      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+    '/lovable/email/suppression': {
+      id: '/lovable/email/suppression'
+      path: '/lovable/email/suppression'
+      fullPath: '/lovable/email/suppression'
+      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/auth/webhook': {
-      id: '/lovable/email/auth/webhook'
-      path: '/lovable/email/auth/webhook'
-      fullPath: '/lovable/email/auth/webhook'
-      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+    '/api/public/product-image/$': {
+      id: '/api/public/product-image/$'
+      path: '/api/public/product-image/$'
+      fullPath: '/api/public/product-image/$'
+      preLoaderRoute: typeof ApiPublicProductImageSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/auth/preview': {
@@ -857,11 +836,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/product-image/$': {
-      id: '/api/public/product-image/$'
-      path: '/api/public/product-image/$'
-      fullPath: '/api/public/product-image/$'
-      preLoaderRoute: typeof ApiPublicProductImageSplatRouteImport
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/send': {
+      id: '/lovable/email/transactional/send'
+      path: '/lovable/email/transactional/send'
+      fullPath: '/lovable/email/transactional/send'
+      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
