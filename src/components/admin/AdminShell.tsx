@@ -569,6 +569,7 @@ export function AdminShell() {
                   ))}
                   <button
                     onClick={async () => {
+                      try { await lockFn(); } catch {}
                       await supabase.auth.signOut();
                       window.location.assign("/signin?redirect=%2F260519");
                     }}
