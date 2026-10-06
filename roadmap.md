@@ -5,3 +5,4 @@
 
 ## Done
 - Fix email sender name typo: `trxxshop` → `Trx Shop` across all email routes/helpers.
+- [x] Check site code/secrets can't be extracted
