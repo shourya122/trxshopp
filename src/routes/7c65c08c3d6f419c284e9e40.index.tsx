@@ -149,7 +149,7 @@ function Dashboard() {
               <h3 className="text-[13.5px] font-semibold text-white">Recent orders</h3>
               <p className="text-[11.5px] text-[#A1A1AA]">Latest transactions</p>
             </div>
-            <button onClick={() => navigate({ to: "/260519/orders" as never })} className="text-[12px] text-[#A1A1AA] transition hover:text-white">
+            <button onClick={() => navigate({ to: "/7c65c08c3d6f419c284e9e40/orders" as never })} className="text-[12px] text-[#A1A1AA] transition hover:text-white">
               View all →
             </button>
           </div>
@@ -171,7 +171,7 @@ function Dashboard() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.03 * i }}
-                    onClick={() => navigate({ to: "/260519/orders" as never })}
+                    onClick={() => navigate({ to: "/7c65c08c3d6f419c284e9e40/orders" as never })}
                     className="cursor-pointer border-b border-white/[0.04] text-[12.5px] transition-colors hover:bg-white/[0.02]"
                   >
                     <td className="px-5 py-3 text-white">{o.email || <span className="text-[#71717A]">guest</span>}</td>
@@ -194,7 +194,7 @@ function Dashboard() {
               <h3 className="text-[13.5px] font-semibold text-white">Top products</h3>
               <p className="text-[11.5px] text-[#A1A1AA]">By units sold</p>
             </div>
-            <button onClick={() => navigate({ to: "/260519/products" as never })} className="grid h-7 w-7 place-items-center rounded-md text-[#A1A1AA] hover:text-white" aria-label="View products">
+            <button onClick={() => navigate({ to: "/7c65c08c3d6f419c284e9e40/products" as never })} className="grid h-7 w-7 place-items-center rounded-md text-[#A1A1AA] hover:text-white" aria-label="View products">
               <MoreHorizontal className="h-3.5 w-3.5" />
             </button>
           </div>
