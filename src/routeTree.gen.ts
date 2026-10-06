@@ -19,11 +19,11 @@ import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as ContactusRouteImport } from './routes/contactus'
 import { Route as CheckoutRouteImport } from './routes/checkout'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
+import { Route as R260519RouteImport } from './routes/260519'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GamesIndexRouteImport } from './routes/games.index'
-import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as R260519IndexRouteImport } from './routes/260519.index'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
 import { Route as OrderIdRouteImport } from './routes/order.$id'
 import { Route as GamesSubscriptionsRouteImport } from './routes/games.subscriptions'
@@ -31,16 +31,16 @@ import { Route as GamesSteamGamesRouteImport } from './routes/games.steam-games'
 import { Route as GamesPlaystationGamesRouteImport } from './routes/games.playstation-games'
 import { Route as GamesAllRouteImport } from './routes/games.all'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
-import { Route as AdminSupportRouteImport } from './routes/admin.support'
-import { Route as AdminSuppliersRouteImport } from './routes/admin.suppliers'
-import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
-import { Route as AdminReviewsRouteImport } from './routes/admin.reviews'
-import { Route as AdminProductsRouteImport } from './routes/admin.products'
-import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
-import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
-import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
-import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
-import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
+import { Route as R260519SupportRouteImport } from './routes/260519.support'
+import { Route as R260519SuppliersRouteImport } from './routes/260519.suppliers'
+import { Route as R260519SettingsRouteImport } from './routes/260519.settings'
+import { Route as R260519ReviewsRouteImport } from './routes/260519.reviews'
+import { Route as R260519ProductsRouteImport } from './routes/260519.products'
+import { Route as R260519OrdersRouteImport } from './routes/260519.orders'
+import { Route as R260519CustomersRouteImport } from './routes/260519.customers'
+import { Route as R260519CouponsRouteImport } from './routes/260519.coupons'
+import { Route as R260519CategoriesRouteImport } from './routes/260519.categories'
+import { Route as R260519AnalyticsRouteImport } from './routes/260519.analytics'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicOxapayWebhookRouteImport } from './routes/api/public/oxapay-webhook'
 import { Route as ApiPublicCfSdkRouteImport } from './routes/api/public/cf-sdk'
@@ -102,14 +102,14 @@ const CheckoutRoute = CheckoutRouteImport.update({
   path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const R260519Route = R260519RouteImport.update({
+  id: '/260519',
+  path: '/260519',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -122,10 +122,10 @@ const GamesIndexRoute = GamesIndexRouteImport.update({
   path: '/games/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
+const R260519IndexRoute = R260519IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => R260519Route,
 } as any)
 const ProductsIdRoute = ProductsIdRouteImport.update({
   id: '/products/$id',
@@ -162,55 +162,55 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminSupportRoute = AdminSupportRouteImport.update({
+const R260519SupportRoute = R260519SupportRouteImport.update({
   id: '/support',
   path: '/support',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => R260519Route,
 } as any)
-const AdminSuppliersRoute = AdminSuppliersRouteImport.update({
+const R260519SuppliersRoute = R260519SuppliersRouteImport.update({
   id: '/suppliers',
   path: '/suppliers',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => R260519Route,
 } as any)
-const AdminSettingsRoute = AdminSettingsRouteImport.update({
+const R260519SettingsRoute = R260519SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => R260519Route,
 } as any)
-const AdminReviewsRoute = AdminReviewsRouteImport.update({
+const R260519ReviewsRoute = R260519ReviewsRouteImport.update({
   id: '/reviews',
   path: '/reviews',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => R260519Route,
 } as any)
-const AdminProductsRoute = AdminProductsRouteImport.update({
+const R260519ProductsRoute = R260519ProductsRouteImport.update({
   id: '/products',
   path: '/products',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => R260519Route,
 } as any)
-const AdminOrdersRoute = AdminOrdersRouteImport.update({
+const R260519OrdersRoute = R260519OrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => R260519Route,
 } as any)
-const AdminCustomersRoute = AdminCustomersRouteImport.update({
+const R260519CustomersRoute = R260519CustomersRouteImport.update({
   id: '/customers',
   path: '/customers',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => R260519Route,
 } as any)
-const AdminCouponsRoute = AdminCouponsRouteImport.update({
+const R260519CouponsRoute = R260519CouponsRouteImport.update({
   id: '/coupons',
   path: '/coupons',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => R260519Route,
 } as any)
-const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+const R260519CategoriesRoute = R260519CategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => R260519Route,
 } as any)
-const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
+const R260519AnalyticsRoute = R260519AnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => R260519Route,
 } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
@@ -270,8 +270,8 @@ const ApiPublicProductImageSplatRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/260519': typeof R260519RouteWithChildren
   '/account': typeof AccountRoute
-  '/admin': typeof AdminRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/contactus': typeof ContactusRoute
   '/home': typeof HomeRoute
@@ -282,16 +282,16 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/verify-code': typeof VerifyCodeRoute
-  '/admin/analytics': typeof AdminAnalyticsRoute
-  '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/coupons': typeof AdminCouponsRoute
-  '/admin/customers': typeof AdminCustomersRoute
-  '/admin/orders': typeof AdminOrdersRoute
-  '/admin/products': typeof AdminProductsRoute
-  '/admin/reviews': typeof AdminReviewsRoute
-  '/admin/settings': typeof AdminSettingsRoute
-  '/admin/suppliers': typeof AdminSuppliersRoute
-  '/admin/support': typeof AdminSupportRoute
+  '/260519/analytics': typeof R260519AnalyticsRoute
+  '/260519/categories': typeof R260519CategoriesRoute
+  '/260519/coupons': typeof R260519CouponsRoute
+  '/260519/customers': typeof R260519CustomersRoute
+  '/260519/orders': typeof R260519OrdersRoute
+  '/260519/products': typeof R260519ProductsRoute
+  '/260519/reviews': typeof R260519ReviewsRoute
+  '/260519/settings': typeof R260519SettingsRoute
+  '/260519/suppliers': typeof R260519SuppliersRoute
+  '/260519/support': typeof R260519SupportRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/games/all': typeof GamesAllRoute
   '/games/playstation-games': typeof GamesPlaystationGamesRoute
@@ -299,7 +299,7 @@ export interface FileRoutesByFullPath {
   '/games/subscriptions': typeof GamesSubscriptionsRoute
   '/order/$id': typeof OrderIdRoute
   '/products/$id': typeof ProductsIdRoute
-  '/admin/': typeof AdminIndexRoute
+  '/260519/': typeof R260519IndexRoute
   '/games/': typeof GamesIndexRoute
   '/api/public/cashfree-webhook': typeof ApiPublicCashfreeWebhookRoute
   '/api/public/cf-sdk': typeof ApiPublicCfSdkRoute
@@ -325,16 +325,16 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/verify-code': typeof VerifyCodeRoute
-  '/admin/analytics': typeof AdminAnalyticsRoute
-  '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/coupons': typeof AdminCouponsRoute
-  '/admin/customers': typeof AdminCustomersRoute
-  '/admin/orders': typeof AdminOrdersRoute
-  '/admin/products': typeof AdminProductsRoute
-  '/admin/reviews': typeof AdminReviewsRoute
-  '/admin/settings': typeof AdminSettingsRoute
-  '/admin/suppliers': typeof AdminSuppliersRoute
-  '/admin/support': typeof AdminSupportRoute
+  '/260519/analytics': typeof R260519AnalyticsRoute
+  '/260519/categories': typeof R260519CategoriesRoute
+  '/260519/coupons': typeof R260519CouponsRoute
+  '/260519/customers': typeof R260519CustomersRoute
+  '/260519/orders': typeof R260519OrdersRoute
+  '/260519/products': typeof R260519ProductsRoute
+  '/260519/reviews': typeof R260519ReviewsRoute
+  '/260519/settings': typeof R260519SettingsRoute
+  '/260519/suppliers': typeof R260519SuppliersRoute
+  '/260519/support': typeof R260519SupportRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/games/all': typeof GamesAllRoute
   '/games/playstation-games': typeof GamesPlaystationGamesRoute
@@ -342,7 +342,7 @@ export interface FileRoutesByTo {
   '/games/subscriptions': typeof GamesSubscriptionsRoute
   '/order/$id': typeof OrderIdRoute
   '/products/$id': typeof ProductsIdRoute
-  '/admin': typeof AdminIndexRoute
+  '/260519': typeof R260519IndexRoute
   '/games': typeof GamesIndexRoute
   '/api/public/cashfree-webhook': typeof ApiPublicCashfreeWebhookRoute
   '/api/public/cf-sdk': typeof ApiPublicCfSdkRoute
@@ -358,8 +358,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/260519': typeof R260519RouteWithChildren
   '/account': typeof AccountRoute
-  '/admin': typeof AdminRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/contactus': typeof ContactusRoute
   '/home': typeof HomeRoute
@@ -370,16 +370,16 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/verify-code': typeof VerifyCodeRoute
-  '/admin/analytics': typeof AdminAnalyticsRoute
-  '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/coupons': typeof AdminCouponsRoute
-  '/admin/customers': typeof AdminCustomersRoute
-  '/admin/orders': typeof AdminOrdersRoute
-  '/admin/products': typeof AdminProductsRoute
-  '/admin/reviews': typeof AdminReviewsRoute
-  '/admin/settings': typeof AdminSettingsRoute
-  '/admin/suppliers': typeof AdminSuppliersRoute
-  '/admin/support': typeof AdminSupportRoute
+  '/260519/analytics': typeof R260519AnalyticsRoute
+  '/260519/categories': typeof R260519CategoriesRoute
+  '/260519/coupons': typeof R260519CouponsRoute
+  '/260519/customers': typeof R260519CustomersRoute
+  '/260519/orders': typeof R260519OrdersRoute
+  '/260519/products': typeof R260519ProductsRoute
+  '/260519/reviews': typeof R260519ReviewsRoute
+  '/260519/settings': typeof R260519SettingsRoute
+  '/260519/suppliers': typeof R260519SuppliersRoute
+  '/260519/support': typeof R260519SupportRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/games/all': typeof GamesAllRoute
   '/games/playstation-games': typeof GamesPlaystationGamesRoute
@@ -387,7 +387,7 @@ export interface FileRoutesById {
   '/games/subscriptions': typeof GamesSubscriptionsRoute
   '/order/$id': typeof OrderIdRoute
   '/products/$id': typeof ProductsIdRoute
-  '/admin/': typeof AdminIndexRoute
+  '/260519/': typeof R260519IndexRoute
   '/games/': typeof GamesIndexRoute
   '/api/public/cashfree-webhook': typeof ApiPublicCashfreeWebhookRoute
   '/api/public/cf-sdk': typeof ApiPublicCfSdkRoute
@@ -404,8 +404,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/260519'
     | '/account'
-    | '/admin'
     | '/checkout'
     | '/contactus'
     | '/home'
@@ -416,16 +416,16 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms-and-conditions'
     | '/verify-code'
-    | '/admin/analytics'
-    | '/admin/categories'
-    | '/admin/coupons'
-    | '/admin/customers'
-    | '/admin/orders'
-    | '/admin/products'
-    | '/admin/reviews'
-    | '/admin/settings'
-    | '/admin/suppliers'
-    | '/admin/support'
+    | '/260519/analytics'
+    | '/260519/categories'
+    | '/260519/coupons'
+    | '/260519/customers'
+    | '/260519/orders'
+    | '/260519/products'
+    | '/260519/reviews'
+    | '/260519/settings'
+    | '/260519/suppliers'
+    | '/260519/support'
     | '/email/unsubscribe'
     | '/games/all'
     | '/games/playstation-games'
@@ -433,7 +433,7 @@ export interface FileRouteTypes {
     | '/games/subscriptions'
     | '/order/$id'
     | '/products/$id'
-    | '/admin/'
+    | '/260519/'
     | '/games/'
     | '/api/public/cashfree-webhook'
     | '/api/public/cf-sdk'
@@ -459,16 +459,16 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms-and-conditions'
     | '/verify-code'
-    | '/admin/analytics'
-    | '/admin/categories'
-    | '/admin/coupons'
-    | '/admin/customers'
-    | '/admin/orders'
-    | '/admin/products'
-    | '/admin/reviews'
-    | '/admin/settings'
-    | '/admin/suppliers'
-    | '/admin/support'
+    | '/260519/analytics'
+    | '/260519/categories'
+    | '/260519/coupons'
+    | '/260519/customers'
+    | '/260519/orders'
+    | '/260519/products'
+    | '/260519/reviews'
+    | '/260519/settings'
+    | '/260519/suppliers'
+    | '/260519/support'
     | '/email/unsubscribe'
     | '/games/all'
     | '/games/playstation-games'
@@ -476,7 +476,7 @@ export interface FileRouteTypes {
     | '/games/subscriptions'
     | '/order/$id'
     | '/products/$id'
-    | '/admin'
+    | '/260519'
     | '/games'
     | '/api/public/cashfree-webhook'
     | '/api/public/cf-sdk'
@@ -491,8 +491,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/260519'
     | '/account'
-    | '/admin'
     | '/checkout'
     | '/contactus'
     | '/home'
@@ -503,16 +503,16 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms-and-conditions'
     | '/verify-code'
-    | '/admin/analytics'
-    | '/admin/categories'
-    | '/admin/coupons'
-    | '/admin/customers'
-    | '/admin/orders'
-    | '/admin/products'
-    | '/admin/reviews'
-    | '/admin/settings'
-    | '/admin/suppliers'
-    | '/admin/support'
+    | '/260519/analytics'
+    | '/260519/categories'
+    | '/260519/coupons'
+    | '/260519/customers'
+    | '/260519/orders'
+    | '/260519/products'
+    | '/260519/reviews'
+    | '/260519/settings'
+    | '/260519/suppliers'
+    | '/260519/support'
     | '/email/unsubscribe'
     | '/games/all'
     | '/games/playstation-games'
@@ -520,7 +520,7 @@ export interface FileRouteTypes {
     | '/games/subscriptions'
     | '/order/$id'
     | '/products/$id'
-    | '/admin/'
+    | '/260519/'
     | '/games/'
     | '/api/public/cashfree-webhook'
     | '/api/public/cf-sdk'
@@ -536,8 +536,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  R260519Route: typeof R260519RouteWithChildren
   AccountRoute: typeof AccountRoute
-  AdminRoute: typeof AdminRouteWithChildren
   CheckoutRoute: typeof CheckoutRoute
   ContactusRoute: typeof ContactusRoute
   HomeRoute: typeof HomeRoute
@@ -640,18 +640,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/account': {
       id: '/account'
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/260519': {
+      id: '/260519'
+      path: '/260519'
+      fullPath: '/260519'
+      preLoaderRoute: typeof R260519RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -668,12 +668,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/': {
-      id: '/admin/'
+    '/260519/': {
+      id: '/260519/'
       path: '/'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/260519/'
+      preLoaderRoute: typeof R260519IndexRouteImport
+      parentRoute: typeof R260519Route
     }
     '/products/$id': {
       id: '/products/$id'
@@ -724,75 +724,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/support': {
-      id: '/admin/support'
+    '/260519/support': {
+      id: '/260519/support'
       path: '/support'
-      fullPath: '/admin/support'
-      preLoaderRoute: typeof AdminSupportRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/260519/support'
+      preLoaderRoute: typeof R260519SupportRouteImport
+      parentRoute: typeof R260519Route
     }
-    '/admin/suppliers': {
-      id: '/admin/suppliers'
+    '/260519/suppliers': {
+      id: '/260519/suppliers'
       path: '/suppliers'
-      fullPath: '/admin/suppliers'
-      preLoaderRoute: typeof AdminSuppliersRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/260519/suppliers'
+      preLoaderRoute: typeof R260519SuppliersRouteImport
+      parentRoute: typeof R260519Route
     }
-    '/admin/settings': {
-      id: '/admin/settings'
+    '/260519/settings': {
+      id: '/260519/settings'
       path: '/settings'
-      fullPath: '/admin/settings'
-      preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/260519/settings'
+      preLoaderRoute: typeof R260519SettingsRouteImport
+      parentRoute: typeof R260519Route
     }
-    '/admin/reviews': {
-      id: '/admin/reviews'
+    '/260519/reviews': {
+      id: '/260519/reviews'
       path: '/reviews'
-      fullPath: '/admin/reviews'
-      preLoaderRoute: typeof AdminReviewsRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/260519/reviews'
+      preLoaderRoute: typeof R260519ReviewsRouteImport
+      parentRoute: typeof R260519Route
     }
-    '/admin/products': {
-      id: '/admin/products'
+    '/260519/products': {
+      id: '/260519/products'
       path: '/products'
-      fullPath: '/admin/products'
-      preLoaderRoute: typeof AdminProductsRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/260519/products'
+      preLoaderRoute: typeof R260519ProductsRouteImport
+      parentRoute: typeof R260519Route
     }
-    '/admin/orders': {
-      id: '/admin/orders'
+    '/260519/orders': {
+      id: '/260519/orders'
       path: '/orders'
-      fullPath: '/admin/orders'
-      preLoaderRoute: typeof AdminOrdersRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/260519/orders'
+      preLoaderRoute: typeof R260519OrdersRouteImport
+      parentRoute: typeof R260519Route
     }
-    '/admin/customers': {
-      id: '/admin/customers'
+    '/260519/customers': {
+      id: '/260519/customers'
       path: '/customers'
-      fullPath: '/admin/customers'
-      preLoaderRoute: typeof AdminCustomersRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/260519/customers'
+      preLoaderRoute: typeof R260519CustomersRouteImport
+      parentRoute: typeof R260519Route
     }
-    '/admin/coupons': {
-      id: '/admin/coupons'
+    '/260519/coupons': {
+      id: '/260519/coupons'
       path: '/coupons'
-      fullPath: '/admin/coupons'
-      preLoaderRoute: typeof AdminCouponsRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/260519/coupons'
+      preLoaderRoute: typeof R260519CouponsRouteImport
+      parentRoute: typeof R260519Route
     }
-    '/admin/categories': {
-      id: '/admin/categories'
+    '/260519/categories': {
+      id: '/260519/categories'
       path: '/categories'
-      fullPath: '/admin/categories'
-      preLoaderRoute: typeof AdminCategoriesRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/260519/categories'
+      preLoaderRoute: typeof R260519CategoriesRouteImport
+      parentRoute: typeof R260519Route
     }
-    '/admin/analytics': {
-      id: '/admin/analytics'
+    '/260519/analytics': {
+      id: '/260519/analytics'
       path: '/analytics'
-      fullPath: '/admin/analytics'
-      preLoaderRoute: typeof AdminAnalyticsRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/260519/analytics'
+      preLoaderRoute: typeof R260519AnalyticsRouteImport
+      parentRoute: typeof R260519Route
     }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
@@ -867,40 +867,41 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AdminRouteChildren {
-  AdminAnalyticsRoute: typeof AdminAnalyticsRoute
-  AdminCategoriesRoute: typeof AdminCategoriesRoute
-  AdminCouponsRoute: typeof AdminCouponsRoute
-  AdminCustomersRoute: typeof AdminCustomersRoute
-  AdminOrdersRoute: typeof AdminOrdersRoute
-  AdminProductsRoute: typeof AdminProductsRoute
-  AdminReviewsRoute: typeof AdminReviewsRoute
-  AdminSettingsRoute: typeof AdminSettingsRoute
-  AdminSuppliersRoute: typeof AdminSuppliersRoute
-  AdminSupportRoute: typeof AdminSupportRoute
-  AdminIndexRoute: typeof AdminIndexRoute
+interface R260519RouteChildren {
+  R260519AnalyticsRoute: typeof R260519AnalyticsRoute
+  R260519CategoriesRoute: typeof R260519CategoriesRoute
+  R260519CouponsRoute: typeof R260519CouponsRoute
+  R260519CustomersRoute: typeof R260519CustomersRoute
+  R260519OrdersRoute: typeof R260519OrdersRoute
+  R260519ProductsRoute: typeof R260519ProductsRoute
+  R260519ReviewsRoute: typeof R260519ReviewsRoute
+  R260519SettingsRoute: typeof R260519SettingsRoute
+  R260519SuppliersRoute: typeof R260519SuppliersRoute
+  R260519SupportRoute: typeof R260519SupportRoute
+  R260519IndexRoute: typeof R260519IndexRoute
 }
 
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminAnalyticsRoute: AdminAnalyticsRoute,
-  AdminCategoriesRoute: AdminCategoriesRoute,
-  AdminCouponsRoute: AdminCouponsRoute,
-  AdminCustomersRoute: AdminCustomersRoute,
-  AdminOrdersRoute: AdminOrdersRoute,
-  AdminProductsRoute: AdminProductsRoute,
-  AdminReviewsRoute: AdminReviewsRoute,
-  AdminSettingsRoute: AdminSettingsRoute,
-  AdminSuppliersRoute: AdminSuppliersRoute,
-  AdminSupportRoute: AdminSupportRoute,
-  AdminIndexRoute: AdminIndexRoute,
+const R260519RouteChildren: R260519RouteChildren = {
+  R260519AnalyticsRoute: R260519AnalyticsRoute,
+  R260519CategoriesRoute: R260519CategoriesRoute,
+  R260519CouponsRoute: R260519CouponsRoute,
+  R260519CustomersRoute: R260519CustomersRoute,
+  R260519OrdersRoute: R260519OrdersRoute,
+  R260519ProductsRoute: R260519ProductsRoute,
+  R260519ReviewsRoute: R260519ReviewsRoute,
+  R260519SettingsRoute: R260519SettingsRoute,
+  R260519SuppliersRoute: R260519SuppliersRoute,
+  R260519SupportRoute: R260519SupportRoute,
+  R260519IndexRoute: R260519IndexRoute,
 }
 
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+const R260519RouteWithChildren =
+  R260519Route._addFileChildren(R260519RouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  R260519Route: R260519RouteWithChildren,
   AccountRoute: AccountRoute,
-  AdminRoute: AdminRouteWithChildren,
   CheckoutRoute: CheckoutRoute,
   ContactusRoute: ContactusRoute,
   HomeRoute: HomeRoute,
