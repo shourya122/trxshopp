@@ -61,13 +61,14 @@ export function Marquee({
     }
   }, [])
 
-  const running = active && !reducedMotion
+  const running = true
+  void active; void reducedMotion
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "w-full overflow-hidden sm:mt-24 mt-10 z-10 [content-visibility:auto] [contain-intrinsic-size:1px_120px]",
+        "w-full overflow-hidden sm:mt-24 mt-10 z-10",
         className
       )}
       {...props}
