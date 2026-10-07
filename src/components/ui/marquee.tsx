@@ -17,7 +17,7 @@ export function Marquee({
   ...props
 }: MarqueeProps) {
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const [active, setActive] = React.useState(false)
+  const [active, setActive] = React.useState(true)
   const [reducedMotion, setReducedMotion] = React.useState(false)
 
   // Respect users who ask the OS to reduce motion.
@@ -35,19 +35,20 @@ export function Marquee({
     const el = containerRef.current
     if (!el) return
 
-    let inView = false
+    let inView = true
     let tabVisible = typeof document !== "undefined" ? !document.hidden : true
 
     const update = () => setActive(inView && tabVisible)
 
-    const io = new IntersectionObserver(
+    const io = typeof IntersectionObserver === "undefined" ? null : new IntersectionObserver(
       (entries) => {
         inView = entries[0]?.isIntersecting ?? false
         update()
       },
       { rootMargin: "200px 0px" }
     )
-    io.observe(el)
+    io?.observe(el)
+    update()
 
     const onVis = () => {
       tabVisible = !document.hidden
@@ -56,13 +57,12 @@ export function Marquee({
     document.addEventListener("visibilitychange", onVis)
 
     return () => {
-      io.disconnect()
+      io?.disconnect()
       document.removeEventListener("visibilitychange", onVis)
     }
   }, [])
 
-  const running = true
-  void active; void reducedMotion
+  const running = active && !reducedMotion
 
   return (
     <div
@@ -73,12 +73,12 @@ export function Marquee({
       )}
       {...props}
     >
-      <div className="relative flex w-full overflow-hidden py-5">
+      <div className="relative flex w-full overflow-hidden py-5 group">
         <div
           className={cn(
-            "flex w-max shrink-0 animate-marquee [backface-visibility:hidden] [transform:translate3d(0,0,0)] [contain:layout_paint_style]",
+            "flex w-max min-w-[200%] shrink-0 animate-marquee [backface-visibility:hidden]",
             running && "[will-change:transform]",
-            pauseOnHover && "hover:[animation-play-state:paused]",
+            pauseOnHover && "group-hover:[animation-play-state:paused]",
             direction === "right" && "animate-marquee-reverse"
           )}
           style={{
@@ -86,8 +86,10 @@ export function Marquee({
             animationPlayState: running ? "running" : "paused",
           } as React.CSSProperties}
         >
-          {children}
-          <div className="flex" aria-hidden="true">
+          <div className="flex flex-1 shrink-0 items-center justify-around">
+            {children}
+          </div>
+          <div className="flex flex-1 shrink-0 items-center justify-around" aria-hidden="true" inert>
             {children}
           </div>
         </div>
