@@ -65,6 +65,11 @@
   --ring: oklch(0.704 0.04 256.788);
   --sky-400: #38bdf8;
   --sky-500: #0ea5e9;
+  --ambient-base: oklch(0.12 0.01 285);
+  --ambient-violet: oklch(0.39 0.15 295 / 0.65);
+  --ambient-blue: oklch(0.43 0.12 260 / 0.55);
+  --ambient-dot: oklch(1 0 0 / 0.07);
+  --ambient-fallback: linear-gradient(125deg, var(--ambient-base), var(--ambient-violet) 38%, var(--ambient-blue) 70%, var(--ambient-base));
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -218,6 +223,21 @@ button { font-family: inherit; }
 }
 
 /* ─── HERO ─── */
+.ambient-background { background: var(--ambient-base); }
+.ambient-fallback {
+  background: var(--ambient-fallback);
+  background-size: 200% 200%;
+  animation: ambient-flow 18s ease-in-out infinite alternate;
+}
+.ambient-dots {
+  background-image: radial-gradient(circle at 1px 1px, var(--ambient-dot) 1px, transparent 0);
+  background-size: 26px 26px;
+}
+.ambient-fade { background: linear-gradient(to top, var(--ambient-base), transparent); }
+@keyframes ambient-flow {
+  from { background-position: 0% 30%; }
+  to { background-position: 100% 70%; }
+}
 .hero {
   min-height: 100vh; display: grid; grid-template-columns: 1.15fr 0.85fr;
   padding: 0 2.5rem;
