@@ -8,3 +8,4 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+- Home animations use the local ambient canvas and equal-width marquee groups, with visible fallbacks and reduced-motion support, to avoid external animation dependencies and broken loops.
