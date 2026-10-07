@@ -96,6 +96,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "TRXSHOP — Buy Cheap PC, PlayStation & Xbox Game Keys" },
       { property: "og:description", content: "Original game keys at unbeatable prices. Instant digital delivery for PC, PlayStation, and Xbox." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "https://trxshop.xyz/" },
     ],
     links: [{ rel: "canonical", href: "https://trxshop.xyz/" }],
@@ -191,71 +192,7 @@ function HomePage() {
     return () => clearInterval(id);
   }, []);
 
-  // Unicorn Studio animated background — enabled on all devices.
-  // Lag is prevented via: lazy-load on idle (never blocks first paint),
-  // pause when scrolled offscreen, pause when tab hidden, and respect
-  // prefers-reduced-motion for accessibility.
-  const heroBgRef = useRef<HTMLDivElement | null>(null);
-  const [enableHeroBg, setEnableHeroBg] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mql.matches) return; // a11y: honor reduced motion
-    // Skip the WebGL canvas on phones — it dominates GPU time on mid-range Android.
-    if (window.matchMedia("(max-width: 767px)").matches) return;
-    setEnableHeroBg(true);
-  }, []);
-
-
-
-  useEffect(() => {
-    if (!enableHeroBg || typeof window === "undefined") return;
-    const el = heroBgRef.current;
-    if (!el) return;
-    let started = false;
-    let cleanup: (() => void) | undefined;
-    const start = () => {
-      if (started) return;
-      started = true;
-      const init = () => {
-        try { (window as any).UnicornStudio?.init?.(); } catch {}
-      };
-      if ((window as any).UnicornStudio) {
-        init();
-      } else {
-        const existing = document.querySelector<HTMLScriptElement>("script[data-unicorn]");
-        if (existing) {
-          existing.addEventListener("load", init, { once: true });
-        } else {
-          const script = document.createElement("script");
-          script.src = "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js";
-          script.async = true;
-          script.dataset.unicorn = "1";
-          script.onload = init;
-          document.head.appendChild(script);
-        }
-      }
-      // Pause the canvas when scrolled offscreen
-      const io = new IntersectionObserver((entries) => {
-        for (const e of entries) {
-          el.style.visibility = e.isIntersecting ? "visible" : "hidden";
-        }
-      }, { threshold: 0 });
-      io.observe(el);
-      const onVis = () => {
-        el.style.visibility = document.hidden ? "hidden" : "visible";
-      };
-      document.addEventListener("visibilitychange", onVis);
-      cleanup = () => {
-        io.disconnect();
-        document.removeEventListener("visibilitychange", onVis);
-      };
-    };
-    const idle = (window as any).requestIdleCallback as
-      | ((cb: () => void, opts?: { timeout: number }) => number)
-      | undefined;
-    const handle = idle ? idle(start, { timeout: 1500 }) : window.setTimeout(start, 600);
-    return () => {
+  return () => {
       if (idle && typeof handle === "number") {
         (window as any).cancelIdleCallback?.(handle);
       } else {

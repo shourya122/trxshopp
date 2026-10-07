@@ -54,7 +54,8 @@ void main(){
 `;
 
 function compile(gl: WebGLRenderingContext, type: number, src: string) {
-  const sh = gl.createShader(type)!;
+  const sh = gl.createShader(type);
+  if (!sh) return null;
   gl.shaderSource(sh, src);
   gl.compileShader(sh);
   if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
@@ -70,129 +71,98 @@ export function AmbientBackground() {
   const [supported, setSupported] = useState(true);
 
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const canvas = canvasRef.current;
-    if (!canvas || reduce) { setSupported(false); return; }
-
+    if (!canvas) return;
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const gl = canvas.getContext("webgl", {
       antialias: false,
       premultipliedAlpha: false,
       powerPreference: "low-power",
-    }) as WebGLRenderingContext | null;
+    });
     if (!gl) { setSupported(false); return; }
-
     const vs = compile(gl, gl.VERTEX_SHADER, VERT);
     const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
-    if (!vs || !fs) { setSupported(false); return; }
-
-    const prog = gl.createProgram()!;
+    const prog = gl.createProgram();
+    if (!vs || !fs || !prog) { setSupported(false); return; }
     gl.attachShader(prog, vs);
     gl.attachShader(prog, fs);
     gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      setSupported(false);
+      gl.deleteProgram(prog);
+      gl.deleteShader(vs);
+      gl.deleteShader(fs);
+      return;
+    }
     gl.useProgram(prog);
-
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
-      gl.STATIC_DRAW,
-    );
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]), gl.STATIC_DRAW);
     const loc = gl.getAttribLocation(prog, "a_pos");
     gl.enableVertexAttribArray(loc);
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
     const uRes = gl.getUniformLocation(prog, "u_res");
     const uT = gl.getUniformLocation(prog, "u_t");
-
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
-    const resize = () => {
-      const w = Math.floor(window.innerWidth * dpr);
-      const h = Math.floor(window.innerHeight * dpr);
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w;
-        canvas.height = h;
-        gl.viewport(0, 0, w, h);
-      }
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
+    let t = 0;
     let raf = 0;
     let last = performance.now();
-    let t = 0;
-    let running = true;
-
-    const FRAME_MS = 1000 / 30; // cap shader at 30fps — fBm is GPU-heavy
-    const tick = (now: number) => {
-      if (!running) return;
-      const elapsed = now - last;
-      if (elapsed < FRAME_MS) {
-        raf = requestAnimationFrame(tick);
-        return;
-      }
-      const dt = Math.min(elapsed / 1000, 0.05);
-      last = now;
-      t += dt;
+    let visible = true;
+    let lost = false;
+    const draw = () => {
+      if (lost) return;
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform1f(uT, t);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
+    };
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      // Render at bounded resolution rather than full device resolution.
+      const scale = Math.min(1, 960 / Math.max(rect.width, rect.height, 1));
+      canvas.width = Math.max(1, Math.round(rect.width * scale));
+      canvas.height = Math.max(1, Math.round(rect.height * scale));
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      draw();
+    };
+    const tick = (now: number) => {
+      if (now - last >= 1000 / 24) {
+        t += Math.min((now - last) / 1000, 0.1);
+        last = now;
+        draw();
+      }
       raf = requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(tick);
-
-    const onVis = () => {
-      if (document.hidden) {
-        running = false;
-        cancelAnimationFrame(raf);
-      } else if (!running) {
-        running = true;
-        last = performance.now();
-        raf = requestAnimationFrame(tick);
-      }
-    };
-    document.addEventListener("visibilitychange", onVis);
-
-    return () => {
-      running = false;
+    const sync = () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener("resize", resize);
-      document.removeEventListener("visibilitychange", onVis);
+      last = performance.now();
+      if (!lost && !document.hidden && visible && !motion.matches) {
+        raf = requestAnimationFrame(tick);
+      } else draw();
     };
-  }, []);
-
-  return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-[#040406]">
-      {!supported && (
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(60% 50% at 30% 10%, rgba(66,40,150,0.45), transparent 70%), radial-gradient(55% 45% at 80% 20%, rgba(40,90,170,0.35), transparent 70%), radial-gradient(50% 50% at 50% 100%, rgba(80,30,120,0.30), transparent 70%)",
-          }}
-        />
-      )}
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" style={{ display: "block" }} />
-      {/* dot matrix */}
-      <div
-        className="absolute inset-0 opacity-[0.13] mix-blend-overlay"
-        style={{
-          backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.55) 1px, transparent 0)",
-          backgroundSize: "26px 26px",
-          maskImage: "radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 80%)",
-          WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 80%)",
-        }}
-      />
-      {/* film grain */}
-      <div
-        className="absolute inset-0 opacity-[0.06] mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6'/></svg>\")",
-        }}
-      />
-      {/* bottom fade */}
-      <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-[#040406] to-transparent" />
+    const onLost = (event: Event) => {
+      event.preventDefault();
+      lost = true;
+      setSupported(false);
+      cancelAnimationFrame(raf);
+    };
+    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(resize);
+    observer?.observe(canvas);
+    const visibility = typeof IntersectionObserver === "undefined" ? null : new IntersectionObserver(([entry]) => {
+      visible = entry?.isIntersecting ?? true;
+      sync();
+    }, { rootMargin: "100px" });
+    visibility?.observe(canvas);
+    canvas.addEventListener("webglcontextlost", onLost);
+    document.addEventListener("visibilitychange", sync);
+    motion.addEventListener("change", sync);
+    window.addEventListener("resize", resize);
+    resize();
+    sync();
+    return (
+    <div aria-hidden className="ambient-background pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div className="ambient-fallback absolute inset-0" />
+      <canvas ref={canvasRef} className={`absolute inset-0 block h-full w-full ${supported ? "" : "invisible"}`} />
+      <div className="ambient-dots absolute inset-0" />
+      <div className="ambient-fade absolute inset-x-0 bottom-0 h-72" />
     </div>
   );
 }
