@@ -192,16 +192,6 @@ function HomePage() {
     return () => clearInterval(id);
   }, []);
 
-  return () => {
-      if (idle && typeof handle === "number") {
-        (window as any).cancelIdleCallback?.(handle);
-      } else {
-        clearTimeout(handle as unknown as number);
-      }
-      cleanup?.();
-    };
-  }, [enableHeroBg]);
-
   return (
     <>
       {/* Full-page loader until products + images + window.load are ready */}

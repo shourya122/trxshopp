@@ -157,7 +157,24 @@ export function AmbientBackground() {
     window.addEventListener("resize", resize);
     resize();
     sync();
-    return (
+    return () => {
+      cancelAnimationFrame(raf);
+      observer?.disconnect();
+      visibility?.disconnect();
+      canvas.removeEventListener("webglcontextlost", onLost);
+      document.removeEventListener("visibilitychange", sync);
+      motion.removeEventListener("change", sync);
+      window.removeEventListener("resize", resize);
+      if (!lost) {
+        gl.deleteBuffer(buf);
+        gl.deleteProgram(prog);
+        gl.deleteShader(vs);
+        gl.deleteShader(fs);
+      }
+    };
+  }, []);
+
+  return (
     <div aria-hidden className="ambient-background pointer-events-none absolute inset-0 z-0 overflow-hidden">
       <div className="ambient-fallback absolute inset-0" />
       <canvas ref={canvasRef} className={`absolute inset-0 block h-full w-full ${supported ? "" : "invisible"}`} />
