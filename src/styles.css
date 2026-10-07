@@ -229,10 +229,6 @@ button { font-family: inherit; }
   background-size: 200% 200%;
   animation: ambient-flow 18s ease-in-out infinite alternate;
 }
-.ambient-dots {
-  background-image: radial-gradient(circle at 1px 1px, var(--ambient-dot) 1px, transparent 0);
-  background-size: 26px 26px;
-}
 .ambient-fade { background: linear-gradient(to top, var(--ambient-base), transparent); }
 @keyframes ambient-flow {
   from { background-position: 0% 30%; }
@@ -742,6 +738,13 @@ button { font-family: inherit; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* Keep the requested logo loop running independently of global motion timing. */
+.trx-marquee-track {
+  animation-duration: var(--duration, 30s) !important;
+  animation-iteration-count: infinite !important;
+  animation-timing-function: linear !important;
 }
 
 .dark {

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 /**
  * Animated WebGL mesh-gradient shader — Linear / Vercel / Stripe / Arc style.
- * Flowing organic blobs over a near-black canvas + dot grid + film grain.
+ * Flowing organic color over a near-black canvas with film grain.
  * Falls back to a static gradient if WebGL is unavailable or reduced-motion.
  */
 
@@ -178,7 +178,6 @@ export function AmbientBackground() {
     <div aria-hidden className="ambient-background pointer-events-none absolute inset-0 z-0 overflow-hidden">
       <div className="ambient-fallback absolute inset-0" />
       <canvas ref={canvasRef} className={`absolute inset-0 block h-full w-full ${supported ? "" : "invisible"}`} />
-      <div className="ambient-dots absolute inset-0" />
       <div className="ambient-fade absolute inset-x-0 bottom-0 h-72" />
     </div>
   );

@@ -18,17 +18,6 @@ export function Marquee({
 }: MarqueeProps) {
   const containerRef = React.useRef<HTMLDivElement>(null)
   const [active, setActive] = React.useState(true)
-  const [reducedMotion, setReducedMotion] = React.useState(false)
-
-  // Respect users who ask the OS to reduce motion.
-  React.useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
-    const onChange = () => setReducedMotion(mq.matches)
-    onChange()
-    mq.addEventListener?.("change", onChange)
-    return () => mq.removeEventListener?.("change", onChange)
-  }, [])
 
   // Only animate when near the viewport AND tab is visible.
   React.useEffect(() => {
@@ -62,7 +51,7 @@ export function Marquee({
     }
   }, [])
 
-  const running = active && !reducedMotion
+  const running = active
 
   return (
     <div
@@ -76,7 +65,7 @@ export function Marquee({
       <div className="relative flex w-full overflow-hidden py-5 group">
         <div
           className={cn(
-            "flex w-max min-w-[200%] shrink-0 animate-marquee [backface-visibility:hidden]",
+            "trx-marquee-track flex w-max min-w-[200%] shrink-0 animate-marquee [backface-visibility:hidden]",
             running && "[will-change:transform]",
             pauseOnHover && "group-hover:[animation-play-state:paused]",
             direction === "right" && "animate-marquee-reverse"
@@ -86,10 +75,10 @@ export function Marquee({
             animationPlayState: running ? "running" : "paused",
           } as React.CSSProperties}
         >
-          <div className="flex flex-1 shrink-0 items-center justify-around">
+          <div className="flex flex-1 shrink-0 items-center justify-around" data-marquee-group>
             {children}
           </div>
-          <div className="flex flex-1 shrink-0 items-center justify-around" aria-hidden="true" inert>
+          <div className="flex flex-1 shrink-0 items-center justify-around" data-marquee-group aria-hidden="true" inert>
             {children}
           </div>
         </div>
