@@ -134,7 +134,7 @@ export function AmbientBackground() {
     const sync = () => {
       cancelAnimationFrame(raf);
       last = performance.now();
-      if (!lost && !document.hidden && visible && !motion.matches) {
+      if (!lost && !document.hidden && visible) {
         raf = requestAnimationFrame(tick);
       } else draw();
     };

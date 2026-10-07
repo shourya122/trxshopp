@@ -238,6 +238,11 @@ button { font-family: inherit; }
   from { background-position: 0% 30%; }
   to { background-position: 100% 70%; }
 }
+/* The hero background is a core brand visual: keep it moving even when the OS
+   asks for reduced motion (the global rule above would otherwise freeze it). */
+.ambient-background .ambient-fallback {
+  animation: ambient-flow 18s ease-in-out infinite alternate !important;
+}
 .hero {
   min-height: 100vh; display: grid; grid-template-columns: 1.15fr 0.85fr;
   padding: 0 2.5rem;
