@@ -401,6 +401,7 @@ export type Database = {
           rating: number
           release_date: string
           screenshots: string[]
+          sellauth_product_id: number | null
           slug: string
           status: string
           stock: number
@@ -432,6 +433,7 @@ export type Database = {
           rating?: number
           release_date?: string
           screenshots?: string[]
+          sellauth_product_id?: number | null
           slug: string
           status?: string
           stock?: number
@@ -463,6 +465,7 @@ export type Database = {
           rating?: number
           release_date?: string
           screenshots?: string[]
+          sellauth_product_id?: number | null
           slug?: string
           status?: string
           stock?: number

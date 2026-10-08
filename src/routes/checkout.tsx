@@ -7,6 +7,7 @@ import { placeOrder } from "@/lib/orders.functions";
 import { validateCoupon } from "@/lib/coupons.functions";
 import { PayWithCashfreeButton } from "@/components/PayWithCashfreeButton";
 import { PayWithCryptoButton } from "@/components/PayWithCryptoButton";
+import { PayWithSellauthButton } from "@/components/PayWithSellauthButton";
 import { COUNTRIES } from "@/lib/countries";
 import { STATES_BY_COUNTRY } from "@/lib/states";
 import {
@@ -349,7 +350,7 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
   const [couponError, setCouponError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [applying, setApplying] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"cashfree" | "crypto">("cashfree");
+  const [paymentMethod, setPaymentMethod] = useState<"cashfree" | "crypto" | "sellauth">("cashfree");
   const [paymentLocked, setPaymentLocked] = useState(false);
 
 
@@ -442,7 +443,7 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
             country: country || undefined,
           },
           payment_method_label:
-            paymentMethod === "cashfree" ? "Cashfree · UPI / Card" : "Crypto (OxaPay)",
+            paymentMethod === "cashfree" ? "Cashfree · UPI / Card" : paymentMethod === "sellauth" ? "SellAuth Secure Checkout" : "Crypto (OxaPay)",
         },
       });
       if (res?.ok) {
@@ -891,6 +892,38 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
                     You'll be redirected to OxaPay in a new tab to complete your crypto payment.
                   </div>
                 )}
+
+                {/* SellAuth option */}
+                <label
+                  className={`flex items-center gap-3 px-4 py-3.5 transition-colors ${
+                    paymentLocked
+                      ? "cursor-not-allowed opacity-60"
+                      : "cursor-pointer"
+                  } ${
+                    paymentMethod === "sellauth" ? "bg-emerald-500/10" : paymentLocked ? "" : "hover:bg-white/[0.03]"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="payment_method"
+                    value="sellauth"
+                    checked={paymentMethod === "sellauth"}
+                    onChange={() => !paymentLocked && setPaymentMethod("sellauth")}
+                    disabled={paymentLocked}
+                    className="w-4 h-4 accent-emerald-500"
+                  />
+                  <span className="flex-1 text-sm text-white font-medium">
+                    SellAuth — secure checkout with instant delivery
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-600 text-white font-bold">
+                    SECURE
+                  </span>
+                </label>
+                {paymentMethod === "sellauth" && (
+                  <div className="px-4 py-3 bg-white/[0.02] text-[12px] text-white/60 leading-relaxed">
+                    You'll be taken to SellAuth's secure payment page. Your item is delivered automatically right after payment.
+                  </div>
+                )}
               </div>
 
               <div className="pt-2">
@@ -930,6 +963,43 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
                       className="w-full h-12 rounded-[16px] bg-[#005bd1]/40 text-white/80 text-xs font-semibold uppercase tracking-[0.2em] hover:bg-[#005bd1]/50 inline-flex items-center justify-center gap-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       Pay Now
+                    </button>
+                  )
+                ) : paymentMethod === "sellauth" ? (
+                  formValid ? (
+                    <PayWithSellauthButton
+                      items={items.map((i) => ({
+                        name: i.name, qty: i.qty, price: i.price,
+                        variantId: i.variantId,
+                        product_id: i.variantId || String(i.id),
+                        edition_name: i.edition?.name,
+                        options: i.options,
+                      }))}
+                      amount={grand}
+                      name={name}
+                      email={email}
+                      phone={phone}
+                      discord={discord || undefined}
+                      shipping={{
+                        line1, line2: line2 || undefined, city, state: stateName,
+                        postal_code: postalCode,
+                        country: COUNTRIES.find((c) => c.name === country)?.code || "IN",
+                      }}
+                      couponCode={coupon?.code}
+                      disabled={paymentLocked || !items.length}
+                      onInitiate={() => setPaymentLocked(true)}
+                      onError={() => setPaymentLocked(false)}
+                      className="w-full h-12 rounded-[16px] bg-emerald-600 text-white text-xs font-semibold uppercase tracking-[0.2em] hover:bg-emerald-500 shadow-[0_0_24px_-6px_rgba(16,185,129,0.6)] inline-flex items-center justify-center gap-2 transition-colors"
+                      label="Pay Securely"
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => { setAttempted(true); touchAll(); }}
+                      disabled={paymentLocked}
+                      className="w-full h-12 rounded-[16px] bg-emerald-600/40 text-white/70 text-xs font-semibold uppercase tracking-[0.2em] hover:bg-emerald-600/50 inline-flex items-center justify-center gap-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      Pay Securely
                     </button>
                   )
                 ) : formValid ? (

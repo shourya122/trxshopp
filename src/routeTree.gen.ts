@@ -42,6 +42,7 @@ import { Route as R7c65c08c3d6f419c284e9e40CouponsRouteImport } from './routes/7
 import { Route as R7c65c08c3d6f419c284e9e40CategoriesRouteImport } from './routes/7c65c08c3d6f419c284e9e40.categories'
 import { Route as R7c65c08c3d6f419c284e9e40AnalyticsRouteImport } from './routes/7c65c08c3d6f419c284e9e40.analytics'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
+import { Route as ApiPublicSellauthWebhookRouteImport } from './routes/api/public/sellauth-webhook'
 import { Route as ApiPublicOxapayWebhookRouteImport } from './routes/api/public/oxapay-webhook'
 import { Route as ApiPublicCfSdkRouteImport } from './routes/api/public/cf-sdk'
 import { Route as ApiPublicCashfreeWebhookRouteImport } from './routes/api/public/cashfree-webhook'
@@ -229,6 +230,12 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicSellauthWebhookRoute =
+  ApiPublicSellauthWebhookRouteImport.update({
+    id: '/api/public/sellauth-webhook',
+    path: '/api/public/sellauth-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicOxapayWebhookRoute = ApiPublicOxapayWebhookRouteImport.update({
   id: '/api/public/oxapay-webhook',
   path: '/api/public/oxapay-webhook',
@@ -316,6 +323,7 @@ export interface FileRoutesByFullPath {
   '/api/public/cashfree-webhook': typeof ApiPublicCashfreeWebhookRoute
   '/api/public/cf-sdk': typeof ApiPublicCfSdkRoute
   '/api/public/oxapay-webhook': typeof ApiPublicOxapayWebhookRoute
+  '/api/public/sellauth-webhook': typeof ApiPublicSellauthWebhookRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/product-image/$': typeof ApiPublicProductImageSplatRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -359,6 +367,7 @@ export interface FileRoutesByTo {
   '/api/public/cashfree-webhook': typeof ApiPublicCashfreeWebhookRoute
   '/api/public/cf-sdk': typeof ApiPublicCfSdkRoute
   '/api/public/oxapay-webhook': typeof ApiPublicOxapayWebhookRoute
+  '/api/public/sellauth-webhook': typeof ApiPublicSellauthWebhookRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/product-image/$': typeof ApiPublicProductImageSplatRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -404,6 +413,7 @@ export interface FileRoutesById {
   '/api/public/cashfree-webhook': typeof ApiPublicCashfreeWebhookRoute
   '/api/public/cf-sdk': typeof ApiPublicCfSdkRoute
   '/api/public/oxapay-webhook': typeof ApiPublicOxapayWebhookRoute
+  '/api/public/sellauth-webhook': typeof ApiPublicSellauthWebhookRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/product-image/$': typeof ApiPublicProductImageSplatRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -450,6 +460,7 @@ export interface FileRouteTypes {
     | '/api/public/cashfree-webhook'
     | '/api/public/cf-sdk'
     | '/api/public/oxapay-webhook'
+    | '/api/public/sellauth-webhook'
     | '/lovable/email/suppression'
     | '/api/public/product-image/$'
     | '/lovable/email/auth/preview'
@@ -493,6 +504,7 @@ export interface FileRouteTypes {
     | '/api/public/cashfree-webhook'
     | '/api/public/cf-sdk'
     | '/api/public/oxapay-webhook'
+    | '/api/public/sellauth-webhook'
     | '/lovable/email/suppression'
     | '/api/public/product-image/$'
     | '/lovable/email/auth/preview'
@@ -537,6 +549,7 @@ export interface FileRouteTypes {
     | '/api/public/cashfree-webhook'
     | '/api/public/cf-sdk'
     | '/api/public/oxapay-webhook'
+    | '/api/public/sellauth-webhook'
     | '/lovable/email/suppression'
     | '/api/public/product-image/$'
     | '/lovable/email/auth/preview'
@@ -571,6 +584,7 @@ export interface RootRouteChildren {
   ApiPublicCashfreeWebhookRoute: typeof ApiPublicCashfreeWebhookRoute
   ApiPublicCfSdkRoute: typeof ApiPublicCfSdkRoute
   ApiPublicOxapayWebhookRoute: typeof ApiPublicOxapayWebhookRoute
+  ApiPublicSellauthWebhookRoute: typeof ApiPublicSellauthWebhookRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicProductImageSplatRoute: typeof ApiPublicProductImageSplatRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
@@ -813,6 +827,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/sellauth-webhook': {
+      id: '/api/public/sellauth-webhook'
+      path: '/api/public/sellauth-webhook'
+      fullPath: '/api/public/sellauth-webhook'
+      preLoaderRoute: typeof ApiPublicSellauthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/oxapay-webhook': {
       id: '/api/public/oxapay-webhook'
       path: '/api/public/oxapay-webhook'
@@ -947,6 +968,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicCashfreeWebhookRoute: ApiPublicCashfreeWebhookRoute,
   ApiPublicCfSdkRoute: ApiPublicCfSdkRoute,
   ApiPublicOxapayWebhookRoute: ApiPublicOxapayWebhookRoute,
+  ApiPublicSellauthWebhookRoute: ApiPublicSellauthWebhookRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicProductImageSplatRoute: ApiPublicProductImageSplatRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
