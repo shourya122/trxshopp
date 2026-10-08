@@ -38,8 +38,9 @@ export type EditableProduct = {
   active?: boolean | null;
   featured?: boolean | null;
   badge?: string | null;
-  editions?: { name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null }[] | null;
+  editions?: { name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null; sellauth_variant_id?: number | null }[] | null;
   editions_label?: string | null;
+  sellauth_product_id?: number | null;
 
 
 };
@@ -136,7 +137,7 @@ export function ProductEditDialog({ product, onClose }: Props) {
   };
 
   const editions = form.editions ?? [];
-  const updateEdition = (i: number, patch: Partial<{ name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null }>) => {
+  const updateEdition = (i: number, patch: Partial<{ name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null; sellauth_variant_id?: number | null }>) => {
     const next = editions.map((e, idx) => (idx === i ? { ...e, ...patch } : e));
     set("editions", next);
   };
@@ -182,10 +183,18 @@ export function ProductEditDialog({ product, onClose }: Props) {
             price_cents: Math.max(0, Math.round(Number(e.price_cents) || 0)),
             out_of_stock: !!e.out_of_stock || stock === 0,
             stock,
+            sellauth_variant_id:
+              e.sellauth_variant_id === null || e.sellauth_variant_id === undefined
+                ? null
+                : Math.max(0, Math.floor(Number(e.sellauth_variant_id) || 0)),
           };
         })
         .filter((e) => e.name.length > 0),
       editions_label: (form.editions_label ?? "").trim(),
+      sellauth_product_id:
+        form.sellauth_product_id === null || form.sellauth_product_id === undefined
+          ? null
+          : Math.max(0, Math.floor(Number(form.sellauth_product_id) || 0)),
     };
 
     try {
@@ -497,7 +506,7 @@ export function ProductEditDialog({ product, onClose }: Props) {
                             placeholder="Price (₹)"
                           />
                         </div>
-                        <div className="w-24 shrink-0">
+                         <div className="w-24 shrink-0">
                           <Input
                             type="number"
                             value={e.stock === null || e.stock === undefined ? "" : String(e.stock)}
@@ -507,6 +516,18 @@ export function ProductEditDialog({ product, onClose }: Props) {
                               })
                             }
                             placeholder="Stock"
+                          />
+                        </div>
+                        <div className="w-28 shrink-0">
+                          <Input
+                            type="number"
+                            value={e.sellauth_variant_id === null || e.sellauth_variant_id === undefined ? "" : String(e.sellauth_variant_id)}
+                            onChange={(v) =>
+                              updateEdition(i, {
+                                sellauth_variant_id: v.trim() === "" ? null : Math.max(0, Math.floor(Number(v) || 0)),
+                              })
+                            }
+                            placeholder="SellAuth var."
                           />
                         </div>
                         <button
@@ -526,6 +547,18 @@ export function ProductEditDialog({ product, onClose }: Props) {
                       <Plus className="h-3 w-3" /> Add edition
                     </button>
                   </div>
+                </Field>
+                <Field label="SellAuth product ID (optional)">
+                  <Input
+                    type="number"
+                    value={form.sellauth_product_id === null || form.sellauth_product_id === undefined ? "" : String(form.sellauth_product_id)}
+                    onChange={(v) => set("sellauth_product_id", v.trim() === "" ? null : Math.max(0, Math.floor(Number(v) || 0)))}
+                    placeholder="e.g. 123"
+                  />
+                  <p className="text-[11px] text-[#71717A]">
+                    Link this product to its SellAuth product so SellAuth checkout delivers it automatically.
+                    Put the matching SellAuth variant ID on each edition above. Leave blank to deliver manually.
+                  </p>
                 </Field>
               </div>
             </div>
