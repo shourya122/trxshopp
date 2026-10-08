@@ -51,7 +51,7 @@ export const Route = createFileRoute("/api/public/sellauth-webhook")({
         }
 
         // Fetch the full invoice — notifications only carry IDs.
-        let invoice: {
+        interface SellauthInvoice {
           id?: number | string;
           status?: string;
           price?: string | number;
@@ -59,15 +59,16 @@ export const Route = createFileRoute("/api/public/sellauth-webhook")({
           currency?: string;
           email?: string;
           metadata?: Record<string, string>;
-        } | null = null;
+        }
+        let invoice: SellauthInvoice | null = null;
         try {
           const resp = await fetch(
             `https://api.sellauth.com/v1/shops/${shopId}/invoices/${invoiceId}`,
             { headers: { Authorization: `Bearer ${apiKey}` } },
           );
           if (resp.ok) {
-            const json = (await resp.json().catch(() => ({}))) as { data?: typeof invoice } & typeof invoice;
-            invoice = (json?.data ?? json) as typeof invoice;
+            const json = (await resp.json().catch(() => ({}))) as { data?: SellauthInvoice } & SellauthInvoice;
+            invoice = json?.data ?? json;
           }
         } catch (e) {
           console.error("[sellauth-webhook] invoice fetch failed", e);
