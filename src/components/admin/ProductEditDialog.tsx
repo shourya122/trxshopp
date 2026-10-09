@@ -38,9 +38,8 @@ export type EditableProduct = {
   active?: boolean | null;
   featured?: boolean | null;
   badge?: string | null;
-  editions?: { name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null; sellauth_variant_id?: number | null }[] | null;
+  editions?: { name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null }[] | null;
   editions_label?: string | null;
-  sellauth_product_id?: number | null;
 
 
 };
@@ -137,7 +136,7 @@ export function ProductEditDialog({ product, onClose }: Props) {
   };
 
   const editions = form.editions ?? [];
-  const updateEdition = (i: number, patch: Partial<{ name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null; sellauth_variant_id?: number | null }>) => {
+  const updateEdition = (i: number, patch: Partial<{ name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null }>) => {
     const next = editions.map((e, idx) => (idx === i ? { ...e, ...patch } : e));
     set("editions", next);
   };
@@ -183,18 +182,10 @@ export function ProductEditDialog({ product, onClose }: Props) {
             price_cents: Math.max(0, Math.round(Number(e.price_cents) || 0)),
             out_of_stock: !!e.out_of_stock || stock === 0,
             stock,
-            sellauth_variant_id:
-              e.sellauth_variant_id === null || e.sellauth_variant_id === undefined
-                ? null
-                : Math.max(0, Math.floor(Number(e.sellauth_variant_id) || 0)),
           };
         })
         .filter((e) => e.name.length > 0),
       editions_label: (form.editions_label ?? "").trim(),
-      sellauth_product_id:
-        form.sellauth_product_id === null || form.sellauth_product_id === undefined
-          ? null
-          : Math.max(0, Math.floor(Number(form.sellauth_product_id) || 0)),
     };
 
     try {
