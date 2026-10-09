@@ -933,43 +933,6 @@ function CheckoutInner({ cart, isBuyNow }: { cart: ReturnType<typeof useCart>; i
                       Pay Now
                     </button>
                   )
-                ) : paymentMethod === "sellauth" ? (
-                  formValid ? (
-                    <PayWithSellauthButton
-                      items={items.map((i) => ({
-                        name: i.name, qty: i.qty, price: i.price,
-                        variantId: i.variantId,
-                        product_id: i.variantId || String(i.id),
-                        edition_name: i.edition?.name,
-                        options: i.options,
-                      }))}
-                      amount={grand}
-                      name={name}
-                      email={email}
-                      phone={phone}
-                      discord={discord || undefined}
-                      shipping={{
-                        line1, line2: line2 || undefined, city, state: stateName,
-                        postal_code: postalCode,
-                        country: COUNTRIES.find((c) => c.name === country)?.code || "IN",
-                      }}
-                      couponCode={coupon?.code}
-                      disabled={paymentLocked || !items.length}
-                      onInitiate={() => setPaymentLocked(true)}
-                      onError={() => setPaymentLocked(false)}
-                      className="w-full h-12 rounded-[16px] bg-emerald-600 text-white text-xs font-semibold uppercase tracking-[0.2em] hover:bg-emerald-500 shadow-[0_0_24px_-6px_rgba(16,185,129,0.6)] inline-flex items-center justify-center gap-2 transition-colors"
-                      label="Pay Securely"
-                    />
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => { setAttempted(true); touchAll(); }}
-                      disabled={paymentLocked}
-                      className="w-full h-12 rounded-[16px] bg-emerald-600/40 text-white/70 text-xs font-semibold uppercase tracking-[0.2em] hover:bg-emerald-600/50 inline-flex items-center justify-center gap-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                    >
-                      Pay Securely
-                    </button>
-                  )
                 ) : formValid ? (
                     <PayWithCryptoButton
                       items={items.map((i) => ({
