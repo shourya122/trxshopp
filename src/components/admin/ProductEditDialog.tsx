@@ -518,18 +518,6 @@ export function ProductEditDialog({ product, onClose }: Props) {
                             placeholder="Stock"
                           />
                         </div>
-                        <div className="w-28 shrink-0">
-                          <Input
-                            type="number"
-                            value={e.sellauth_variant_id === null || e.sellauth_variant_id === undefined ? "" : String(e.sellauth_variant_id)}
-                            onChange={(v) =>
-                              updateEdition(i, {
-                                sellauth_variant_id: v.trim() === "" ? null : Math.max(0, Math.floor(Number(v) || 0)),
-                              })
-                            }
-                            placeholder="SellAuth var."
-                          />
-                        </div>
                         <button
                           type="button"
                           onClick={() => updateEdition(i, { out_of_stock: !e.out_of_stock })}
@@ -547,18 +535,6 @@ export function ProductEditDialog({ product, onClose }: Props) {
                       <Plus className="h-3 w-3" /> Add edition
                     </button>
                   </div>
-                </Field>
-                <Field label="SellAuth product ID (optional)">
-                  <Input
-                    type="number"
-                    value={form.sellauth_product_id === null || form.sellauth_product_id === undefined ? "" : String(form.sellauth_product_id)}
-                    onChange={(v) => set("sellauth_product_id", v.trim() === "" ? null : Math.max(0, Math.floor(Number(v) || 0)))}
-                    placeholder="e.g. 123"
-                  />
-                  <p className="text-[11px] text-[#71717A]">
-                    Link this product to its SellAuth product so SellAuth checkout delivers it automatically.
-                    Put the matching SellAuth variant ID on each edition above. Leave blank to deliver manually.
-                  </p>
                 </Field>
               </div>
             </div>
