@@ -62,12 +62,18 @@ export const createCryptoInvoice = createServerFn({ method: "POST" })
       return { ok: false as const, error: "Order total must be greater than zero." };
     }
 
+    // Link the order to the signed-in buyer so it shows on their account page.
+    const { resolveBuyerFromRequest } = await import("./order-user.server");
+    const buyer = await resolveBuyerFromRequest();
+
     // 1. Create order row (server-computed totals + line items)
     const { data: row, error } = await supabase
       .from("orders")
       .insert({
+        user_id: buyer.userId,
+        customer_id: buyer.userId,
         customer_name: data.name ?? null,
-        customer_email: data.email ?? "",
+        customer_email: data.email || buyer.email || "",
         customer_phone: data.phone ?? null,
         customer_discord: data.discord ?? null,
         shipping_address: data.shipping ?? null,

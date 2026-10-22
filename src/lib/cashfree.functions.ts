@@ -63,11 +63,17 @@ export const createCashfreePaymentLink = createServerFn({ method: "POST" })
       return { ok: false as const, error: "Order total must be greater than zero." };
     }
 
+    // Link the order to the signed-in buyer so it shows on their account page.
+    const { resolveBuyerFromRequest } = await import("./order-user.server");
+    const buyer = await resolveBuyerFromRequest();
+
     // 1. Create pending order row (server-computed totals + line items)
     const { data: row, error } = await supabase
       .from("orders")
       .insert({
-        customer_email: data.email,
+        user_id: buyer.userId,
+        customer_id: buyer.userId,
+        customer_email: data.email || buyer.email || "",
         customer_name: data.name,
         customer_phone: data.phone,
         customer_discord: data.discord ?? null,
