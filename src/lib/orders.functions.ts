@@ -249,7 +249,19 @@ export const getOrderWithItems = createServerFn({ method: "GET" })
     if (!order) return { ok: false as const, error: "Not found" };
     const { data: items } = await context.supabase
       .from("order_items").select("*").eq("order_id", data.id);
-    const rows = items ?? [];
+    type J = { product_id?: string; title?: string; name?: string; qty?: number; quantity?: number; price_cents?: number; price?: number; edition_name?: string | null };
+    const jsonItems = (Array.isArray(order.items) ? order.items : []) as J[];
+    const rows = (items && items.length)
+      ? items
+      : jsonItems.map((it, i) => ({
+          id: `${order.id}-${i}`,
+          order_id: order.id,
+          product_id: it.product_id ?? null,
+          title: it.title || it.name || "Item",
+          quantity: Number(it.qty ?? it.quantity ?? 1),
+          price_cents: Number(it.price_cents ?? Math.round(Number(it.price ?? 0) * 100)),
+          edition_name: it.edition_name ?? null,
+        }));
     const pids = Array.from(new Set(rows.map((r) => r.product_id).filter(Boolean))) as string[];
     let imgById = new Map<string, string | null>();
     if (pids.length) {
