@@ -39,6 +39,7 @@ export const Route = createFileRoute("/api/public/oxapay-webhook")({
           track_id?: string | number;
           order_id?: string;
           amount?: number | string;
+          email?: string;
         };
         try {
           payload = JSON.parse(rawBody);
@@ -130,6 +131,10 @@ export const Route = createFileRoute("/api/public/oxapay-webhook")({
           patch.order_status = "processing";
         }
         if (trackId) patch.payment_ref = trackId;
+        // Backfill customer email from the gateway payload when the order row has none.
+        if (!existing.customer_email && payload?.email) {
+          patch.customer_email = String(payload.email);
+        }
 
         const { error } = await supabase.from("orders").update(patch).eq("id", orderId);
         if (error) {

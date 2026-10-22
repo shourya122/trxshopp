@@ -49,7 +49,8 @@ function Orders() {
   const { data: rows = [], isLoading, isFetching, refetch } = useQuery({
     queryKey: ["admin-orders"],
     queryFn: () => listFn(),
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchInterval: 20000,
   });
 
   const [open, setOpen] = useState<string | null>(null);
