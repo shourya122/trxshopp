@@ -39,6 +39,7 @@ export const Route = createFileRoute("/api/public/oxapay-webhook")({
           track_id?: string | number;
           order_id?: string;
           amount?: number | string;
+          email?: string;
         };
         try {
           payload = JSON.parse(rawBody);
