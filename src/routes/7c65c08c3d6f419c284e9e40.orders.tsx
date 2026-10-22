@@ -261,7 +261,17 @@ function Orders() {
                           <span className="text-[11px] text-[#71717A]">{r.payment_provider || "—"}</span>
                         </div>
                       </td>
-                      <td className="px-3 py-3 text-[#D4D4D8]">{firstItemName(r.items)}</td>
+                      <td className="px-3 py-3">
+                        <div className="flex items-center gap-2.5">
+                          <div className="h-8 w-8 shrink-0 overflow-hidden rounded-md border border-white/[0.08] bg-[#18181B]">
+                            {(() => {
+                              const img = (r.items?.[0] as { cover_image?: string | null } | undefined)?.cover_image;
+                              return img ? <img src={img} alt="" className="h-full w-full object-cover" loading="lazy" /> : null;
+                            })()}
+                          </div>
+                          <span className="text-[#D4D4D8]">{firstItemName(r.items)}</span>
+                        </div>
+                      </td>
                       <td className="px-3 py-3 tabular-nums text-white">{inr(r.amount_inr)}</td>
                       <td className="px-3 py-3"><Badge tone={statusTone(r.status)}>{r.status}</Badge></td>
                       <td className="px-5 py-3 text-right">
@@ -287,10 +297,16 @@ function Orders() {
                                   <ul className="mt-1.5 space-y-1 text-[12px] text-[#D4D4D8]">
                                     {(r.items ?? []).map((it, i) => {
                                       const ed = (it as { edition_name?: string }).edition_name;
+                                      const img = (it as { cover_image?: string | null }).cover_image;
                                       return (
-                                        <li key={i}>
-                                          {(it.name || it.title || "Item")} × {(it.qty ?? it.quantity ?? 1)}
-                                          {ed && <span className="ml-1 text-emerald-400/80">· {ed}</span>}
+                                        <li key={i} className="flex items-center gap-2">
+                                          <div className="h-7 w-7 shrink-0 overflow-hidden rounded border border-white/[0.08] bg-[#18181B]">
+                                            {img && <img src={img} alt="" className="h-full w-full object-cover" loading="lazy" />}
+                                          </div>
+                                          <span>
+                                            {(it.name || it.title || "Item")} × {(it.qty ?? it.quantity ?? 1)}
+                                            {ed && <span className="ml-1 text-emerald-400/80">· {ed}</span>}
+                                          </span>
                                         </li>
                                       );
                                     })}
@@ -470,12 +486,20 @@ function ConfirmFulfillModal({
           <div>
             <div className="mb-1 text-[#71717A]">Items ({totalQty})</div>
             <ul className="space-y-1 rounded-md border border-white/[0.06] bg-[#0B0B0E] px-3 py-2 text-[12px] text-[#D4D4D8]">
-              {(order.items ?? []).map((it, i) => (
-                <li key={i} className="flex justify-between">
-                  <span>{(it.name || it.title || "Item")}</span>
-                  <span className="text-[#A1A1AA]">× {(it.qty ?? it.quantity ?? 1)}</span>
-                </li>
-              ))}
+              {(order.items ?? []).map((it, i) => {
+                const img = (it as { cover_image?: string | null }).cover_image;
+                return (
+                  <li key={i} className="flex items-center justify-between gap-2">
+                    <span className="flex min-w-0 items-center gap-2">
+                      <div className="h-7 w-7 shrink-0 overflow-hidden rounded border border-white/[0.08] bg-[#18181B]">
+                        {img && <img src={img} alt="" className="h-full w-full object-cover" loading="lazy" />}
+                      </div>
+                      <span className="truncate">{(it.name || it.title || "Item")}</span>
+                    </span>
+                    <span className="text-[#A1A1AA]">× {(it.qty ?? it.quantity ?? 1)}</span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
           <div className="flex justify-between border-t border-white/[0.06] pt-3">
