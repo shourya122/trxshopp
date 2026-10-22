@@ -29,7 +29,7 @@ export default function LegalPage({
           <hr style={{ margin: "3rem 0 1.5rem", borderColor: "rgba(255,255,255,0.08)" }} />
           <p style={{ opacity: 0.7, fontSize: "0.875rem" }}>
             Questions? Reach us on{" "}
-            <a href="https://discord.gg/4yJQJxgYh4" style={{ color: "#5865F2" }}>Discord</a>{" "}
+            <a href="https://discord.gg/trxshop" style={{ color: "#5865F2" }}>Discord</a>{" "}
             or email{" "}
             <a href="mailto:support@trxshop.in" style={{ color: "var(--text)", textDecoration: "underline" }}>
               support@trxshop.in
