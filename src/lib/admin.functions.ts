@@ -17,7 +17,7 @@ export type AdminOrder = {
   payment_status: string | null;
   order_status: string | null;
   payment_provider: string | null;
-  items: Array<{ name?: string; title?: string; qty?: number; quantity?: number; price?: number }>;
+  items: Array<{ name?: string; title?: string; qty?: number; quantity?: number; price?: number; product_id?: string; cover_image?: string | null }>;
   created_at: string;
   paid_at: string | null;
 };
@@ -73,6 +73,24 @@ export const adminListAllOrders = createServerFn({ method: "GET" })
         created_at: o.created_at as string,
         paid_at: (o.paid_at as string) || null,
       });
+    }
+    // Attach product cover images so each order row shows product artwork.
+    const pids = Array.from(
+      new Set(
+        rows.flatMap((r) => r.items.map((it) => (it as { product_id?: string }).product_id ?? "")).filter(Boolean),
+      ),
+    );
+    if (pids.length) {
+      const { data: prods } = await supabaseAdmin.from("products").select("id, cover_image").in("id", pids);
+      const imgById = new Map<string, string | null>(
+        (prods ?? []).map((p) => [p.id as string, (p.cover_image as string | null) ?? null]),
+      );
+      for (const r of rows) {
+        for (const it of r.items) {
+          const pid = (it as { product_id?: string }).product_id;
+          if (pid) (it as { cover_image?: string | null }).cover_image = imgById.get(pid) ?? null;
+        }
+      }
     }
     rows.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
     return rows;
