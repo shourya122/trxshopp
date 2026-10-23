@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { ShieldCheck, Layers, Clock, Lock, Check, Star, ArrowRight, Eye, FileText, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { ShieldCheck, Layers, Clock, Lock, Check, Star, ArrowRight, Eye, FileText, Loader2, ChevronLeft, ChevronRight, Bitcoin } from "lucide-react";
 import cartIconAsset from "@/assets/cart-icon-v2.svg.asset.json";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { getProduct, getProductBySlug, listProducts } from "@/lib/products";
@@ -18,7 +18,6 @@ import avatar1 from "@/assets/mcpfp.png.asset.json";
 import avatar2 from "@/assets/masteroog.png.asset.json";
 import avatar3 from "@/assets/woody.png.asset.json";
 import { toast } from "sonner";
-import { PayWithCryptoButton } from "@/components/PayWithCryptoButton";
 import { supabase } from "@/integrations/supabase/client";
 
 

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { Menu, X, Search, User, Trash2, Loader2 } from "lucide-react";
+import { Menu, X, Search, User, Trash2, Loader2, Bitcoin } from "lucide-react";
 import cartIconAsset from "@/assets/header-cart-icon-v2.svg.asset.json";
 import { Link, useLocation } from "@tanstack/react-router";
 
@@ -17,7 +17,6 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { SearchModal } from "@/components/SearchModal";
-import { PayWithCryptoButton } from "@/components/PayWithCryptoButton";
 import { CartDrawerSkeleton } from "@/components/ProductDetailSkeleton";
 import { AccountDialog } from "@/components/AccountDialog";
 
