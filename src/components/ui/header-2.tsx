@@ -429,16 +429,15 @@ export function Header() {
                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
                   Check out
                 </button>
-                <PayWithCryptoButton
-                  disabled={items.length === 0}
-                  amount={total}
-                  items={items.map((it) => ({
-                    name: it.name,
-                    qty: it.qty,
-                    price: it.price,
-                    variantId: it.variantId,
-                  }))}
-                />
+                <button
+                  type="button"
+                  onClick={handleCheckout}
+                  disabled={!checkoutUrl || isLoading}
+                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-md text-sm font-semibold bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:opacity-95 transition disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <Bitcoin className="w-4 h-4" />
+                  Pay with Crypto
+                </button>
 
               </div>
             </>
