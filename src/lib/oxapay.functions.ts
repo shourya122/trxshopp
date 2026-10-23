@@ -142,7 +142,7 @@ export const createCryptoInvoice = createServerFn({ method: "POST" })
           order_id: row.id,
           email: data.email || undefined,
           callback_url: `${origin}/api/public/oxapay-webhook`,
-          return_url: `${origin}/order/${row.id}`,
+          return_url: `${origin}/account`,
         }),
       });
 

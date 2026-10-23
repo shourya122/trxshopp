@@ -37,6 +37,7 @@ import { Route as R7c65c08c3d6f419c284e9e40SettingsRouteImport } from './routes/
 import { Route as R7c65c08c3d6f419c284e9e40ReviewsRouteImport } from './routes/7c65c08c3d6f419c284e9e40.reviews'
 import { Route as R7c65c08c3d6f419c284e9e40ProductsRouteImport } from './routes/7c65c08c3d6f419c284e9e40.products'
 import { Route as R7c65c08c3d6f419c284e9e40OrdersRouteImport } from './routes/7c65c08c3d6f419c284e9e40.orders'
+import { Route as R7c65c08c3d6f419c284e9e40DeliveryRouteImport } from './routes/7c65c08c3d6f419c284e9e40.delivery'
 import { Route as R7c65c08c3d6f419c284e9e40CustomersRouteImport } from './routes/7c65c08c3d6f419c284e9e40.customers'
 import { Route as R7c65c08c3d6f419c284e9e40CouponsRouteImport } from './routes/7c65c08c3d6f419c284e9e40.coupons'
 import { Route as R7c65c08c3d6f419c284e9e40CategoriesRouteImport } from './routes/7c65c08c3d6f419c284e9e40.categories'
@@ -200,6 +201,12 @@ const R7c65c08c3d6f419c284e9e40OrdersRoute =
     path: '/orders',
     getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
   } as any)
+const R7c65c08c3d6f419c284e9e40DeliveryRoute =
+  R7c65c08c3d6f419c284e9e40DeliveryRouteImport.update({
+    id: '/delivery',
+    path: '/delivery',
+    getParentRoute: () => R7c65c08c3d6f419c284e9e40Route,
+  } as any)
 const R7c65c08c3d6f419c284e9e40CustomersRoute =
   R7c65c08c3d6f419c284e9e40CustomersRouteImport.update({
     id: '/customers',
@@ -298,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/7c65c08c3d6f419c284e9e40/categories': typeof R7c65c08c3d6f419c284e9e40CategoriesRoute
   '/7c65c08c3d6f419c284e9e40/coupons': typeof R7c65c08c3d6f419c284e9e40CouponsRoute
   '/7c65c08c3d6f419c284e9e40/customers': typeof R7c65c08c3d6f419c284e9e40CustomersRoute
+  '/7c65c08c3d6f419c284e9e40/delivery': typeof R7c65c08c3d6f419c284e9e40DeliveryRoute
   '/7c65c08c3d6f419c284e9e40/orders': typeof R7c65c08c3d6f419c284e9e40OrdersRoute
   '/7c65c08c3d6f419c284e9e40/products': typeof R7c65c08c3d6f419c284e9e40ProductsRoute
   '/7c65c08c3d6f419c284e9e40/reviews': typeof R7c65c08c3d6f419c284e9e40ReviewsRoute
@@ -341,6 +349,7 @@ export interface FileRoutesByTo {
   '/7c65c08c3d6f419c284e9e40/categories': typeof R7c65c08c3d6f419c284e9e40CategoriesRoute
   '/7c65c08c3d6f419c284e9e40/coupons': typeof R7c65c08c3d6f419c284e9e40CouponsRoute
   '/7c65c08c3d6f419c284e9e40/customers': typeof R7c65c08c3d6f419c284e9e40CustomersRoute
+  '/7c65c08c3d6f419c284e9e40/delivery': typeof R7c65c08c3d6f419c284e9e40DeliveryRoute
   '/7c65c08c3d6f419c284e9e40/orders': typeof R7c65c08c3d6f419c284e9e40OrdersRoute
   '/7c65c08c3d6f419c284e9e40/products': typeof R7c65c08c3d6f419c284e9e40ProductsRoute
   '/7c65c08c3d6f419c284e9e40/reviews': typeof R7c65c08c3d6f419c284e9e40ReviewsRoute
@@ -386,6 +395,7 @@ export interface FileRoutesById {
   '/7c65c08c3d6f419c284e9e40/categories': typeof R7c65c08c3d6f419c284e9e40CategoriesRoute
   '/7c65c08c3d6f419c284e9e40/coupons': typeof R7c65c08c3d6f419c284e9e40CouponsRoute
   '/7c65c08c3d6f419c284e9e40/customers': typeof R7c65c08c3d6f419c284e9e40CustomersRoute
+  '/7c65c08c3d6f419c284e9e40/delivery': typeof R7c65c08c3d6f419c284e9e40DeliveryRoute
   '/7c65c08c3d6f419c284e9e40/orders': typeof R7c65c08c3d6f419c284e9e40OrdersRoute
   '/7c65c08c3d6f419c284e9e40/products': typeof R7c65c08c3d6f419c284e9e40ProductsRoute
   '/7c65c08c3d6f419c284e9e40/reviews': typeof R7c65c08c3d6f419c284e9e40ReviewsRoute
@@ -432,6 +442,7 @@ export interface FileRouteTypes {
     | '/7c65c08c3d6f419c284e9e40/categories'
     | '/7c65c08c3d6f419c284e9e40/coupons'
     | '/7c65c08c3d6f419c284e9e40/customers'
+    | '/7c65c08c3d6f419c284e9e40/delivery'
     | '/7c65c08c3d6f419c284e9e40/orders'
     | '/7c65c08c3d6f419c284e9e40/products'
     | '/7c65c08c3d6f419c284e9e40/reviews'
@@ -475,6 +486,7 @@ export interface FileRouteTypes {
     | '/7c65c08c3d6f419c284e9e40/categories'
     | '/7c65c08c3d6f419c284e9e40/coupons'
     | '/7c65c08c3d6f419c284e9e40/customers'
+    | '/7c65c08c3d6f419c284e9e40/delivery'
     | '/7c65c08c3d6f419c284e9e40/orders'
     | '/7c65c08c3d6f419c284e9e40/products'
     | '/7c65c08c3d6f419c284e9e40/reviews'
@@ -519,6 +531,7 @@ export interface FileRouteTypes {
     | '/7c65c08c3d6f419c284e9e40/categories'
     | '/7c65c08c3d6f419c284e9e40/coupons'
     | '/7c65c08c3d6f419c284e9e40/customers'
+    | '/7c65c08c3d6f419c284e9e40/delivery'
     | '/7c65c08c3d6f419c284e9e40/orders'
     | '/7c65c08c3d6f419c284e9e40/products'
     | '/7c65c08c3d6f419c284e9e40/reviews'
@@ -778,6 +791,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40OrdersRouteImport
       parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
     }
+    '/7c65c08c3d6f419c284e9e40/delivery': {
+      id: '/7c65c08c3d6f419c284e9e40/delivery'
+      path: '/delivery'
+      fullPath: '/7c65c08c3d6f419c284e9e40/delivery'
+      preLoaderRoute: typeof R7c65c08c3d6f419c284e9e40DeliveryRouteImport
+      parentRoute: typeof R7c65c08c3d6f419c284e9e40Route
+    }
     '/7c65c08c3d6f419c284e9e40/customers': {
       id: '/7c65c08c3d6f419c284e9e40/customers'
       path: '/customers'
@@ -884,6 +904,7 @@ interface R7c65c08c3d6f419c284e9e40RouteChildren {
   R7c65c08c3d6f419c284e9e40CategoriesRoute: typeof R7c65c08c3d6f419c284e9e40CategoriesRoute
   R7c65c08c3d6f419c284e9e40CouponsRoute: typeof R7c65c08c3d6f419c284e9e40CouponsRoute
   R7c65c08c3d6f419c284e9e40CustomersRoute: typeof R7c65c08c3d6f419c284e9e40CustomersRoute
+  R7c65c08c3d6f419c284e9e40DeliveryRoute: typeof R7c65c08c3d6f419c284e9e40DeliveryRoute
   R7c65c08c3d6f419c284e9e40OrdersRoute: typeof R7c65c08c3d6f419c284e9e40OrdersRoute
   R7c65c08c3d6f419c284e9e40ProductsRoute: typeof R7c65c08c3d6f419c284e9e40ProductsRoute
   R7c65c08c3d6f419c284e9e40ReviewsRoute: typeof R7c65c08c3d6f419c284e9e40ReviewsRoute
@@ -903,6 +924,8 @@ const R7c65c08c3d6f419c284e9e40RouteChildren: R7c65c08c3d6f419c284e9e40RouteChil
       R7c65c08c3d6f419c284e9e40CouponsRoute,
     R7c65c08c3d6f419c284e9e40CustomersRoute:
       R7c65c08c3d6f419c284e9e40CustomersRoute,
+    R7c65c08c3d6f419c284e9e40DeliveryRoute:
+      R7c65c08c3d6f419c284e9e40DeliveryRoute,
     R7c65c08c3d6f419c284e9e40OrdersRoute: R7c65c08c3d6f419c284e9e40OrdersRoute,
     R7c65c08c3d6f419c284e9e40ProductsRoute:
       R7c65c08c3d6f419c284e9e40ProductsRoute,

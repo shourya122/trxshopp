@@ -367,3 +367,55 @@ export const adminUpdateOrder = createServerFn({ method: "POST" })
 
     return { ok: true as const, id: data.id };
   });
+
+// Send (or resend) the delivery confirmation email for an order, on demand.
+export const adminSendDeliveryEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sb = context.supabase as any;
+    const { data: row } = await sb
+      .from("orders")
+      .select("customer_email, customer_name, order_number, amount_cents, items, payment_provider, payment_ref")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (!row?.customer_email) {
+      return { ok: false as const, error: "This order has no customer email." };
+    }
+    const items = Array.isArray(row.items)
+      ? (row.items as Array<Record<string, unknown>>).map((li) => ({
+          name: String(li.title ?? li.name ?? "Item"),
+          qty: Number(li.qty ?? li.quantity ?? 1),
+          price:
+            li.price != null
+              ? Number(li.price)
+              : li.price_cents != null
+                ? Number(li.price_cents) / 100
+                : 0,
+          edition: (li.edition_name as string | undefined) ?? null,
+        }))
+      : [];
+    const amountInr = (Number(row.amount_cents) || 0) / 100;
+    const { sendTransactionalInternal } = await import(
+      "@/lib/email/send-transactional.server"
+    );
+    await sendTransactionalInternal({
+      templateName: "order-delivered",
+      recipientEmail: row.customer_email as string,
+      // Unique key per send so manual resends are not deduped.
+      idempotencyKey: `order-delivered-manual-${data.id}-${Date.now()}`,
+      templateData: {
+        orderId: data.id,
+        orderNumber: row.order_number ?? null,
+        customerName: row.customer_name ?? undefined,
+        items,
+        amountInr,
+        price: amountInr.toFixed(2),
+        provider: row.payment_provider ?? undefined,
+        paymentRef: row.payment_ref ?? null,
+      },
+    });
+    return { ok: true as const, id: data.id };
+  });
