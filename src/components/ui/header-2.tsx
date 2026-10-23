@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { Menu, X, Search, User, Trash2, Loader2 } from "lucide-react";
+import { Menu, X, Search, User, Trash2, Loader2, Bitcoin } from "lucide-react";
 import cartIconAsset from "@/assets/header-cart-icon-v2.svg.asset.json";
 import { Link, useLocation } from "@tanstack/react-router";
 
@@ -17,7 +17,6 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { SearchModal } from "@/components/SearchModal";
-import { PayWithCryptoButton } from "@/components/PayWithCryptoButton";
 import { CartDrawerSkeleton } from "@/components/ProductDetailSkeleton";
 import { AccountDialog } from "@/components/AccountDialog";
 
@@ -429,16 +428,15 @@ export function Header() {
                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
                   Check out
                 </button>
-                <PayWithCryptoButton
-                  disabled={items.length === 0}
-                  amount={total}
-                  items={items.map((it) => ({
-                    name: it.name,
-                    qty: it.qty,
-                    price: it.price,
-                    variantId: it.variantId,
-                  }))}
-                />
+                <button
+                  type="button"
+                  onClick={handleCheckout}
+                  disabled={!checkoutUrl || isLoading}
+                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-md text-sm font-semibold bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:opacity-95 transition disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <Bitcoin className="w-4 h-4" />
+                  Pay with Crypto
+                </button>
 
               </div>
             </>
