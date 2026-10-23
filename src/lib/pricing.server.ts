@@ -21,6 +21,7 @@ export interface ResolvedLineItem {
   variantId?: string;
   edition_name: string | null;
   edition_price_cents: number | null;
+  options: Record<string, string> | null;
 }
 
 export interface PricingResult {
@@ -120,6 +121,7 @@ export async function resolvePricing(
       variantId: it.variantId,
       edition_name: editionName,
       edition_price_cents: editionName ? unitCents : null,
+      options: Object.keys(optRes.selected).length ? optRes.selected : null,
     });
     subtotalCents += unitCents * qty;
   }
