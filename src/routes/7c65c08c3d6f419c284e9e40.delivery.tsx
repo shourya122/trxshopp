@@ -120,7 +120,7 @@ function Delivery() {
     <div className="space-y-6">
       <PageHeader
         title="Delivery"
-        subtitle="Update each order's delivery status and notify the customer."
+        description="Update each order's delivery status and notify the customer."
         actions={
           <button
             onClick={() => refetch()}
