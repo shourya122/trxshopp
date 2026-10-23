@@ -8,7 +8,7 @@ import {
   LayoutDashboard, ShoppingBag, Package, Tags, Users, Ticket,
   BarChart3, Star, LifeBuoy, Settings, Search, Bell, Plus,
   ChevronRight, Command as CmdIcon, CircleUser, Menu, X, Check,
-  Loader2, ShieldAlert, Inbox, Truck,
+  Loader2, ShieldAlert, Inbox, Truck, PackageCheck,
 } from "lucide-react";
 import {
   CommandDialog, CommandInput, CommandList, CommandEmpty,
@@ -50,6 +50,7 @@ type NavItem = {
 const nav: NavItem[] = [
   { to: "/7c65c08c3d6f419c284e9e40", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/7c65c08c3d6f419c284e9e40/orders", label: "Orders", icon: ShoppingBag, badge: "24" },
+  { to: "/7c65c08c3d6f419c284e9e40/delivery", label: "Delivery", icon: PackageCheck },
   { to: "/7c65c08c3d6f419c284e9e40/products", label: "Products", icon: Package },
   { to: "/7c65c08c3d6f419c284e9e40/categories", label: "Categories", icon: Tags },
   { to: "/7c65c08c3d6f419c284e9e40/customers", label: "Customers", icon: Users },
