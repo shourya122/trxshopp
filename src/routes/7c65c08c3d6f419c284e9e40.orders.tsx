@@ -34,12 +34,24 @@ const statusTone = (s: string) => {
   return "danger";
 };
 
+const itemVariantParts = (it: Record<string, unknown>): string[] => {
+  const parts: string[] = [];
+  const ed = it.edition_name as string | undefined | null;
+  if (ed) parts.push(ed);
+  const opts = it.options as Record<string, string> | undefined | null;
+  if (opts && typeof opts === "object") {
+    for (const [k, v] of Object.entries(opts)) parts.push(`${k}: ${v}`);
+  }
+  return parts;
+};
+
 const firstItemName = (items: AdminOrder["items"]) => {
   const it = items?.[0];
   if (!it) return "—";
   const name = (it.name || it.title || "Item") as string;
+  const variant = itemVariantParts(it as Record<string, unknown>);
   const rest = items.length > 1 ? ` +${items.length - 1}` : "";
-  return name + rest;
+  return name + (variant.length ? ` · ${variant.join(" · ")}` : "") + rest;
 };
 
 function Orders() {
@@ -296,8 +308,8 @@ function Orders() {
                                   <div className="text-[10.5px] uppercase tracking-wider text-[#52525B]">Items</div>
                                   <ul className="mt-1.5 space-y-1 text-[12px] text-[#D4D4D8]">
                                     {(r.items ?? []).map((it, i) => {
-                                      const ed = (it as { edition_name?: string }).edition_name;
                                       const img = (it as { cover_image?: string | null }).cover_image;
+                                      const variant = itemVariantParts(it as Record<string, unknown>);
                                       return (
                                         <li key={i} className="flex items-center gap-2">
                                           <div className="h-7 w-7 shrink-0 overflow-hidden rounded border border-white/[0.08] bg-[#18181B]">
@@ -305,7 +317,9 @@ function Orders() {
                                           </div>
                                           <span>
                                             {(it.name || it.title || "Item")} × {(it.qty ?? it.quantity ?? 1)}
-                                            {ed && <span className="ml-1 text-emerald-400/80">· {ed}</span>}
+                                            {variant.length > 0 && (
+                                              <span className="ml-1 text-emerald-400/80">· {variant.join(" · ")}</span>
+                                            )}
                                           </span>
                                         </li>
                                       );
