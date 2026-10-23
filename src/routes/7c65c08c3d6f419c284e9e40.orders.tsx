@@ -502,13 +502,19 @@ function ConfirmFulfillModal({
             <ul className="space-y-1 rounded-md border border-white/[0.06] bg-[#0B0B0E] px-3 py-2 text-[12px] text-[#D4D4D8]">
               {(order.items ?? []).map((it, i) => {
                 const img = (it as { cover_image?: string | null }).cover_image;
+                const variant = itemVariantParts(it as Record<string, unknown>);
                 return (
                   <li key={i} className="flex items-center justify-between gap-2">
                     <span className="flex min-w-0 items-center gap-2">
                       <div className="h-7 w-7 shrink-0 overflow-hidden rounded border border-white/[0.08] bg-[#18181B]">
                         {img && <img src={img} alt="" className="h-full w-full object-cover" loading="lazy" />}
                       </div>
-                      <span className="truncate">{(it.name || it.title || "Item")}</span>
+                      <span className="truncate">
+                        {(it.name || it.title || "Item")}
+                        {variant.length > 0 && (
+                          <span className="ml-1 text-emerald-400/80">· {variant.join(" · ")}</span>
+                        )}
+                      </span>
                     </span>
                     <span className="text-[#A1A1AA]">× {(it.qty ?? it.quantity ?? 1)}</span>
                   </li>
