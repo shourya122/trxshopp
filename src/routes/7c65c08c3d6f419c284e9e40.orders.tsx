@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Filter, Search, X } from "lucide-react";
 import { Loader } from "@/components/Loader";
 import { toast } from "sonner";
+import { useNewOrderChime } from "@/hooks/useOrderChime";
 import { toastPromise } from "@/lib/toast-utils";
 import { Card, PageHeader, Badge } from "@/components/admin/ui";
 import { adminListAllOrders, type AdminOrder } from "@/lib/admin.functions";

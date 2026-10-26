@@ -1,7 +1,7 @@
 // Admin delivery tracking: update each order's shipping/delivery status and
 // send (or resend) the delivery confirmation email to the customer.
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Search, Mail, RefreshCw } from "lucide-react";
