@@ -1,12 +1,13 @@
 // Admin delivery tracking: update each order's shipping/delivery status and
 // send (or resend) the delivery confirmation email to the customer.
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Search, Mail, RefreshCw } from "lucide-react";
 import { Loader } from "@/components/Loader";
 import { toast } from "sonner";
+import { useNewOrderChime } from "@/hooks/useOrderChime";
 import { Card, PageHeader, Badge } from "@/components/admin/ui";
 import { adminListAllOrders, type AdminOrder } from "@/lib/admin.functions";
 import { adminUpdateOrder, adminSendDeliveryEmail } from "@/lib/orders.functions";
@@ -67,6 +68,8 @@ function Delivery() {
     refetchOnWindowFocus: true,
     refetchInterval: 20000,
   });
+  // Chime whenever a brand-new order shows up.
+  useNewOrderChime(rows);
 
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<"active" | "delivered" | "all">("active");
