@@ -69,6 +69,8 @@ function Orders() {
     refetchOnWindowFocus: true,
     refetchInterval: 20000,
   });
+  // Chime whenever a brand-new order shows up.
+  useNewOrderChime(rows);
 
   const [open, setOpen] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
