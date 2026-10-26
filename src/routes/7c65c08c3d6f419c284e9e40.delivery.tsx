@@ -68,6 +68,8 @@ function Delivery() {
     refetchOnWindowFocus: true,
     refetchInterval: 20000,
   });
+  // Chime whenever a brand-new order shows up.
+  useNewOrderChime(rows);
 
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<"active" | "delivered" | "all">("active");
