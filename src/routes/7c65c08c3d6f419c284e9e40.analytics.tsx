@@ -44,7 +44,7 @@ function Analytics() {
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <Stat label="Revenue (30d)" value={inr(totals.rev)} delta="" trend="up" spark={trend.map((d) => d.rev)} index={0} />
-        <Stat label="Orders (30d)" value={totals.ord.toLocaleString()} delta={`${totals.paidCount} paid`} trend="up" spark={trend.map((d) => d.orders)} index={1} />
+        <Stat label="Orders (30d)" value={totals.ord.toLocaleString()} delta="paid orders" trend="up" spark={trend.map((d) => d.orders)} index={1} />
         <Stat label="Avg paid order" value={inr(Math.round(totals.avg))} delta="" trend="up" spark={trend.map((d) => d.rev)} index={2} />
         <Stat label="Conversion" value={`${(stats?.conversion ?? 0).toFixed(1)}%`} delta="paid / placed" trend="up" spark={[]} index={3} />
       </div>
