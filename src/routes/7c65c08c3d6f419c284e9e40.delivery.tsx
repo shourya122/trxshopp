@@ -7,6 +7,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Search, Mail, RefreshCw } from "lucide-react";
 import { Loader } from "@/components/Loader";
 import { toast } from "sonner";
+import { useNewOrderChime } from "@/hooks/useOrderChime";
 import { Card, PageHeader, Badge } from "@/components/admin/ui";
 import { adminListAllOrders, type AdminOrder } from "@/lib/admin.functions";
 import { adminUpdateOrder, adminSendDeliveryEmail } from "@/lib/orders.functions";
