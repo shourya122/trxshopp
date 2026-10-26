@@ -131,6 +131,11 @@ h1, h2, h3, h4 { letter-spacing: -0.015em; }
   border-radius: 2px;
 }
 
+/* Admin command palette: the search input keeps no blue focus ring */
+[cmdk-input]:focus-visible {
+  outline: none;
+}
+
 /* Skip-to-content link (visible only on focus) */
 .skip-link {
   position: fixed;
