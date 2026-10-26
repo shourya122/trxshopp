@@ -168,6 +168,8 @@ export const adminDashboardStats = createServerFn({ method: "GET" })
     // Top products by number sold
     const bag = new Map<string, { name: string; sold: number; revenue: number }>();
     for (const o of all) {
+      // Only paid orders contribute to sold units / product revenue.
+      if (!o.paid) continue;
       for (const it of (o.items as Array<{ name?: string; title?: string; qty?: number; quantity?: number; price?: number }>) ?? []) {
         const name = (it.name || it.title || "Unknown") as string;
         const qty = Number(it.qty ?? it.quantity ?? 1);
@@ -224,6 +226,7 @@ export const adminAnalyticsTrend = createServerFn({ method: "GET" })
       for (const o of orders ?? []) {
         const t = new Date(o.created_at as string).getTime();
         if (t >= dayStart && t < dayEnd) {
+          if (o.status !== "paid" && o.payment_status !== "paid") continue;
           cnt++;
           if (o.status === "paid" || o.payment_status === "paid") {
             rev += ((o.amount_cents ?? o.total_amount ?? 0) as number) / 100;
@@ -232,9 +235,9 @@ export const adminAnalyticsTrend = createServerFn({ method: "GET" })
       }
       for (const o of crypto ?? []) {
         const t = new Date(o.created_at as string).getTime();
-        if (t >= dayStart && t < dayEnd) {
+        if (t >= dayStart && t < dayEnd && o.status === "paid") {
           cnt++;
-          if (o.status === "paid") rev += Number(o.amount_inr ?? 0);
+          rev += Number(o.amount_inr ?? 0);
         }
       }
       days.push({ d: String(d.getDate()), rev: Math.round(rev), orders: cnt });
