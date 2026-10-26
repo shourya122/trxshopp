@@ -13,6 +13,9 @@ export type AdminOrder = {
   source: "card" | "crypto";
   customer_email: string | null;
   amount_inr: number; // rupees
+  paid_currency: "INR" | "USD"; // currency the customer actually paid in
+  paid_amount: number; // amount in paid_currency
+
   status: string;
   payment_status: string | null;
   order_status: string | null;
@@ -32,7 +35,7 @@ export const adminListAllOrders = createServerFn({ method: "GET" })
     const [{ data: fiat }, { data: crypto }] = await Promise.all([
       supabaseAdmin
         .from("orders")
-        .select("id, customer_email, amount_cents, total_amount, status, payment_status, order_status, payment_provider, items, created_at, paid_at")
+        .select("id, customer_email, amount_cents, total_amount, status, payment_status, order_status, payment_provider, items, raw_callback, created_at, paid_at")
         .order("created_at", { ascending: false })
         .limit(500),
       supabaseAdmin
@@ -42,14 +45,30 @@ export const adminListAllOrders = createServerFn({ method: "GET" })
         .limit(500),
     ]);
 
+    // Payment currency: crypto settles in dollars (USDT), card/UPI in rupees.
+    const { data: rateRow } = await supabaseAdmin
+      .from("site_settings")
+      .select("key, value")
+      .eq("key", "usd_inr_rate")
+      .maybeSingle();
+    const rateVal = Number(rateRow?.value);
+    const currentRate = Number.isFinite(rateVal) && rateVal > 0 ? rateVal : 104;
+
     const rows: AdminOrder[] = [];
     for (const o of fiat ?? []) {
       const cents = (o.amount_cents ?? o.total_amount ?? 0) as number;
+      const rc = (o.raw_callback ?? null) as Record<string, unknown> | null;
+      const isCrypto = (o.payment_provider as string) === "oxapay";
+      const storedRate = Number(rc?.usd_inr_rate);
+      const rate = Number.isFinite(storedRate) && storedRate > 0 ? storedRate : currentRate;
+      const amount_inr = Math.round(cents) / 100;
       rows.push({
         id: o.id as string,
         source: "card",
         customer_email: (o.customer_email as string) || null,
-        amount_inr: Math.round(cents) / 100,
+        amount_inr,
+        paid_currency: isCrypto ? "USD" : "INR",
+        paid_amount: isCrypto ? Math.round((amount_inr / rate) * 100) / 100 : amount_inr,
         status: (o.status as string) || "pending",
         payment_status: (o.payment_status as string) || null,
         order_status: (o.order_status as string) || null,
@@ -60,11 +79,14 @@ export const adminListAllOrders = createServerFn({ method: "GET" })
       });
     }
     for (const o of crypto ?? []) {
+      const amount_inr = Number(o.amount_inr ?? 0);
       rows.push({
         id: o.id as string,
         source: "crypto",
         customer_email: (o.customer_email as string) || null,
-        amount_inr: Number(o.amount_inr ?? 0),
+        amount_inr,
+        paid_currency: "USD",
+        paid_amount: Math.round((amount_inr / currentRate) * 100) / 100,
         status: (o.status as string) || "pending",
         payment_status: null,
         order_status: null,

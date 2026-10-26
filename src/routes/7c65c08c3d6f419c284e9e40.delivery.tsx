@@ -23,6 +23,11 @@ const FULFILL_OPTIONS: { value: FulfillStatus; label: string }[] = [
 ];
 
 const inr = (v: number) => `₹${v.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
+// Show each order in the currency the customer actually paid in.
+const amt = (r: { paid_currency?: "INR" | "USD" | null; paid_amount?: number | null; amount_inr: number }) =>
+  r.paid_currency === "USD"
+    ? `$${(r.paid_amount ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    : inr(r.amount_inr);
 const dt = (iso: string) => new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 
 const deliveryTone = (s: string | null) => {
@@ -184,7 +189,7 @@ function Delivery() {
                         {o.items.map((it) => itemLabel(it as Record<string, unknown>)).join(", ") || "—"}
                       </p>
                       <p className="mt-0.5 truncate text-xs text-white/40">
-                        {o.customer_email || "guest"} · {inr(o.amount_inr)} · {dt(o.created_at)}
+                        {o.customer_email || "guest"} · {amt(o)} · {dt(o.created_at)}
                       </p>
                     </div>
                   </div>
