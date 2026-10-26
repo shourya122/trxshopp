@@ -66,6 +66,14 @@ export const createCryptoInvoice = createServerFn({ method: "POST" })
     const { resolveBuyerFromRequest } = await import("./order-user.server");
     const buyer = await resolveBuyerFromRequest();
 
+    // Record the payment currency: crypto settles in dollars (USDT).
+    // The rate is snapshot at order time so admin can show the paid amount in $.
+    const { data: rateRow } = await supabase
+      .from("site_settings").select("key, value").eq("key", "usd_inr_rate").maybeSingle();
+    const rateNum = Number(rateRow?.value);
+    const usdRate = Number.isFinite(rateNum) && rateNum > 0 ? rateNum : 104;
+
+
     // 1. Create order row (server-computed totals + line items)
     const { data: row, error } = await supabase
       .from("orders")
@@ -81,9 +89,11 @@ export const createCryptoInvoice = createServerFn({ method: "POST" })
         amount_cents: priced.totalCents,
         status: "pending",
         payment_provider: "oxapay",
-        raw_callback: priced.appliedCoupon
-          ? { coupon: priced.appliedCoupon, discount_cents: priced.discountCents }
-          : null,
+        raw_callback: {
+          ...(priced.appliedCoupon ? { coupon: priced.appliedCoupon, discount_cents: priced.discountCents } : {}),
+          paid_currency: "USD",
+          usd_inr_rate: usdRate,
+        },
       })
       .select("id, order_number")
       .single();
