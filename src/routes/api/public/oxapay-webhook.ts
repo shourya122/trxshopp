@@ -70,7 +70,7 @@ export const Route = createFileRoute("/api/public/oxapay-webhook")({
         // Idempotency: if already paid, don't re-post to Discord.
         const { data: existing } = await supabase
           .from("orders")
-          .select("id, status, amount_cents, customer_email, customer_name, order_number, items")
+          .select("id, status, amount_cents, customer_email, customer_name, order_number, items, raw_callback")
           .eq("id", orderId)
           .maybeSingle();
         if (!existing) {
@@ -107,7 +107,12 @@ export const Route = createFileRoute("/api/public/oxapay-webhook")({
                 .update({
                   payment_status: "pending",
                   status: "pending",
-                  raw_callback: { ...payload, underpaid: true, expected_cents: expectedCents },
+                  raw_callback: {
+                    ...((existing.raw_callback as Record<string, unknown> | null) ?? {}),
+                    ...payload,
+                    underpaid: true,
+                    expected_cents: expectedCents,
+                  },
                 })
                 .eq("id", orderId);
               return new Response("Amount mismatch", { status: 409 });
@@ -124,7 +129,11 @@ export const Route = createFileRoute("/api/public/oxapay-webhook")({
               : payment_status === "failed"
                 ? "failed"
                 : "pending",
-          raw_callback: payload,
+          // Merge so order-creation metadata (coupon, paid_currency, rate) survives.
+          raw_callback: {
+            ...((existing.raw_callback as Record<string, unknown> | null) ?? {}),
+            ...payload,
+          },
         };
         if (payment_status === "paid") {
           patch.paid_at = new Date().toISOString();

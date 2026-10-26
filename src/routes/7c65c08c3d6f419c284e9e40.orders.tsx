@@ -24,6 +24,10 @@ const FULFILL_OPTIONS: { value: FulfillStatus; label: string }[] = [
 ];
 
 const inr = (v: number) => `₹${v.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
+const usd = (v: number) => `$${v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+// Show each order in the currency the customer actually paid in.
+const amt = (r: { paid_currency?: "INR" | "USD" | null; paid_amount?: number | null; amount_inr: number }) =>
+  r.paid_currency === "USD" ? usd(r.paid_amount ?? 0) : inr(r.amount_inr);
 const dt = (iso: string) => new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 
 const statusTone = (s: string) => {
@@ -284,7 +288,7 @@ function Orders() {
                           <span className="text-[#D4D4D8]">{firstItemName(r.items)}</span>
                         </div>
                       </td>
-                      <td className="px-3 py-3 tabular-nums text-white">{inr(r.amount_inr)}</td>
+                      <td className="px-3 py-3 tabular-nums text-white">{amt(r)}</td>
                       <td className="px-3 py-3"><Badge tone={statusTone(r.status)}>{r.status}</Badge></td>
                       <td className="px-5 py-3 text-right">
                         <div className="inline-flex items-center gap-2 tabular-nums text-[#A1A1AA]">
@@ -328,7 +332,10 @@ function Orders() {
                                 </div>
                                 <div>
                                   <div className="text-[10.5px] uppercase tracking-wider text-[#52525B]">Total</div>
-                                  <div className="mt-1.5 text-[13px] text-white tabular-nums">{inr(r.amount_inr)}</div>
+                                  <div className="mt-1.5 text-[13px] text-white tabular-nums">{amt(r)}</div>
+                                  {r.paid_currency === "USD" && (
+                                    <div className="text-[11.5px] text-[#A1A1AA] tabular-nums">≈ {inr(r.amount_inr)}</div>
+                                  )}
                                   <div className="text-[11.5px] text-[#A1A1AA]">Placed {dt(r.created_at)}</div>
                                   {r.paid_at && <div className="text-[11.5px] text-[#A1A1AA]">Paid {dt(r.paid_at)}</div>}
                                 </div>
@@ -524,7 +531,7 @@ function ConfirmFulfillModal({
           </div>
           <div className="flex justify-between border-t border-white/[0.06] pt-3">
             <span className="text-[#71717A]">Total</span>
-            <span className="tabular-nums text-white">₹{order.amount_inr.toLocaleString("en-IN", { maximumFractionDigits: 2 })}</span>
+            <span className="tabular-nums text-white">{amt(order)}</span>
           </div>
         </div>
         <div className="flex items-center justify-end gap-2 border-t border-white/[0.06] bg-[#0B0B0E] px-5 py-3">
