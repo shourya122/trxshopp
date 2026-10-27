@@ -345,7 +345,6 @@ function HomePage() {
                       img={img}
                       sale={sale}
                       regular={regular}
-                      platform={(p.platforms[0] || "pc") as any}
                     />
                   </div>
                 );
@@ -399,7 +398,6 @@ function HomePage() {
                         img={img}
                         sale={sale}
                         regular={regular}
-                        platform="pc"
                       />
                     </div>
                   );
@@ -451,7 +449,6 @@ function HomePage() {
                         img={img}
                         sale={sale}
                         regular={regular}
-                        platform="ps"
                       />
                     </div>
                   );
