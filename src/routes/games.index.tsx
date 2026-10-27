@@ -276,42 +276,6 @@ export function ProductCard({ g }: { g: Product }) {
   const { format } = useCurrency();
   const fmt = (n: number) => format(n * 100, { rs: true });
   const img = g.coverImage || g.screenshots[0] || "";
-  const { add } = useCart();
-  const numericId = Array.from(g.id).reduce((a, c) => a + c.charCodeAt(0), 0);
-  const [adding, setAdding] = useState(false);
-  const lockRef = useRef(false);
-  const btnRef = useRef<HTMLButtonElement>(null);
-  const handleQuickAdd = (e: React.MouseEvent) => {
-    // Products with editions/options must be configured on the product page —
-    // let the surrounding link navigate there instead of adding directly.
-    if ((g.editions?.length ?? 0) > 0 || g.purchaseMode === "enquire") return;
-    e.preventDefault();
-    e.stopPropagation();
-    if (lockRef.current) return;
-    if (!canAddToCart()) return;
-    lockRef.current = true;
-    setAdding(true);
-    if (btnRef.current) flyToCart(btnRef.current, img);
-    void add(
-      {
-        id: numericId,
-        variantId: g.variantId,
-        productId: g.id,
-        name: g.title,
-        platform: (g.platforms[0] || "pc"),
-        price: sale,
-        old: regular,
-        steamId: numericId,
-        image: img,
-      },
-      1,
-    );
-    
-    setTimeout(() => {
-      lockRef.current = false;
-      setAdding(false);
-    }, 800);
-  };
   const { ref: revealRef, shown } = useReveal<HTMLDivElement>();
   return (
     <div
@@ -337,18 +301,6 @@ export function ProductCard({ g }: { g: Product }) {
         <span className="absolute top-3 right-3 bg-green-500 text-white text-xs font-semibold rounded-full px-3 py-1">
           Sale
         </span>
-        <button
-          ref={btnRef}
-          type="button"
-          aria-label="Quick add"
-          onClick={handleQuickAdd}
-          disabled={adding}
-          aria-busy={adding}
-          className="hidden md:inline-flex absolute bottom-3 right-3 items-center justify-center gap-0 bg-white text-neutral-900 rounded-full text-sm font-semibold shadow-md border border-neutral-200 overflow-hidden w-10 h-10 hover:w-[110px] hover:gap-2 transition-all duration-300 hover:bg-neutral-100 disabled:cursor-not-allowed translate-y-1 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
-        >
-          {adding ? <Loader2 size={18} className="animate-spin shrink-0" /> : <img src={cartIconAsset.url} alt="" className="w-6 h-6 shrink-0" />}
-          <span className="max-w-0 opacity-0 [button:hover_>_&]:max-w-[70px] [button:hover_>_&]:opacity-100 transition-all duration-300 whitespace-nowrap overflow-hidden">Add</span>
-        </button>
       </div>
 
       <div className="pt-4">
