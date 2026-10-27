@@ -498,6 +498,9 @@ function ProductPage() {
               Pay with Crypto
             </button>
           </div>
+          </>
+          )}
+
 
 
           {/* Feature cards */}
