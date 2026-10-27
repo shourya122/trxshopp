@@ -49,6 +49,7 @@ export interface Product {
   editions: Edition[];
   editionsLabel: string;
   optionGroups: OptionGroup[];
+  purchaseMode?: "buy" | "enquire";
 
   rating: number;
   votes: string;

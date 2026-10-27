@@ -21,13 +21,19 @@ export const getPublicSettings = createServerFn({ method: "GET" }).handler(async
     },
   });
 
-  const { data } = await client.from("site_settings").select("key, value").eq("key", "usd_inr_rate").maybeSingle();
+  const { data } = await client.from("site_settings").select("key, value").in("key", ["usd_inr_rate", "whatsapp_number"]);
 
-  const raw = data?.value as unknown;
+  const rows = (data ?? []) as { key: string; value: unknown }[];
+  const rateRow = rows.find((r) => r.key === "usd_inr_rate");
+  const raw = rateRow?.value as unknown;
   const parsed = typeof raw === "number" ? raw : typeof raw === "string" ? Number(raw) : NaN;
   const usdInrRate = Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_USD_INR_RATE;
 
-  return { usdInrRate };
+  const waRow = rows.find((r) => r.key === "whatsapp_number");
+  const waRaw = waRow?.value;
+  const whatsappNumber = (typeof waRaw === "string" ? waRaw : "").replace(/\D/g, "");
+
+  return { usdInrRate, whatsappNumber };
 });
 
 /** Visitor country from the edge (Cloudflare) request headers. */
@@ -59,4 +65,23 @@ export const adminUpdateUsdRate = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
 
     return { ok: true, rate: data.rate };
+  });
+
+/** Admin-only write of the WhatsApp enquiry number (digits only, with country code). */
+export const adminUpdateWhatsapp = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { number: string }) => {
+    const digits = String(input?.number ?? "").replace(/\D/g, "");
+    if (digits && (digits.length < 8 || digits.length > 15)) throw new Error("Enter a valid WhatsApp number with country code, digits only");
+    return { number: digits };
+  })
+  .handler(async ({ data, context }) => {
+    await (await import("@/lib/admin-guard.server")).requireAdminAccess(context.userId);
+
+    const { error } = await context.supabase
+      .from("site_settings")
+      .upsert({ key: "whatsapp_number", value: data.number as unknown as never }, { onConflict: "key" });
+    if (error) throw new Error(error.message);
+
+    return { ok: true, number: data.number };
   });

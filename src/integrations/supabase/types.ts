@@ -398,6 +398,7 @@ export type Database = {
           price_cents: number
           product_details: string
           publisher: string
+          purchase_mode: string
           rating: number
           release_date: string
           screenshots: string[]
@@ -430,6 +431,7 @@ export type Database = {
           price_cents?: number
           product_details?: string
           publisher?: string
+          purchase_mode?: string
           rating?: number
           release_date?: string
           screenshots?: string[]
@@ -462,6 +464,7 @@ export type Database = {
           price_cents?: number
           product_details?: string
           publisher?: string
+          purchase_mode?: string
           rating?: number
           release_date?: string
           screenshots?: string[]

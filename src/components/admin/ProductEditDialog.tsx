@@ -40,7 +40,7 @@ export type EditableProduct = {
   badge?: string | null;
   editions?: { name: string; price_cents: number; out_of_stock?: boolean; stock?: number | null }[] | null;
   editions_label?: string | null;
-
+  purchase_mode?: "buy" | "enquire" | null;
 
 };
 
@@ -186,6 +186,7 @@ export function ProductEditDialog({ product, onClose }: Props) {
         })
         .filter((e) => e.name.length > 0),
       editions_label: (form.editions_label ?? "").trim(),
+      purchase_mode: form.purchase_mode === "enquire" ? "enquire" : "buy",
     };
 
     try {
@@ -271,6 +272,27 @@ export function ProductEditDialog({ product, onClose }: Props) {
                 <option value="new">New</option>
                 <option value="disc">Discount</option>
               </select>
+            </Field>
+
+            <Field label="Selling">
+              <div className="grid grid-cols-2 gap-1 rounded-md border border-white/[0.06] bg-[#111113] p-1">
+                {(["buy", "enquire"] as const).map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => set("purchase_mode", m)}
+                    className={`h-7 rounded text-[11.5px] font-medium transition ${
+                      (form.purchase_mode ?? "buy") === m ? "bg-white text-black" : "text-[#A1A1AA] hover:text-white"
+                    }`}
+                  >
+                    {m === "buy" ? "Buy now" : "Enquire"}
+                  </button>
+                ))}
+              </div>
+              {(form.purchase_mode ?? "buy") === "enquire" && (
+                <p className="mt-1.5 text-[11px] leading-snug text-[#71717A]">
+                  Customers see Discord / WhatsApp chat buttons instead of buying. Set your WhatsApp number in Settings.
+                </p>
+              )}
             </Field>
           </div>
 

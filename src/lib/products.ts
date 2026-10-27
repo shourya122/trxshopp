@@ -28,6 +28,7 @@ type Row = {
   editions: unknown;
   editions_label?: unknown;
   option_groups?: unknown;
+  purchase_mode?: unknown;
 
   created_at: string;
   updated_at: string;
@@ -118,6 +119,7 @@ function rowToProduct(r: Row): Product {
     editions: parseEditions(r.editions),
     editionsLabel: typeof r.editions_label === "string" ? r.editions_label : "",
     optionGroups: parseOptionGroups(r.option_groups),
+    purchaseMode: r.purchase_mode === "enquire" ? "enquire" : "buy",
 
     rating: typeof r.rating === "string" ? parseFloat(r.rating) : r.rating,
     votes: "0",

@@ -354,7 +354,7 @@ function HomePage() {
                       sale={sale}
                       regular={regular}
                       platform={(p.platforms[0] || "pc") as any}
-                      hasOptions={(p.editions?.length ?? 0) > 0}
+                      hasOptions={(p.editions?.length ?? 0) > 0 || p.purchaseMode === "enquire"}
                     />
                   </div>
                 );
@@ -411,7 +411,7 @@ function HomePage() {
                         sale={sale}
                         regular={regular}
                         platform="pc"
-                        hasOptions={(p.editions?.length ?? 0) > 0}
+                        hasOptions={(p.editions?.length ?? 0) > 0 || p.purchaseMode === "enquire"}
                       />
                     </div>
                   );
@@ -466,7 +466,7 @@ function HomePage() {
                         sale={sale}
                         regular={regular}
                         platform="ps"
-                        hasOptions={(p.editions?.length ?? 0) > 0}
+                        hasOptions={(p.editions?.length ?? 0) > 0 || p.purchaseMode === "enquire"}
                       />
                     </div>
                   );
