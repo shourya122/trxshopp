@@ -119,6 +119,58 @@ function CurrencyCard() {
   );
 }
 
+function WhatsappCard() {
+  const settingsFn = useServerFn(getPublicSettings);
+  const saveFn = useServerFn(adminUpdateWhatsapp);
+  const { data, isLoading, refetch } = useQuery({ queryKey: ["public-settings"], queryFn: () => settingsFn() });
+  const [number, setNumber] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (data?.whatsappNumber != null) setNumber(data.whatsappNumber);
+  }, [data?.whatsappNumber]);
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      await saveFn({ data: { number } });
+      await refetch();
+      toast.success(number.replace(/\D/g, "") ? "WhatsApp number saved" : "WhatsApp button turned off");
+    } catch (e) {
+      toast.error((e as Error)?.message || "Couldn't save the number");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Card className="mb-3 p-5">
+      <h3 className="text-[14px] font-semibold text-white">Enquiry contact</h3>
+      <p className="mt-1 text-[12px] text-[#A1A1AA]">
+        Products set to "Enquire" show chat buttons instead of buy buttons. Discord always links to your server;
+        add your WhatsApp number (with country code, digits only) to also show a WhatsApp button. Leave it blank to hide it.
+      </p>
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <span className="text-[12.5px] text-[#D4D4D8]">WhatsApp:</span>
+        <input
+          value={number}
+          onChange={(e) => setNumber(e.target.value.replace(/\D/g, ""))}
+          inputMode="numeric"
+          placeholder={isLoading ? "…" : "e.g. 919876543210"}
+          className="h-9 w-44 rounded-md border border-white/[0.1] bg-black px-3 text-[13px] text-white outline-none focus:border-white/30"
+        />
+        <button
+          onClick={save}
+          disabled={saving || isLoading}
+          className="inline-flex h-9 items-center gap-2 rounded-md bg-white px-4 text-[12.5px] font-semibold text-black disabled:opacity-50"
+        >
+          {saving && <Loader2 className="h-3.5 w-3.5 animate-spin" />} Save
+        </button>
+      </div>
+    </Card>
+  );
+}
+
 const groups = [
   { title: "Workspace", desc: "Name, branding and timezone", items: ["Store name", "Logo & favicon", "Timezone", "Currency"] },
   { title: "Payments", desc: "Providers and payout schedule", items: ["Stripe", "PayPal", "Apple Pay", "Payout schedule"] },
