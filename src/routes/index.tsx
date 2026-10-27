@@ -3,12 +3,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { listProducts } from "@/lib/products";
-import { useCart } from "@/lib/cart";
 import { useCurrency } from "@/lib/currency";
 import { TextEffect } from "@/components/ui/text-effect";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { motion } from "framer-motion";
-import { Zap, ShieldCheck, BadgeCheck, Gamepad2, Flame, Check, X, Loader2 } from "lucide-react";
+import { Zap, ShieldCheck, BadgeCheck, Gamepad2, Flame, Check, X } from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
 import { AmbientBackground } from "@/components/AmbientBackground";
 import { Loader } from "@/components/Loader";
@@ -37,14 +36,10 @@ import avatarWoody from "@/assets/woody2.png.asset.json";
 import adobeLogo from "@/assets/logos/adobe.svg.asset.json";
 import canvaLogo from "@/assets/logos/canva.svg.asset.json";
 import primeVideoLogo from "@/assets/logos/prime-video.svg.asset.json";
-import cartIconAsset from "@/assets/cart-icon-v2.svg.asset.json";
 import greenCheckAsset from "@/assets/check.png.asset.json";
 import redCrossAsset from "@/assets/cross.png.asset.json";
 import { ImageWithSkeleton } from "@/components/ImageWithSkeleton";
 import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
-import { flyToCart } from "@/lib/fly-to-cart";
-import { canAddToCart } from "@/lib/rate-limit";
-import { toast } from "sonner";
 
 const HERO_TAGLINES = [
   "Instant Key Delivery",
@@ -140,7 +135,6 @@ export const Route = createFileRoute("/")({
 type Filter = "all" | "pc" | "ps" | "xbox";
 
 function HomePage() {
-  const { add } = useCart();
   const { data: fsProducts, isPending: productsPending } = useQuery({
     queryKey: ["products", "active", "home"],
     queryFn: () => listProducts({ activeOnly: true, max: 400 }),
@@ -346,15 +340,11 @@ function HomePage() {
                 return (
                   <div key={p.id} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
                     <HomeProductCard
-                      id={p.id}
-                      variantId={p.variantId}
                       slug={p.slug || p.id}
                       title={p.title}
                       img={img}
                       sale={sale}
                       regular={regular}
-                      platform={(p.platforms[0] || "pc") as any}
-                      hasOptions={(p.editions?.length ?? 0) > 0 || p.purchaseMode === "enquire"}
                     />
                   </div>
                 );
@@ -403,15 +393,11 @@ function HomePage() {
                   return (
                     <div key={p.id} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
                       <HomeProductCard
-                        id={p.id}
-                        variantId={p.variantId}
                         slug={p.slug || p.id}
                         title={p.title}
                         img={img}
                         sale={sale}
                         regular={regular}
-                        platform="pc"
-                        hasOptions={(p.editions?.length ?? 0) > 0 || p.purchaseMode === "enquire"}
                       />
                     </div>
                   );
@@ -458,15 +444,11 @@ function HomePage() {
                   return (
                     <div key={p.id} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
                       <HomeProductCard
-                        id={p.id}
-                        variantId={p.variantId}
                         slug={p.slug || p.id}
                         title={p.title}
                         img={img}
                         sale={sale}
                         regular={regular}
-                        platform="ps"
-                        hasOptions={(p.editions?.length ?? 0) > 0 || p.purchaseMode === "enquire"}
                       />
                     </div>
                   );
@@ -738,56 +720,19 @@ function HorizontalScroller({ children }: { children: React.ReactNode }) {
 }
 
 function HomeProductCard({
-  id,
-  variantId,
   slug,
   title,
   img,
   sale,
   regular,
-  platform,
-  hasOptions,
 }: {
-  id: string;
-  variantId: string;
   slug: string;
   title: string;
   img: string;
   sale: number;
   regular: number;
-  platform: any;
-  hasOptions?: boolean;
 }) {
-  const { add } = useCart();
   const { format } = useCurrency();
-  const [adding, setAdding] = useState(false);
-  const lockRef = useRef(false);
-  const btnRef = useRef<HTMLButtonElement>(null);
-  const numericId = Array.from(id).reduce((a, c) => a + c.charCodeAt(0), 0);
-
-  const handleQuickAdd = (e: React.MouseEvent) => {
-    // Products with editions/options must be configured on the product page —
-    // let the surrounding link navigate there instead of adding directly.
-    if (hasOptions) return;
-    e.preventDefault();
-    e.stopPropagation();
-    if (lockRef.current) return;
-    if (!canAddToCart()) {
-      toast.error("Slow down a sec — too many adds at once");
-      return;
-    }
-    lockRef.current = true;
-    setAdding(true);
-    if (btnRef.current) flyToCart(btnRef.current, img);
-    void add(
-      { id: numericId, variantId, productId: id, name: title, platform, price: sale, old: regular, steamId: numericId, image: img },
-      1,
-    );
-    setTimeout(() => {
-      lockRef.current = false;
-      setAdding(false);
-    }, 800);
-  };
 
   return (
     <Link to="/products/$id" params={{ id: slug }} className="group block content-in">
@@ -804,18 +749,6 @@ function HomeProductCard({
         >
           Sale
         </span>
-        <button
-          ref={btnRef}
-          type="button"
-          aria-label="Add to cart"
-          onClick={handleQuickAdd}
-          disabled={adding}
-          aria-busy={adding}
-          className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white text-neutral-900 rounded-full pl-3 pr-3.5 py-1.5 text-sm font-semibold shadow-md border border-neutral-200 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all hover:bg-neutral-100 disabled:cursor-not-allowed"
-        >
-          {adding ? <Loader2 size={18} className="animate-spin" /> : <img src={cartIconAsset.url} alt="" className="w-[18px] h-[18px]" />}
-          <span>Add</span>
-        </button>
       </div>
       <h3
         className="mt-3 text-white line-clamp-2"
