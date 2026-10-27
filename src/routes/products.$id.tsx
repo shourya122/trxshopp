@@ -421,7 +421,33 @@ function ProductPage() {
             </div>
           )}
 
+          {enquireOnly && (
+            <div className="mb-6 space-y-3">
+              <p className="text-sm text-neutral-400">This product is booked personally — chat with us and we'll set it up for you.</p>
+              <a
+                href="https://discord.gg/trxshop"
+                target="_blank"
+                rel="noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 py-4 rounded-lg text-base font-semibold bg-[#5865F2] text-white hover:opacity-95 transition"
+              >
+                <MessageCircle size={18} /> Chat on Discord
+              </a>
+              {whatsappNumber && (
+                <a
+                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hi! I want to enquire about ${product.title}`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full inline-flex items-center justify-center gap-2 py-4 rounded-lg text-base font-semibold bg-[#25D366] text-black hover:opacity-95 transition"
+                >
+                  <MessageCircle size={18} /> Chat on WhatsApp
+                </a>
+              )}
+            </div>
+          )}
+
           {/* Qty + Add to cart */}
+          {!enquireOnly && (
+          <>
           <div className="flex items-stretch gap-3 mb-3 h-14">
             <div className="flex items-center border border-neutral-700 rounded-lg overflow-hidden h-full">
               <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-11 h-full text-lg hover:bg-neutral-900">−</button>
