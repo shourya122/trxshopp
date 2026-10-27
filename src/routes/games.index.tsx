@@ -1,19 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState, useRef } from "react";
-import { Loader2 } from "lucide-react";
+import { useMemo, useState } from "react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { ChevronDown, ShoppingBag, LayoutGrid, Grid3x3 } from "lucide-react";
 import { listProducts } from "@/lib/products";
 import type { Product, Platform } from "@/lib/types";
 import { ImageWithSkeleton } from "@/components/ImageWithSkeleton";
 import { ProductCardSkeletonGrid } from "@/components/ProductCardSkeleton";
-import { useCart } from "@/lib/cart";
 import { useCurrency } from "@/lib/currency";
 import { useReveal } from "@/hooks/useReveal";
-import cartIconAsset from "@/assets/cart-icon-v2.svg.asset.json";
 
-import { flyToCart } from "@/lib/fly-to-cart";
-import { canAddToCart } from "@/lib/rate-limit";
 
 const productsQueryOptions = () =>
   queryOptions({
