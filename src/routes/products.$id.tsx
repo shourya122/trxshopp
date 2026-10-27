@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { ShieldCheck, Layers, Clock, Lock, Check, Star, ArrowRight, Eye, FileText, Loader2, ChevronLeft, ChevronRight, Bitcoin } from "lucide-react";
+import { ShieldCheck, Layers, Clock, Lock, Check, Star, ArrowRight, Eye, FileText, Loader2, ChevronLeft, ChevronRight, Bitcoin, MessageCircle } from "lucide-react";
 import cartIconAsset from "@/assets/cart-icon-v2.svg.asset.json";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { getProduct, getProductBySlug, listProducts } from "@/lib/products";
@@ -19,6 +19,7 @@ import avatar2 from "@/assets/masteroog.png.asset.json";
 import avatar3 from "@/assets/woody.png.asset.json";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { getPublicSettings } from "@/lib/settings.functions";
 
 
 
@@ -162,6 +163,12 @@ function ProductPage() {
     staleTime: 60_000,
   });
 
+  const { data: pubSettings } = useQuery({
+    queryKey: ["public-settings"],
+    queryFn: () => getPublicSettings(),
+    staleTime: 300_000,
+  });
+
   const timer = useCountdown(3600);
 
   if (!product) {
@@ -187,6 +194,8 @@ function ProductPage() {
   const regular = product.oldPriceCents > 0 ? Math.round(product.oldPriceCents / 100) : sale;
   const related = (allProducts || []).filter((p) => p.id !== product.id).slice(0, 4);
   const outOfStock = (typeof product.stock === "number" && product.stock <= 0) || !!activeEdition?.outOfStock;
+  const enquireOnly = product.purchaseMode === "enquire";
+  const whatsappNumber = pubSettings?.whatsappNumber || "";
 
   const numericId = Array.from(product.id).reduce((a, c) => a + c.charCodeAt(0), 0);
   const handleAddToCart = async () => {
