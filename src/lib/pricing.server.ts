@@ -70,7 +70,7 @@ export async function resolvePricing(
 
   const { data: products, error: pErr } = await admin
     .from("products")
-    .select("id, title, price_cents, active, editions, option_groups")
+    .select("id, title, price_cents, active, editions, option_groups, purchase_mode")
     .in("id", ids);
   if (pErr) return { ok: false, error: pErr.message };
   const byId = new Map((products ?? []).map((p) => [p.id as string, p]));
@@ -83,6 +83,9 @@ export async function resolvePricing(
     const p = uuidRe.test(pid) ? byId.get(pid) : null;
     if (!p || !p.active) {
       return { ok: false, error: `Product unavailable: ${it.name ?? pid}` };
+    }
+    if ((p as { purchase_mode?: string }).purchase_mode === "enquire") {
+      return { ok: false, error: `${p.title as string} is enquiry-only — please contact the store to buy it.` };
     }
     const qty = Math.max(1, Math.min(99, Math.floor(it.qty)));
     let unitCents = Number(p.price_cents) || 0;

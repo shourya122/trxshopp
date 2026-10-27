@@ -305,6 +305,7 @@ const productPatch = z.object({
     stock: z.number().int().min(0).max(1000000).nullable().optional(),
   })).max(20).optional(),
   editions_label: z.string().trim().max(60).optional(),
+  purchase_mode: z.enum(["buy", "enquire"]).optional(),
   option_groups: z.array(z.object({
     name: z.string().trim().min(1).max(60),
     values: z.array(z.object({
