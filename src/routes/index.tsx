@@ -3,12 +3,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { listProducts } from "@/lib/products";
-import { useCart } from "@/lib/cart";
 import { useCurrency } from "@/lib/currency";
 import { TextEffect } from "@/components/ui/text-effect";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { motion } from "framer-motion";
-import { Zap, ShieldCheck, BadgeCheck, Gamepad2, Flame, Check, X, Loader2 } from "lucide-react";
+import { Zap, ShieldCheck, BadgeCheck, Gamepad2, Flame, Check, X } from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
 import { AmbientBackground } from "@/components/AmbientBackground";
 import { Loader } from "@/components/Loader";
@@ -37,14 +36,10 @@ import avatarWoody from "@/assets/woody2.png.asset.json";
 import adobeLogo from "@/assets/logos/adobe.svg.asset.json";
 import canvaLogo from "@/assets/logos/canva.svg.asset.json";
 import primeVideoLogo from "@/assets/logos/prime-video.svg.asset.json";
-import cartIconAsset from "@/assets/cart-icon-v2.svg.asset.json";
 import greenCheckAsset from "@/assets/check.png.asset.json";
 import redCrossAsset from "@/assets/cross.png.asset.json";
 import { ImageWithSkeleton } from "@/components/ImageWithSkeleton";
 import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
-import { flyToCart } from "@/lib/fly-to-cart";
-import { canAddToCart } from "@/lib/rate-limit";
-import { toast } from "sonner";
 
 const HERO_TAGLINES = [
   "Instant Key Delivery",
@@ -140,7 +135,6 @@ export const Route = createFileRoute("/")({
 type Filter = "all" | "pc" | "ps" | "xbox";
 
 function HomePage() {
-  const { add } = useCart();
   const { data: fsProducts, isPending: productsPending } = useQuery({
     queryKey: ["products", "active", "home"],
     queryFn: () => listProducts({ activeOnly: true, max: 400 }),
