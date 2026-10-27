@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Loader2 } from "lucide-react";
 import { Card, PageHeader } from "@/components/admin/ui";
-import { adminUpdateUsdRate, getPublicSettings } from "@/lib/settings.functions";
+import { adminUpdateUsdRate, adminUpdateWhatsapp, getPublicSettings } from "@/lib/settings.functions";
 import { adminGetIps, adminSetIps, adminChangePin } from "@/lib/admin-security.functions";
 
 const inputCls = "h-9 rounded-md border border-white/[0.08] bg-[#09090B] px-3 text-[13px] text-white outline-none focus:border-[#2563EB]";
@@ -142,6 +142,7 @@ function Settings() {
       <PageHeader title="Settings" description="Configure your workspace and integrations." />
       <SecurityCard />
       <CurrencyCard />
+      <WhatsappCard />
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {groups.map((g) => (
           <Card key={g.title} className="p-5">
