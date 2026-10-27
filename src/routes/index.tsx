@@ -723,56 +723,19 @@ function HorizontalScroller({ children }: { children: React.ReactNode }) {
 }
 
 function HomeProductCard({
-  id,
-  variantId,
   slug,
   title,
   img,
   sale,
   regular,
-  platform,
-  hasOptions,
 }: {
-  id: string;
-  variantId: string;
   slug: string;
   title: string;
   img: string;
   sale: number;
   regular: number;
-  platform: any;
-  hasOptions?: boolean;
 }) {
-  const { add } = useCart();
   const { format } = useCurrency();
-  const [adding, setAdding] = useState(false);
-  const lockRef = useRef(false);
-  const btnRef = useRef<HTMLButtonElement>(null);
-  const numericId = Array.from(id).reduce((a, c) => a + c.charCodeAt(0), 0);
-
-  const handleQuickAdd = (e: React.MouseEvent) => {
-    // Products with editions/options must be configured on the product page —
-    // let the surrounding link navigate there instead of adding directly.
-    if (hasOptions) return;
-    e.preventDefault();
-    e.stopPropagation();
-    if (lockRef.current) return;
-    if (!canAddToCart()) {
-      toast.error("Slow down a sec — too many adds at once");
-      return;
-    }
-    lockRef.current = true;
-    setAdding(true);
-    if (btnRef.current) flyToCart(btnRef.current, img);
-    void add(
-      { id: numericId, variantId, productId: id, name: title, platform, price: sale, old: regular, steamId: numericId, image: img },
-      1,
-    );
-    setTimeout(() => {
-      lockRef.current = false;
-      setAdding(false);
-    }, 800);
-  };
 
   return (
     <Link to="/products/$id" params={{ id: slug }} className="group block content-in">
@@ -789,18 +752,6 @@ function HomeProductCard({
         >
           Sale
         </span>
-        <button
-          ref={btnRef}
-          type="button"
-          aria-label="Add to cart"
-          onClick={handleQuickAdd}
-          disabled={adding}
-          aria-busy={adding}
-          className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white text-neutral-900 rounded-full pl-3 pr-3.5 py-1.5 text-sm font-semibold shadow-md border border-neutral-200 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all hover:bg-neutral-100 disabled:cursor-not-allowed"
-        >
-          {adding ? <Loader2 size={18} className="animate-spin" /> : <img src={cartIconAsset.url} alt="" className="w-[18px] h-[18px]" />}
-          <span>Add</span>
-        </button>
       </div>
       <h3
         className="mt-3 text-white line-clamp-2"
