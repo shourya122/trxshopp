@@ -289,7 +289,7 @@ export function ProductCard({ g }: { g: Product }) {
   const handleQuickAdd = (e: React.MouseEvent) => {
     // Products with editions/options must be configured on the product page —
     // let the surrounding link navigate there instead of adding directly.
-    if ((g.editions?.length ?? 0) > 0) return;
+    if ((g.editions?.length ?? 0) > 0 || g.purchaseMode === "enquire") return;
     e.preventDefault();
     e.stopPropagation();
     if (lockRef.current) return;
