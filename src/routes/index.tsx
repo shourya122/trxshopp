@@ -340,15 +340,12 @@ function HomePage() {
                 return (
                   <div key={p.id} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
                     <HomeProductCard
-                      id={p.id}
-                      variantId={p.variantId}
                       slug={p.slug || p.id}
                       title={p.title}
                       img={img}
                       sale={sale}
                       regular={regular}
                       platform={(p.platforms[0] || "pc") as any}
-                      hasOptions={(p.editions?.length ?? 0) > 0 || p.purchaseMode === "enquire"}
                     />
                   </div>
                 );
@@ -397,15 +394,12 @@ function HomePage() {
                   return (
                     <div key={p.id} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
                       <HomeProductCard
-                        id={p.id}
-                        variantId={p.variantId}
                         slug={p.slug || p.id}
                         title={p.title}
                         img={img}
                         sale={sale}
                         regular={regular}
                         platform="pc"
-                        hasOptions={(p.editions?.length ?? 0) > 0 || p.purchaseMode === "enquire"}
                       />
                     </div>
                   );
@@ -452,15 +446,12 @@ function HomePage() {
                   return (
                     <div key={p.id} className="shrink-0 w-[42vw] sm:w-[28vw] lg:w-[21vw]">
                       <HomeProductCard
-                        id={p.id}
-                        variantId={p.variantId}
                         slug={p.slug || p.id}
                         title={p.title}
                         img={img}
                         sale={sale}
                         regular={regular}
                         platform="ps"
-                        hasOptions={(p.editions?.length ?? 0) > 0 || p.purchaseMode === "enquire"}
                       />
                     </div>
                   );
