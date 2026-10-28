@@ -7,6 +7,7 @@ import cartIconAsset from "@/assets/cart-icon-v2.svg.asset.json";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { getProduct, getProductBySlug, listProducts } from "@/lib/products";
 import type { Product } from "@/lib/types";
+import { isSelectionSoldOut, productInventory } from "@/lib/product-availability";
 
 import { useCart } from "@/lib/cart";
 import { useCurrency } from "@/lib/currency";
@@ -80,7 +81,7 @@ export const Route = createFileRoute("/products/$id")({
               url,
               priceCurrency: "INR",
               price: price.toString(),
-              availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+              availability: productInventory(product).soldOut ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
               itemCondition: "https://schema.org/NewCondition",
             },
           }),
@@ -193,7 +194,7 @@ function ProductPage() {
   const sale = Math.round(effectiveCents / 100);
   const regular = product.oldPriceCents > 0 ? Math.round(product.oldPriceCents / 100) : sale;
   const related = (allProducts || []).filter((p) => p.id !== product.id).slice(0, 4);
-  const outOfStock = (typeof product.stock === "number" && product.stock <= 0) || !!activeEdition?.outOfStock;
+  const outOfStock = isSelectionSoldOut(product, activeEdition);
   const enquireOnly = product.purchaseMode === "enquire";
   const whatsappNumber = pubSettings?.whatsappNumber || "";
 
