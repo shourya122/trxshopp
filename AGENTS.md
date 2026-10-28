@@ -9,3 +9,4 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 - Home animations use the local ambient canvas and equal-width marquee groups with visible fallbacks; the marquee overrides global reduced-motion timing so its loop cannot freeze.
+- Storefront purchase availability and admin inventory summaries use the shared product-availability module; edition inventory takes precedence over general stock so stocked variants are not incorrectly blocked.

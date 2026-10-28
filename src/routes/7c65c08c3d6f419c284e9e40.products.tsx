@@ -10,6 +10,7 @@ import { toastPromise } from "@/lib/toast-utils";
 import { Card, PageHeader, Badge } from "@/components/admin/ui";
 import { adminListProducts, adminUpdateProduct, adminDeleteProduct, adminCreateProduct } from "@/lib/admin.functions";
 import { ProductEditDialog, type EditableProduct } from "@/components/admin/ProductEditDialog";
+import { productInventory } from "@/lib/product-availability";
 
 export const Route = createFileRoute("/7c65c08c3d6f419c284e9e40/products")({ component: Products });
 
@@ -44,7 +45,7 @@ function Products() {
     const q = query.trim().toLowerCase();
     return rows.filter((p) => {
       const activeStatus = p.active ? "active" : "draft";
-      const stockStatus = (p.stock ?? 0) <= 0 ? "out" : activeStatus;
+      const stockStatus = productInventory(p as EditableProduct).soldOut ? "out" : activeStatus;
       return (cat === "all" || p.category === cat) &&
         (status === "all" || status === stockStatus) &&
         (!q || (p.title as string).toLowerCase().includes(q) || (p.slug as string).toLowerCase().includes(q));
@@ -215,7 +216,7 @@ function Products() {
                 <tr><td colSpan={7} className="px-5 py-12 text-center text-[12.5px] text-[#71717A]">No products match.</td></tr>
               )}
               {filtered.map((p, i) => {
-                const stock = (p.stock as number) ?? 0;
+                const { stock, soldOut } = productInventory(p as EditableProduct);
                 const isActive = p.active as boolean;
                 return (
                   <motion.tr
@@ -272,12 +273,12 @@ function Products() {
                     </td>
                     <td className="px-3 py-3 tabular-nums text-white">{inr(p.price_cents as number)}</td>
                     <td className="px-3 py-3 tabular-nums">
-                      <span className={stock === 0 ? "text-[#f87171]" : stock < 100 ? "text-[#fbbf24]" : "text-[#D4D4D8]"}>{stock.toLocaleString()}</span>
+                      <span className={soldOut ? "text-[#f87171]" : stock !== null && stock < 100 ? "text-[#fbbf24]" : "text-[#D4D4D8]"}>{stock === null ? "Not tracked" : stock.toLocaleString()}</span>
                     </td>
                     <td className="px-5 py-3">
                       <button onClick={() => toggleActive(p.id as string, isActive)} className="transition hover:opacity-80" title="Toggle status">
-                        <Badge tone={stock === 0 ? "danger" : isActive ? "success" : "neutral"}>
-                          {stock === 0 ? "out of stock" : isActive ? "active" : "draft"}
+                        <Badge tone={soldOut ? "danger" : isActive ? "success" : "neutral"}>
+                          {soldOut ? "out of stock" : isActive ? "active" : "draft"}
                         </Badge>
                       </button>
                     </td>
