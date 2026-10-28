@@ -3,6 +3,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { ADMIN_PRODUCT_COLUMNS } from "@/lib/admin-product-columns";
 
 async function assertAdmin(userId: string) {
   await (await import("@/lib/admin-guard.server")).requireAdminAccess(userId);
@@ -269,7 +270,7 @@ export const adminListProducts = createServerFn({ method: "GET" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin
       .from("products")
-      .select("id, title, slug, description, product_details, terms_conditions, category, genre, developer, publisher, release_date, languages, platforms, price_cents, old_price_cents, stock, active, featured, badge, cover_image, screenshots, status, editions, editions_label, option_groups, created_at")
+      .select(ADMIN_PRODUCT_COLUMNS)
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) throw new Error(error.message);

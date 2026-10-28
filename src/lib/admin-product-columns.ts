@@ -1,0 +1,3 @@
+/** Columns loaded into the admin product editor; every editable field must be read back. */
+export const ADMIN_PRODUCT_COLUMNS =
+  "id, title, slug, description, product_details, terms_conditions, category, genre, developer, publisher, release_date, languages, platforms, price_cents, old_price_cents, stock, active, featured, badge, cover_image, screenshots, status, editions, editions_label, purchase_mode, option_groups, created_at";
